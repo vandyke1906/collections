@@ -3,8 +3,8 @@ import React from 'react'
 
 const Product = (props) => {
   return (
-    <View>
-      <Text>Product</Text>
+    <View className="p-2">
+          <Text>{props.data?.name || ""}</Text>
     </View>
   )
 }
