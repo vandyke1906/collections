@@ -1,0 +1,68 @@
+import { Tabs } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+
+const AppLayout = () => {
+    return (
+        <Tabs screenOptions={{ headerShown: false }}>
+            <Tabs.Screen
+                name="home/index"
+                options={{
+                    tabBarLabel: "Home",
+                    title: "Home",
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome
+                            size={24}
+                            name="home"
+                            color={color}
+                        />
+                    )
+                }}
+            />
+            <Tabs.Screen
+                name="customers"
+                options={{
+                    tabBarLabel: "Customers",
+                    title: "Customers",
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome
+                            size={24}
+                            name="users"
+                            color={color}
+                        />
+                    )
+                }}
+            />
+            <Tabs.Screen
+                name="products"
+                options={{
+                    tabBarLabel: "Products",
+                    title: "Products",
+                    // headerRight: () => <Button onPress={() => router.push("products/addProduct")} title="Add New" />,
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome
+                            size={24}
+                            name="cart-plus"
+                            color={color}
+                        />
+                    )
+                }}
+            />
+            <Tabs.Screen
+                name="settings/index"
+                options={{
+                    tabBarLabel: "Settings",
+                    title: "Settings",
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome
+                            size={24}
+                            name="gear"
+                            color={color}
+                        />
+                    )
+                }}
+            />
+        </Tabs>
+    );
+};
+
+export default AppLayout;
