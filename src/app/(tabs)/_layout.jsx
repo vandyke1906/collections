@@ -9,13 +9,7 @@ const AppLayout = () => {
                 options={{
                     tabBarLabel: "Home",
                     title: "Home",
-                    tabBarIcon: ({ color }) => (
-                        <FontAwesome
-                            size={24}
-                            name="home"
-                            color={color}
-                        />
-                    )
+                    tabBarIcon: ({ color }) => <FontAwesome size={24} name="home" color={color} />,
                 }}
             />
             <Tabs.Screen
@@ -23,13 +17,8 @@ const AppLayout = () => {
                 options={{
                     tabBarLabel: "Customers",
                     title: "Customers",
-                    tabBarIcon: ({ color }) => (
-                        <FontAwesome
-                            size={24}
-                            name="users"
-                            color={color}
-                        />
-                    )
+                    unmountOnBlur: true,
+                    tabBarIcon: ({ color }) => <FontAwesome size={24} name="users" color={color} />,
                 }}
             />
             <Tabs.Screen
@@ -37,14 +26,9 @@ const AppLayout = () => {
                 options={{
                     tabBarLabel: "Products",
                     title: "Products",
+                    unmountOnBlur: true,
                     // headerRight: () => <Button onPress={() => router.push("products/addProduct")} title="Add New" />,
-                    tabBarIcon: ({ color }) => (
-                        <FontAwesome
-                            size={24}
-                            name="cart-plus"
-                            color={color}
-                        />
-                    )
+                    tabBarIcon: ({ color }) => <FontAwesome size={24} name="cart-plus" color={color} />,
                 }}
             />
             <Tabs.Screen
@@ -52,13 +36,7 @@ const AppLayout = () => {
                 options={{
                     tabBarLabel: "Settings",
                     title: "Settings",
-                    tabBarIcon: ({ color }) => (
-                        <FontAwesome
-                            size={24}
-                            name="gear"
-                            color={color}
-                        />
-                    )
+                    tabBarIcon: ({ color }) => <FontAwesome size={24} name="gear" color={color} />,
                 }}
             />
         </Tabs>
