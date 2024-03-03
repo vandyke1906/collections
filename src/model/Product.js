@@ -7,7 +7,7 @@ export class Product extends Realm.Object {
         properties: {
             _id: { type: "uuid", default: () => new BSON.UUID() },
             code: "string",
-            name: { type: "string", indexed: "full-text" },
+            name: { type: "string", indexed: 'full-text' },
             unit: "string",
             group: { type: "string", indexed: true, optional: true }
         },

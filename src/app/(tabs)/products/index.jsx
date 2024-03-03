@@ -1,29 +1,42 @@
-import { Link } from "expo-router";
-import { SafeAreaView, ScrollView, Text, FlatList, View } from "react-native";
-import { PRODUCT_LIST } from "../../../.data/data";
+import {  router } from "expo-router";
+import { FlatList, View, TouchableOpacity, TextInput } from "react-native";
 import Product from "../../../components/Product";
-import { useEffect, useState } from "react";
-import { useQuery, useRealm } from "@realm/react";
+import { useState } from "react";
+import { useQuery } from "@realm/react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const addProduct = () => {
+    const [searchKey, setSearchKey] = useState("");
+    const products = useQuery("products", (col) => {
+        return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey);
+    }, [searchKey]);
     const fetchMoreData = () => {};
-  const products = useQuery("products");
     return (
-        <View className="flex-1 items-center justify-center">
-            <Text className="text-red-400">Index of Product Page</Text>
-            <Link
-                href="/products/addProduct"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-            >
-                Add Product
-            </Link>
-            <FlatList
-                data={products}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <Product data={item} />}
-                onEndReached={fetchMoreData}
-                onEndReachedThreshold={0.2}
-            />
+        <View className="flex-1">
+            <View className="items-center justify-center">
+                <TextInput
+                    className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    placeholder="Search Product..."
+                    value={searchKey}
+                    onChangeText={(text) => setSearchKey(text)}
+                />
+                <FlatList
+                    className="w-full"
+                    data={products}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => <Product data={item} />}
+                    onEndReached={fetchMoreData}
+                    onEndReachedThreshold={0.1}
+                    />
+            </View>
+
+            <View className="items-end">
+                <TouchableOpacity className="fixed z-90 bottom-28 right-4 bg-blue-600 w-14 h-14 rounded-full flex justify-center items-center" onPress={() => {
+                    router.navigate("/products/addProduct");
+                }}>
+                    <FontAwesome size={20} name="plus" color="white" />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
