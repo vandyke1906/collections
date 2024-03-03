@@ -64,6 +64,7 @@ const addProduct = () => {
                 control={control}
                 rules={{ required: false }}
                 name="group"
+                defaultValue=""
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput className={inputClass} autoCapitalize="characters" placeholder="group" onBlur={onBlur} onChangeText={onChange} value={value} />
                 )}
