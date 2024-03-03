@@ -2,7 +2,8 @@ import { Link } from "expo-router";
 import { SafeAreaView, ScrollView, Text, FlatList, View } from "react-native";
 import { PRODUCT_LIST } from "../../../.data/data";
 import Product from "../../../components/Product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery, useRealm } from "@realm/react";
 
 const addProduct = () => {
     const [data, setData] = useState(PRODUCT_LIST.slice(0, 24));
@@ -13,6 +14,16 @@ const addProduct = () => {
             setData(newData);
         }
     };
+    // console.info({ products: useQuery("products") })
+
+    const realm = useRealm();
+
+    // useEffect(() => {
+    //     realm.subscriptions.update((subs) => {
+    //         subs.add(realm.objects("products"));
+    //     });
+    // }, [realm])
+
     return (
         <View className="flex-1 items-center bg-white">
             <Text className="text-red-400">Index of Product Page</Text>

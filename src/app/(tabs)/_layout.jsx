@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-const AppLayout = () => {
+const TabLayout = () => {
     return (
         <Tabs screenOptions={{ headerShown: false }}>
             <Tabs.Screen
@@ -43,4 +43,4 @@ const AppLayout = () => {
     );
 };
 
-export default AppLayout;
+export default TabLayout;

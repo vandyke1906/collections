@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 
 const Product = (props) => {
   return (
@@ -9,4 +9,4 @@ const Product = (props) => {
   )
 }
 
-export default Product
+export default memo(Product)
