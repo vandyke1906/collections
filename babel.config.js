@@ -4,7 +4,8 @@ module.exports = function (api) {
         presets: ['babel-preset-expo'],
         plugins: [
             "nativewind/babel",
-            ["@babel/plugin-proposal-decorators", { "legacy": true }]
+            ["@babel/plugin-proposal-decorators", { "legacy": true }],
+            'react-native-reanimated/plugin'
         ],
     };
 };

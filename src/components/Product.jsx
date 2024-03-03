@@ -3,7 +3,7 @@ import React, { memo } from 'react'
 
 const Product = (props) => {
   return (
-    <View className="p-2">
+    <View className="w-full bg-gray-50 rounded-3xl p-5 my-2 border-black">
           <Text>{props.data?.name || ""}</Text>
     </View>
   )

@@ -8,20 +8,19 @@ import { OpenRealmBehaviorType } from "realm";
 
 const AppLayout = () => {
     return (
-        <AppProvider id="devicesync-zmsyi">
+        <AppProvider id="app-collection-jxjvg">
             <UserProvider fallback={LoginComponent}>
                 <RealmProvider
                     schema={[Product, Group, Customer]}
-                    deleteRealmIfMigrationNeeded={true}
-                    // sync={{
-                    //     flexible: true,
-                    //     newRealmFileBehavior: {
-                    //         type: OpenRealmBehaviorType.DownloadBeforeOpen
-                    //     },
-                    //     existingRealmFileBehavior: {
-                    //         type: OpenRealmBehaviorType.OpenImmediately
-                    //     }
-                    // }}
+                    sync={{
+                        flexible: true,
+                        newRealmFileBehavior: {
+                            type: OpenRealmBehaviorType.DownloadBeforeOpen
+                        },
+                        existingRealmFileBehavior: {
+                            type: OpenRealmBehaviorType.OpenImmediately
+                        }
+                    }}
                 >
                 <Stack />
                 </RealmProvider>

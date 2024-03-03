@@ -9,7 +9,7 @@ export class Product extends Realm.Object {
             code: "string",
             name: { type: "string", indexed: "full-text" },
             unit: "string",
-            group: { type: "string", indexed: true }
+            group: { type: "string", indexed: true, optional: true }
         },
     };
 }

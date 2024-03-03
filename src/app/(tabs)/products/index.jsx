@@ -6,26 +6,10 @@ import { useEffect, useState } from "react";
 import { useQuery, useRealm } from "@realm/react";
 
 const addProduct = () => {
-    const [data, setData] = useState(PRODUCT_LIST.slice(0, 24));
-    const fetchMoreData = () => {
-        console.info({ len: data.length, less: data.length < 26 });
-        if (data.length < 26) {
-            const newData = [...data, ...PRODUCT_LIST.slice(25, 50)];
-            setData(newData);
-        }
-    };
-    // console.info({ products: useQuery("products") })
-
-    const realm = useRealm();
-
-    // useEffect(() => {
-    //     realm.subscriptions.update((subs) => {
-    //         subs.add(realm.objects("products"));
-    //     });
-    // }, [realm])
-
+    const fetchMoreData = () => {};
+  const products = useQuery("products");
     return (
-        <View className="flex-1 items-center bg-white">
+        <View className="flex-1 items-center justify-center">
             <Text className="text-red-400">Index of Product Page</Text>
             <Link
                 href="/products/addProduct"
@@ -34,8 +18,8 @@ const addProduct = () => {
                 Add Product
             </Link>
             <FlatList
-                data={data}
-                keyExtractor={(item) => item.id}
+                data={products}
+                keyExtractor={(item) => item._id}
                 renderItem={({ item }) => <Product data={item} />}
                 onEndReached={fetchMoreData}
                 onEndReachedThreshold={0.2}
