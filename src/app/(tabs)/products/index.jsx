@@ -13,7 +13,7 @@ const addProduct = () => {
     const fetchMoreData = () => {};
     return (
         <View className="flex-1">
-            <View className="items-center justify-center">
+            <View className="items-center justify-center m-2">
                 <TextInput
                     className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     placeholder="Search Product..."
