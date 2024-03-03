@@ -24,7 +24,7 @@ const addProduct = () => {
                     className="w-full"
                     data={products}
                     keyExtractor={(item) => item._id}
-                    renderItem={({ item }) => <Product data={item} />}
+                    renderItem={({ item }) => <Product data={item} onEdit={() => router.navigate("/products/addProduct")} />}
                     onEndReached={fetchMoreData}
                     onEndReachedThreshold={0.1}
                     />
