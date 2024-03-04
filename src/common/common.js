@@ -1,9 +1,13 @@
 
 export const ROUTES = {
     HOME: "/(tabs)/home",
-    CUSTOMERS: "/customers",
-    CUSTOMER_FORM: "/customers/customerForm",
-    PRODUCTS: "/products",
-    PRODUCT_FORM: "/products/productForm",
-    SETTINGS: "/settings",
+    SALES: "/(tabs)/home/sales",
+    SALES_FORM: "/(tabs)/home/salesForm",
+    COLLECTIONS: "/(tabs)/home/collections",
+    COLLECTIONS_FORM: "/(tabs)/home/collectionsForm",
+    CUSTOMERS: "/(tabs)/customers",
+    CUSTOMER_FORM: "/(tabs)/customers/customerForm",
+    PRODUCTS: "/(tabs)/products",
+    PRODUCT_FORM: "/(tabs)/products/productForm",
+    SETTINGS: "/(tabs)/settings",
 };

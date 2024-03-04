@@ -9,6 +9,7 @@ const TabLayout = () => {
                 options={{
                     tabBarLabel: "Home",
                     title: "Home",
+                    unmountOnBlur: true,
                     tabBarIcon: ({ color }) => <FontAwesome size={24} name="home" color={color} />,
                 }}
             />
