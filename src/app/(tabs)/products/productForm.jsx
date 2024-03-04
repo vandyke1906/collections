@@ -1,6 +1,6 @@
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import { useCallback } from "react";
-import { useQuery, useRealm } from "@realm/react";
+import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { BSON } from "realm";
@@ -18,13 +18,15 @@ const productForm = () => {
             realm.write(() => {
                 let isNew = true;
 
-                const isCodeExist = (_code) => {
+                const isCodeExist = (_code, _id) => {
                     const regexPattern = new RegExp(data.code, 'i');
                     const product = realm.objects("products").find((c) => regexPattern.test(c.code));
+                    if (product && _id)
+                        if (product._id.toString() === _id) return false;
                     return !!product;
                 };
 
-                if (isCodeExist(data.code))
+                if (isCodeExist(data.code, params._id))
                     throw new Error(`Code [${data.code}] already exist.`);
 
                 const groupName = data.group && data.group.toUpperCase();
@@ -44,15 +46,15 @@ const productForm = () => {
                         isNew = false;
                     }
                 }
+
                 if(isNew)
                     realm.create("products", data);
 
-                console.info(`Product ${isNew ? "created" : "updated"}.`);
-
+                ToastAndroid.show(`Product ${isNew ? "created" : "updated"}.`, ToastAndroid.SHORT);
                 navigation.goBack();
             });
         } catch (error) {
-            console.error({error});
+                ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
         }
     }, [realm]);
     return (

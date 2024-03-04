@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import { useCallback } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
@@ -17,13 +17,15 @@ const customerForm = () => {
         try {
             realm.write(() => {
                 let isNew = true;
-                const isCodeExist = (_code) => {
+                const isCodeExist = (_code, _id) => {
                     const regexPattern = new RegExp(data.code, 'i');
                     const customer = realm.objects("customers").find((c) => regexPattern.test(c.code));
+                    if (customer && _id)
+                        if (customer._id.toString() === _id) return false;
                     return !!customer;
                 };
 
-                if (isCodeExist(data.code))
+                if (isCodeExist(data.code, params._id))
                     throw new Error(`Code [${data.code}] already exist.`);
 
                 if (params._id) {
@@ -38,12 +40,13 @@ const customerForm = () => {
 
                 if (isNew)
                     realm.create("customers", data);
-                console.info(`Customer ${isNew ? "created" : "updated"}.`);
+
+                ToastAndroid.show(`Customer ${isNew ? "created" : "updated"}.`, ToastAndroid.SHORT);
 
                 navigation.goBack();
             });
         } catch (error) {
-            console.error({ error });
+            ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
         }
     }, [realm]);
     return (
