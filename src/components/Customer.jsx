@@ -22,6 +22,7 @@ const Customer = ({data, onEdit }) => {
 
 Customer.propTypes = {
     data: PropTypes.shape({
+        id: PropTypes.string,
         code: PropTypes.string,
         name: PropTypes.string.isRequired,
         address: PropTypes.string,

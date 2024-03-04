@@ -31,6 +31,7 @@ const Product = ({data, onEdit }) => {
 
 Product.propTypes = {
     data: PropTypes.shape({
+        id: PropTypes.string,
         code: PropTypes.string,
         name: PropTypes.string.isRequired,
         unit: PropTypes.string.isRequired,

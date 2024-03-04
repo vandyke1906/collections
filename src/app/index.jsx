@@ -1,6 +1,7 @@
 import { useRealm } from "@realm/react";
 import { Redirect } from "expo-router";
 import { useEffect } from "react";
+import { ROUTES } from "../common/common";
 
 const Page = () => {
     const realm = useRealm();
@@ -12,7 +13,7 @@ const Page = () => {
         });
     }, [realm])
     return (
-        <Redirect href="/(tabs)/home" />
+        <Redirect href={ROUTES.HOME} />
     );
 };
 

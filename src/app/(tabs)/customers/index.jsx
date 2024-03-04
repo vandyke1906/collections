@@ -4,6 +4,7 @@ import Customer from "../../../components/Customer";
 import { useState } from "react";
 import { useQuery } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ROUTES } from "../../../common/common";
 
 const CustomerPage = () => {
     const [searchKey, setSearchKey] = useState("");
@@ -24,21 +25,21 @@ const CustomerPage = () => {
                     className="w-full"
                     data={customers}
                     keyExtractor={(item) => item._id}
-                    renderItem={({ item }) => <Customer data={item} onEdit={() => router.navigate("/customers/addCustomer")} />}
+                    renderItem={({ item }) => <Customer data={item} onEdit={() => router.navigate({ pathname: ROUTES.CUSTOMER_FORM, params: item })} />}
                     onEndReached={fetchMoreData}
                     onEndReachedThreshold={0.1}
                     />
             </View>
 
             <TouchableOpacity
-                className="bg-blue-600 w-14 h-14 rounded-full flex justify-center items-center"
+                className="bg-blue-700 w-14 h-14 rounded-full flex justify-center items-center"
                 style={{
                     position: "absolute",
-                    bottom: 10,
-                    right: 10
+                    bottom: 30,
+                    right: 15
                 }}
                 onPress={() => {
-                    router.navigate("/customers/addCustomer");
+                    router.navigate(ROUTES.CUSTOMER_FORM);
                 }}
             >
                 <FontAwesome size={20} name="plus" color="white" />

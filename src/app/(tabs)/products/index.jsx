@@ -4,6 +4,7 @@ import Product from "../../../components/Product";
 import { useState } from "react";
 import { useQuery } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ROUTES } from "../../../common/common";
 
 const ProductPage = () => {
     const [searchKey, setSearchKey] = useState("");
@@ -24,21 +25,21 @@ const ProductPage = () => {
                     className="w-full"
                     data={products}
                     keyExtractor={(item) => item._id}
-                    renderItem={({ item }) => <Product data={item} onEdit={() => router.navigate("/products/addProduct")} />}
+                    renderItem={({ item }) => <Product data={item} onEdit={() => router.navigate({ pathname: ROUTES.PRODUCT_FORM, params: item })} />}
                     onEndReached={fetchMoreData}
                     onEndReachedThreshold={0.1}
                     />
             </View>
 
             <TouchableOpacity
-                className="bg-blue-600 w-14 h-14 rounded-full flex justify-center items-center"
+                className="bg-blue-700 w-14 h-14 rounded-full flex justify-center items-center"
                 style={{
                     position: "absolute",
-                    bottom: 10,
-                    right: 10
+                    bottom: 30,
+                    right: 15
                 }}
                 onPress={() => {
-                    router.navigate("/products/addProduct");
+                    router.navigate(ROUTES.PRODUCT_FORM);
                 }}>
                     <FontAwesome size={20} name="plus" color="white" />
             </TouchableOpacity>

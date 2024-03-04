@@ -2,23 +2,48 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { useCallback } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
-import { useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import { BSON } from "realm";
 
-const addCustomer = () => {
+const customerForm = () => {
     const inputClass = "my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const {  control, handleSubmit, formState: { errors }  } = useForm();
     const realm = useRealm();
     const navigation = useNavigation();
+    const params = useLocalSearchParams();
 
-    const handleAddCustomer = useCallback((data) => {
+    const handleSubmitCustomer = useCallback((data) => {
         try {
             realm.write(() => {
-                realm.create("customers", data);
+                let isNew = true;
+                const isCodeExist = (_code) => {
+                    const regexPattern = new RegExp(data.code, 'i');
+                    const customer = realm.objects("customers").find((c) => regexPattern.test(c.code));
+                    return !!customer;
+                };
+
+                if (isCodeExist(data.code))
+                    throw new Error(`Code [${data.code}] already exist.`);
+
+                if (params._id) {
+                    const customer = realm.objectForPrimaryKey("customers", new BSON.UUID(params._id));
+                    if (customer) {
+                        customer.code = data.code;
+                        customer.name = data.name;
+                        customer.address = data.address;
+                        isNew = false;
+                    }
+                }
+
+                if (isNew)
+                    realm.create("customers", data);
+                console.info(`Customer ${isNew ? "created" : "updated"}.`);
+
                 navigation.goBack();
             });
         } catch (error) {
-            console.error({error});
+            console.error({ error });
         }
     }, [realm]);
     return (
@@ -28,7 +53,7 @@ const addCustomer = () => {
                 control={control}
                 rules={{ required: false }}
                 name="code"
-                defaultValue=""
+                defaultValue={params.code || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput className={inputClass} autoCapitalize="characters" placeholder="Code" onBlur={onBlur} onChangeText={onChange} value={value} />
                 )}
@@ -38,6 +63,7 @@ const addCustomer = () => {
                 control={control}
                 rules={{ required: true }}
                 name="name"
+                defaultValue={params.name || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput className={inputClass} autoCapitalize="characters" placeholder="Name" onBlur={onBlur} onChangeText={onChange} value={value} />
                 )}
@@ -47,13 +73,13 @@ const addCustomer = () => {
                 control={control}
                 rules={{ required: false }}
                 name="address"
-                defaultValue=""
+                defaultValue={params.address || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput className={inputClass} autoCapitalize="characters" placeholder="Address" onBlur={onBlur} onChangeText={onChange} value={value}  multiline={true} numberOfLines={4} />
                 )}
             />
 
-            <TouchableOpacity className="p-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={handleSubmit(handleAddCustomer)}>
+            <TouchableOpacity className="p-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitCustomer)}>
                 <Text className="text-white text-center text-[16px]">Save</Text>
             </TouchableOpacity>
 
@@ -65,4 +91,4 @@ const addCustomer = () => {
 };
 
 
-export default addCustomer;
+export default customerForm;
