@@ -10,7 +10,7 @@ import moment from "moment";
 
 
 const salesForm = () => {
-    const inputClass = "my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const {  control, handleSubmit, formState: { errors }  } = useForm();
     const realm = useRealm();
@@ -68,7 +68,7 @@ const salesForm = () => {
 
     return (
         <View className="p-5">
-            <Text>New Sales</Text>
+            <Text className="mb-5 font-bold">New Sales</Text>
 
             <Controller
                 control={control}
@@ -86,7 +86,8 @@ const salesForm = () => {
                         });
                     }}>
                         <View>
-                            <TextInput ref={refDateSI} className={inputClass} placeholder="Date Delivered" value={value} editable={false} />
+                            <Text className="text-slate-500">SI Date</Text>
+                            <TextInput ref={refDateSI} className={inputClass} placeholder="Sales Invoice Date" value={value} editable={false} />
                         </View>
                     </TouchableWithoutFeedback>
                 )}
@@ -98,7 +99,10 @@ const salesForm = () => {
                 name="customerName"
                 defaultValue={params.name || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Customer" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    <View>
+                        <Text className="text-slate-500">Customer</Text>
+                        <TextInput className={inputClass} autoCapitalize="characters" placeholder="Customer" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    </View>
                 )}
             />
 
@@ -108,7 +112,10 @@ const salesForm = () => {
                 name="poNo"
                 defaultValue={params.address || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Purchase Order Number" onBlur={onBlur} onChangeText={onChange} value={value}  />
+                    <View>
+                        <Text className="text-slate-500">PO Number</Text>
+                        <TextInput className={inputClass} autoCapitalize="characters" placeholder="Purchase Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    </View>
                 )}
             />
 
@@ -118,7 +125,10 @@ const salesForm = () => {
                 name="soNo"
                 defaultValue={params.address || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Sales Order Number" onBlur={onBlur} onChangeText={onChange} value={value}  />
+                    <View>
+                        <Text className="text-slate-500">SO Number</Text>
+                        <TextInput className={inputClass} autoCapitalize="characters" placeholder="Sales Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    </View>
                 )}
             />
 
@@ -138,6 +148,7 @@ const salesForm = () => {
                         });
                     }}>
                         <View>
+                            <Text className="text-slate-500">Date Delivered</Text>
                             <TextInput ref={refDateDelivered} className={inputClass} placeholder="Date Delivered" value={value} editable={false} />
                         </View>
                     </TouchableWithoutFeedback>
