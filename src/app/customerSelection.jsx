@@ -11,7 +11,10 @@ const customerSelection = () => {
     const [searchKey, setSearchKey] = React.useState("");
 
     React.useEffect(() => {
-        navigation.setOptions({ headerShown: true, title: "Select Customer" });
+        navigation.setOptions({
+            headerShown: true,
+            title: "Select Customer"
+        });
     }, [navigation]);
 
     const customers = useQuery("customers", (col) => {

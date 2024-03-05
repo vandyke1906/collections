@@ -1,5 +1,5 @@
 import { } from "@react-native-community/datetimepicker";
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback, Button, FlatList } from 'react-native';
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
@@ -14,16 +14,15 @@ import { ROUTES } from "../../../common/common";
 const salesForm = () => {
     const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
-    const {  control, handleSubmit, formState: { errors }  } = useForm();
+    const { control, handleSubmit, setValue, formState: { errors }  } = useForm();
     const realm = useRealm();
     const navigation = useNavigation();
     const params = useLocalSearchParams();
 
-    const refCustomer = useRef(null);
-    const refDateSI = useRef(null);
-    const refDateDelivered = useRef(null);
+    const [list, setList] = useState([]);
 
     const handleSubmitCustomer = useCallback((data) => {
+        console.info({ data });
         // try {
         //     realm.write(() => {
         //         let isNew = true;
@@ -70,125 +69,140 @@ const salesForm = () => {
     };
 
     useEffect(() => {
+        navigation.setOptions({
+            headerShown: true,
+            title: "Create Sales",
+            headerRight: () => (
+                <TouchableOpacity onPress={handleSubmit(handleSubmitCustomer)}>
+                    <FontAwesome size={18} name="check" color="green" />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation]);
+
+    useEffect(() => {
         switch (params.type) {
             case "customer": {
-                if (refCustomer && refCustomer.current)
-                    refCustomer.current.setNativeProps({
-                        text: `${params.code && `(${params.code})`} ${params.name}`
-                    });
+                setValue("customerName", `${params.code && `(${params.code})`} ${params.name}`);
                 break;
             }
         }
-
     }, [params]);
 
+    useEffect(() => {
+        if (Object.keys(errors).length)
+            ToastAndroid.show(JSON.stringify(errors), ToastAndroid.SHORT);
+    }, [errors]);
+
     return (
-        <View className="p-5">
-            <Text className="mb-5 font-bold">New Sales</Text>
-
-            <Controller
-                control={control}
-                rules={{ required: false }}
-                name="dateOfSI"
-                defaultValue={params.dateOfSI || ""}
-                render={({ field: { value } }) => (
-                    <TouchableWithoutFeedback onPress={() => {
-                        Keyboard.dismiss();
-                        showDatePicker((event, date) => {
-                            if (event.type === "set" && refDateSI && refDateSI.current)
-                                refDateSI.current.setNativeProps({
-                                    text: moment(date).format("(dddd), MMMM DD, YYYY")
-                                });
-                        });
-                    }}>
-                        <View>
-                            <Text className="text-slate-500">SI Date</Text>
-                            <TextInput ref={refDateSI} className={inputClass} placeholder="Sales Invoice Date" value={value} editable={false} />
-                        </View>
-                    </TouchableWithoutFeedback>
-                )}
-            />
-
-             <Controller
-                control={control}
-                rules={{ required: true }}
-                name="customerName"
-                defaultValue={params.name || ""}
-                render={({ field: { value } }) => (
-                    <TouchableWithoutFeedback onPress={() => {
-                        Keyboard.dismiss();
-                    }}>
-                        <View>
-                            <Text className="text-slate-500">Customer</Text>
-                            <View className="relative">
-                                <TextInput ref={refCustomer} className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Customer" value={value}  editable={false} />
-                                <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                                    router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION });
-                                }}>
-                                    <FontAwesome size={18} name="search" color="gray" />
-                                </TouchableOpacity>
+        <View className="flex flex-col h-full justify-between p-5 border-2">
+            <View className="flex-1">
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    name="dateOfSI"
+                    defaultValue={params.dateOfSI || ""}
+                    render={({ field: { value } }) => (
+                        <TouchableWithoutFeedback onPress={() => {
+                            Keyboard.dismiss();
+                            showDatePicker((event, date) => {
+                                if (event.type === "set")
+                                    setValue("dateOfSI", moment(date).format("(dddd), MMMM DD, YYYY"));
+                            });
+                        }}>
+                            <View>
+                                <Text className="text-slate-500">SI Date</Text>
+                                <TextInput className={inputClass} placeholder="Sales Invoice Date" value={value} editable={false} />
                             </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                )}
-            />
+                        </TouchableWithoutFeedback>
+                    )}
+                />
 
-             <Controller
-                control={control}
-                rules={{ required: false }}
-                name="poNo"
-                defaultValue={params.address || ""}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <View>
-                        <Text className="text-slate-500">PO Number</Text>
-                        <TextInput className={inputClass} autoCapitalize="characters" placeholder="Purchase Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
-                    </View>
-                )}
-            />
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    name="customerName"
+                    defaultValue={params.customerName || ""}
+                    render={({ field: { value } }) => (
+                        <TouchableWithoutFeedback onPress={() => {
+                            Keyboard.dismiss();
+                        }}>
+                            <View>
+                                <Text className="text-slate-500">Customer</Text>
+                                <View className="relative">
+                                    <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Customer" value={value} editable={false} />
+                                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                                        router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION });
+                                    }}>
+                                        <FontAwesome size={18} name="search" color="gray" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    )}
+                />
 
-            <Controller
-                control={control}
-                rules={{ required: false }}
-                name="soNo"
-                defaultValue={params.address || ""}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <View>
-                        <Text className="text-slate-500">SO Number</Text>
-                        <TextInput className={inputClass} autoCapitalize="characters" placeholder="Sales Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
-                    </View>
-                )}
-            />
-
-            <Controller
-                control={control}
-                rules={{ required: false }}
-                name="dateDelivered"
-                defaultValue={params.dateDelivered || ""}
-                render={({ field: { value } }) => (
-                    <TouchableWithoutFeedback onPress={() => {
-                        Keyboard.dismiss();
-                        showDatePicker((event, date) => {
-                            if (event.type === "set" && refDateDelivered && refDateDelivered.current)
-                                refDateDelivered.current.setNativeProps({
-                                    text: moment(date).format("(dddd), MMMM DD, YYYY")
-                                });
-                        });
-                    }}>
+                <Controller
+                    control={control}
+                    rules={{ required: false }}
+                    name="poNo"
+                    defaultValue={params.address || ""}
+                    render={({ field: { onChange, onBlur, value } }) => (
                         <View>
-                            <Text className="text-slate-500">Date Delivered</Text>
-                            <TextInput ref={refDateDelivered} className={inputClass} placeholder="Date Delivered" value={value} editable={false} />
+                            <Text className="text-slate-500">PO Number</Text>
+                            <TextInput className={inputClass} autoCapitalize="characters" placeholder="Purchase Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
                         </View>
-                    </TouchableWithoutFeedback>
-                )}
-            />
+                    )}
+                />
 
-            <TouchableOpacity className="p-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitCustomer)}>
-                <Text className="text-white text-center text-[16px]">Save</Text>
-            </TouchableOpacity>
+                <Controller
+                    control={control}
+                    rules={{ required: false }}
+                    name="soNo"
+                    defaultValue={params.address || ""}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <View>
+                            <Text className="text-slate-500">SO Number</Text>
+                            <TextInput className={inputClass} autoCapitalize="characters" placeholder="Sales Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                        </View>
+                    )}
+                />
 
-             <Text>
-                {!!Object.keys(errors).length && JSON.stringify(errors)}
-            </Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    name="dateDelivered"
+                    defaultValue={params.dateDelivered || ""}
+                    render={({ field: { value } }) => (
+                        <TouchableWithoutFeedback onPress={() => {
+                            Keyboard.dismiss();
+                            showDatePicker((event, date) => {
+                                if (event.type === "set")
+                                    setValue("dateDelivered", moment(date).format("(dddd), MMMM DD, YYYY"));
+                            });
+                        }}>
+                            <View>
+                                <Text className="text-slate-500">Date Delivered</Text>
+                                <TextInput className={inputClass} placeholder="Date Delivered" value={value} editable={false} />
+                            </View>
+                        </TouchableWithoutFeedback>
+                    )}
+                />
+
+                <FlatList
+                    className="w-full border-2"
+                    data={list}
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ item, index }) => <Text key={index}>test</Text>}
+                />
+
+            </View>
+
+            <View className="m-2">
+                <TouchableOpacity className="p-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={() => setList(prev => [...prev, { _id: 1 }])}>
+                    <Text className="text-white text-center text-[16px]">Add Product</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
