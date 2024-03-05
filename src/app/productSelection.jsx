@@ -14,6 +14,7 @@ const customerSelection = () => {
     const route = useRoute();
     const params = route.params || {};
     const addProduct = useSaleProductStore(state => state.addProduct);
+    const removeProduct = useSaleProductStore(state => state.removeProduct);
     const productList = useSaleProductStore(state => state.list);
 
     const [searchKey, setSearchKey] = React.useState("");
@@ -38,9 +39,8 @@ const customerSelection = () => {
     }, [searchKey]);
 
     const fetchMoreData = () => { };
-
     return (
-        <View className="m-2">
+        <View className="m-2 border-2 h-auto">
             <TextInput
                 className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 placeholder="Search Product..."
@@ -51,21 +51,26 @@ const customerSelection = () => {
                 className="w-full"
                 data={customers}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <Product data={item} enableButtons={false} onSelect={() => {
-                    const product = {
-                        key: moment().valueOf(),
-                        type: "product",
-                        ...item,
-                        _id: item._id.toString()
-                    };
-                    if (+params?.multipleSelect) {
-                        addProduct(product);
-                        console.info({ productList });
-                    } else {
-                        router.back();
-                        router.setParams(product);
-                    }
-                }} />}
+                renderItem={({ item }) => {
+                    const productId = item._id.toString();
+                    const productExist = !!productList.find(p => p._id === productId);
+                    return (
+                        <Product data={item} enableButtons={false} isActive={productExist} onSelect={() => {
+                            const product = {
+                                key: moment().valueOf(),
+                                type: "product",
+                                ...item,
+                                _id: productId
+                            };
+                            if (+params?.multipleSelect) {
+                                productExist ? removeProduct(productId) : addProduct(product);
+                            } else {
+                                router.back();
+                                router.setParams(product);
+                            }
+                        }} />
+                    )
+                }}
                 onEndReached={fetchMoreData}
                 onEndReachedThreshold={0.1}
                 />

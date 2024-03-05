@@ -20,10 +20,9 @@ const useSaleProductStore = create((set) => ({
         const filteredProduct = state.list.filter((p) => p._id !== id);
         return { list: filteredProduct };
     }),
-    clearList: () => {
-        console.info("##clear");;
+    clearList: () => set(() => {
         return { list: [] };
-    }
+    })
 }));
 
 export default useSaleProductStore;

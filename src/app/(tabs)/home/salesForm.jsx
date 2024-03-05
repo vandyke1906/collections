@@ -23,7 +23,7 @@ const salesForm = () => {
     const productList = useSaleProductStore(state => state.list);
     const clearList = useSaleProductStore(state => state.clearList);
 
-    const [list, setList] = useState([]);
+    const [list, setList] = useState(productList);
 
     const handleSubmitCustomer = useCallback((data) => {
         console.info({ data });
@@ -73,11 +73,6 @@ const salesForm = () => {
     };
 
     useEffect(() => {
-        setList([]);
-        clearList();
-    }, [])
-
-    useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             title: "Create Sales",
@@ -101,6 +96,11 @@ const salesForm = () => {
             }
             case "productList": {
                 setList(productList);
+                break;
+            }
+            case "clearList": {
+                clearList();
+                setList([]);
                 break;
             }
         }
@@ -206,22 +206,6 @@ const salesForm = () => {
                         </TouchableWithoutFeedback>
                     )}
                 />
-
-                {/* <VirtualizedList
-                    data={list}
-                    className="w-full"
-                    keyExtractor={(item) => item._id}
-                    renderItem={({ item, index }) => <SIProduct key={index} data={item} />}
-                    getItemCount={(data) => data.length}
-                    getItem={(data) => {
-                        return data;
-                    }}
-                /> */}
-                {/* <SectionList
-                    sections={[{ data: list }]}
-                    className="w-full"
-                    renderItem={({ item, index }) => <SIProduct key={index} data={item} />}
-                /> */}
                 {list.map((item, index) => (
                     <SIProduct key={index} data={item} />
                 ))}
