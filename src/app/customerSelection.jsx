@@ -6,7 +6,6 @@ import { useQuery } from "@realm/react";
 
 const customerSelection = () => {
     const navigation = useNavigation();
-    const params = {};
 
     const [searchKey, setSearchKey] = React.useState("");
 
@@ -38,6 +37,7 @@ const customerSelection = () => {
                 renderItem={({ item }) => <Customer data={item} enableButtons={false} onSelect={() => {
                     router.back();
                     const params = {
+                        key: moment().valueOf(),
                         type: "customer",
                         ...item,
                         _id: item._id.toString()

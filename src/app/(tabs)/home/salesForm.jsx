@@ -9,6 +9,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "../../../common/common";
+import useSaleProductStore from "../../../store/saleProductStore";
 
 
 const salesForm = () => {
@@ -18,6 +19,7 @@ const salesForm = () => {
     const realm = useRealm();
     const navigation = useNavigation();
     const params = useLocalSearchParams();
+    const productList = useSaleProductStore(state => state.list);
 
     const [list, setList] = useState([]);
 
@@ -81,13 +83,22 @@ const salesForm = () => {
     }, [navigation]);
 
     useEffect(() => {
+        console.info({params})
         switch (params.type) {
             case "customer": {
                 setValue("customerName", `${params.code && `(${params.code})`} ${params.name}`);
                 break;
             }
+            case "product": {
+                setList(prev => ([...prev, params ]))
+                break;
+            }
+            case "productList": {
+                setList(productList);
+                break;
+            }
         }
-    }, [params]);
+    }, [params?.key]);
 
     useEffect(() => {
         if (Object.keys(errors).length)
@@ -95,7 +106,7 @@ const salesForm = () => {
     }, [errors]);
 
     return (
-        <View className="flex flex-col h-full justify-between p-5 border-2">
+        <View className="flex flex-col h-full justify-between p-5">
             <View className="flex-1">
                 <Controller
                     control={control}
@@ -190,17 +201,27 @@ const salesForm = () => {
                 />
 
                 <FlatList
-                    className="w-full border-2"
+                    className="w-full"
                     data={list}
-                    keyExtractor={(item, index) => index}
-                    renderItem={({ item, index }) => <Text key={index}>test</Text>}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item, index }) => (
+                        <View key={index}>
+                            <Text>{item.code || ""}</Text>
+                            <Text>{item.name || ""}</Text>
+                            <Text>{item.unit || ""}</Text>
+                            <Text>{item.qty || ""}</Text>
+                            <Text>{item.price || ""}</Text>
+                        </View>
+                    )}
                 />
 
             </View>
 
             <View className="m-2">
-                <TouchableOpacity className="p-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={() => setList(prev => [...prev, { _id: 1 }])}>
-                    <Text className="text-white text-center text-[16px]">Add Product</Text>
+                <TouchableOpacity className="p-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={() => {
+                    router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
+                }}>
+                    <Text className="text-white text-center text-[16px]">Add Products</Text>
                 </TouchableOpacity>
             </View>
         </View>
