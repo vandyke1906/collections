@@ -29,18 +29,19 @@ const salesForm = () => {
     const [list, setList] = useState(productList);
 
     const handleSubmitCustomer = useCallback((data) => {
-        if (!list.length) return ToastAndroid.show("Add atleast one(1) product.", ToastAndroid.SHORT);
         try {
+            if (!productList.length) throw new Error("Add atleast one(1) product.");
+            updateDetails(data);
             realm.write(() => {
                 ToastAndroid.show("Sales invoice created.", ToastAndroid.SHORT);
-                updateDetails(data);
-                navigation.goBack();
-                navigation.reset();
+                console.info({ details });
+                // navigation.reset();
+                // navigation.navigate(ROUTES.HOME)
             });
         } catch (error) {
             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
         }
-    }, [realm]);
+    }, [realm, productList, details]);
 
     const showDatePicker = (onChange = () => { }) => {
         DateTimePickerAndroid.open({
@@ -52,7 +53,7 @@ const salesForm = () => {
     };
 
     const totalAmount = useMemo(() => {
-        return (details.totalAmount || 0).toString();
+        return Number(details.totalAmount || 0).toFixed(2);
     }, [details?.totalAmount]);
 
     useEffect(() => {
@@ -65,7 +66,7 @@ const salesForm = () => {
                 </TouchableOpacity>
             ),
         });
-    }, [navigation]);
+    }, [navigation, productList, details]);
 
     useEffect(() => {
         switch (params.type) {
@@ -123,6 +124,27 @@ const salesForm = () => {
                 <Controller
                     control={control}
                     rules={{ required: true }}
+                    name="dateDelivered"
+                    defaultValue={params.dateDelivered || ""}
+                    render={({ field: { value } }) => (
+                        <TouchableWithoutFeedback onPress={() => {
+                            Keyboard.dismiss();
+                            showDatePicker((event, date) => {
+                                if (event.type === "set")
+                                    setValue("dateDelivered", moment(date).format("(dddd), MMMM DD, YYYY"));
+                            });
+                        }}>
+                            <View>
+                                <Text className="text-slate-500">Date Delivered</Text>
+                                <TextInput className={inputClass} placeholder="Date Delivered" value={value} editable={false} />
+                            </View>
+                        </TouchableWithoutFeedback>
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
                     name="customerName"
                     defaultValue={params.customerName || ""}
                     render={({ field: { value } }) => (
@@ -172,30 +194,8 @@ const salesForm = () => {
 
                 <Controller
                     control={control}
-                    rules={{ required: true }}
-                    name="dateDelivered"
-                    defaultValue={params.dateDelivered || ""}
-                    render={({ field: { value } }) => (
-                        <TouchableWithoutFeedback onPress={() => {
-                            Keyboard.dismiss();
-                            showDatePicker((event, date) => {
-                                if (event.type === "set")
-                                    setValue("dateDelivered", moment(date).format("(dddd), MMMM DD, YYYY"));
-                            });
-                        }}>
-                            <View>
-                                <Text className="text-slate-500">Date Delivered</Text>
-                                <TextInput className={inputClass} placeholder="Date Delivered" value={value} editable={false} />
-                            </View>
-                        </TouchableWithoutFeedback>
-                    )}
-                />
-
-                <Controller
-                    control={control}
-                    rules={{ required: true }}
+                    rules={{ required: false }}
                     name="totalAmount"
-                    defaultValue={Number(totalAmount || 0).toFixed(2)}
                     render={({ field: { } }) => (
                         <View>
                             <Text className="text-slate-500">Total Revenue</Text>
