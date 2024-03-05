@@ -3,7 +3,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const TabLayout = () => {
     return (
-        <Tabs screenOptions={{ headerShown: true }}>
+        <Tabs screenOptions={{ headerShown: false }}>
             <Tabs.Screen
                 name="home"
                 options={{

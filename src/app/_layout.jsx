@@ -22,7 +22,7 @@ const AppLayout = () => {
                         }
                     }}
                 >
-                <Stack screenOptions={{headerShown: false }} />
+                <Stack screenOptions={{ headerShown: false }} />
                 </RealmProvider>
             </UserProvider>
         </AppProvider>

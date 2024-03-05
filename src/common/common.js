@@ -10,4 +10,6 @@ export const ROUTES = {
     PRODUCTS: "/(tabs)/products",
     PRODUCT_FORM: "/(tabs)/products/productForm",
     SETTINGS: "/(tabs)/settings",
+    CUSTOMER_SELECTION: "/customerSelection",
+    PRODUCT_SELECTION: "/productSelection",
 };

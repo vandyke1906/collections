@@ -25,7 +25,7 @@ const CustomerPage = () => {
                     className="w-full"
                     data={customers}
                     keyExtractor={(item) => item._id}
-                    renderItem={({ item }) => <Customer data={item} onEdit={() => router.navigate({ pathname: ROUTES.CUSTOMER_FORM, params: item })} />}
+                    renderItem={({ item }) => <Customer data={item} onEdit={() => router.navigate({ pathname: ROUTES.CUSTOMER_FORM, params: item })} enableButtons={true} />}
                     onEndReached={fetchMoreData}
                     onEndReachedThreshold={0.1}
                     />

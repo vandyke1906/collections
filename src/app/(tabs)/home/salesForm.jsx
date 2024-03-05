@@ -1,12 +1,14 @@
 import { } from "@react-native-community/datetimepicker";
 import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { BSON } from "realm";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ROUTES } from "../../../common/common";
 
 
 const salesForm = () => {
@@ -17,6 +19,7 @@ const salesForm = () => {
     const navigation = useNavigation();
     const params = useLocalSearchParams();
 
+    const refCustomer = useRef(null);
     const refDateSI = useRef(null);
     const refDateDelivered = useRef(null);
 
@@ -66,6 +69,19 @@ const salesForm = () => {
         });
     };
 
+    useEffect(() => {
+        switch (params.type) {
+            case "customer": {
+                if (refCustomer && refCustomer.current)
+                    refCustomer.current.setNativeProps({
+                        text: `${params.code && `(${params.code})`} ${params.name}`
+                    });
+                break;
+            }
+        }
+
+    }, [params]);
+
     return (
         <View className="p-5">
             <Text className="mb-5 font-bold">New Sales</Text>
@@ -78,8 +94,8 @@ const salesForm = () => {
                 render={({ field: { value } }) => (
                     <TouchableWithoutFeedback onPress={() => {
                         Keyboard.dismiss();
-                        showDatePicker((_, date) => {
-                            if (refDateSI && refDateSI.current)
+                        showDatePicker((event, date) => {
+                            if (event.type === "set" && refDateSI && refDateSI.current)
                                 refDateSI.current.setNativeProps({
                                     text: moment(date).format("(dddd), MMMM DD, YYYY")
                                 });
@@ -98,11 +114,22 @@ const salesForm = () => {
                 rules={{ required: true }}
                 name="customerName"
                 defaultValue={params.name || ""}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <View>
-                        <Text className="text-slate-500">Customer</Text>
-                        <TextInput className={inputClass} autoCapitalize="characters" placeholder="Customer" onBlur={onBlur} onChangeText={onChange} value={value} />
-                    </View>
+                render={({ field: { value } }) => (
+                    <TouchableWithoutFeedback onPress={() => {
+                        Keyboard.dismiss();
+                    }}>
+                        <View>
+                            <Text className="text-slate-500">Customer</Text>
+                            <View className="relative">
+                                <TextInput ref={refCustomer} className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Customer" value={value}  editable={false} />
+                                <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                                    router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION });
+                                }}>
+                                    <FontAwesome size={18} name="search" color="gray" />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </TouchableWithoutFeedback>
                 )}
             />
 
@@ -140,8 +167,8 @@ const salesForm = () => {
                 render={({ field: { value } }) => (
                     <TouchableWithoutFeedback onPress={() => {
                         Keyboard.dismiss();
-                        showDatePicker((_, date) => {
-                            if (refDateDelivered && refDateDelivered.current)
+                        showDatePicker((event, date) => {
+                            if (event.type === "set" && refDateDelivered && refDateDelivered.current)
                                 refDateDelivered.current.setNativeProps({
                                     text: moment(date).format("(dddd), MMMM DD, YYYY")
                                 });
@@ -162,12 +189,6 @@ const salesForm = () => {
              <Text>
                 {!!Object.keys(errors).length && JSON.stringify(errors)}
             </Text>
-
-            {/* {showDatePicker && (
-                <DateTimePicker mode="date" display="spinner" value={date} onChange={(event, date) => {
-                    console.info({ event, date });
-                }} />
-            )} */}
         </View>
     );
 };
