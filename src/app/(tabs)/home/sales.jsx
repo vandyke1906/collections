@@ -6,7 +6,6 @@ import { router } from "expo-router";
 import moment from "moment";
 
 const salesPage = () => {
-
     return (
         <View className="flex-1">
             <TouchableOpacity

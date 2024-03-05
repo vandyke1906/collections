@@ -5,13 +5,15 @@ import { Product } from "../model/Product";
 import { Group } from "../model/Group";
 import { Customer } from "../model/Customer";
 import { OpenRealmBehaviorType } from "realm";
+import { SalesInvoice } from "../model/SalesInvoice";
+import { SalesProduct } from "../model/SalesProduct";
 
 const AppLayout = () => {
     return (
         <AppProvider id="app-collection-jxjvg">
             <UserProvider fallback={LoginComponent}>
                 <RealmProvider
-                    schema={[Product, Group, Customer]}
+                    schema={[Product, Group, Customer, SalesInvoice, SalesProduct]}
                     sync={{
                         flexible: true,
                         newRealmFileBehavior: {

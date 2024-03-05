@@ -6,16 +6,16 @@ import { useQuery } from "@realm/react";
 import moment from "moment";
 import { useRoute } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import useSaleProductStore from "../store/saleProductStore";
+import useSalesInvoiceStore from "../store/salesInvoiceStore";
 
 
 const customerSelection = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
-    const addProduct = useSaleProductStore(state => state.addProduct);
-    const removeProduct = useSaleProductStore(state => state.removeProduct);
-    const productList = useSaleProductStore(state => state.list);
+    const addProduct = useSalesInvoiceStore(state => state.addProduct);
+    const removeProduct = useSalesInvoiceStore(state => state.removeProduct);
+    const productList = useSalesInvoiceStore(state => state.list);
 
     const [searchKey, setSearchKey] = React.useState("");
 

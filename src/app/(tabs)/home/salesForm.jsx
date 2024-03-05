@@ -1,6 +1,6 @@
 import { } from "@react-native-community/datetimepicker";
 import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback, Button, FlatList, ScrollView, SectionList, VirtualizedList } from 'react-native';
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
@@ -9,7 +9,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "../../../common/common";
-import useSaleProductStore from "../../../store/saleProductStore";
+import useSalesInvoiceStore from "../../../store/salesInvoiceStore";
 import SIProduct from "../../../components/SIProduct";
 
 
@@ -20,47 +20,26 @@ const salesForm = () => {
     const realm = useRealm();
     const navigation = useNavigation();
     const params = useLocalSearchParams();
-    const productList = useSaleProductStore(state => state.list);
-    const clearList = useSaleProductStore(state => state.clearList);
+    const productList = useSalesInvoiceStore(state => state.list);
+    const details = useSalesInvoiceStore(state => state.details);
+    const updateDetails = useSalesInvoiceStore(state => state.updateDetails);
+    const updateProductDetail = useSalesInvoiceStore(state => state.updateProductDetail);
+    const clearList = useSalesInvoiceStore(state => state.clearList);
 
     const [list, setList] = useState(productList);
 
     const handleSubmitCustomer = useCallback((data) => {
-        console.info({ data });
-        // try {
-        //     realm.write(() => {
-        //         let isNew = true;
-        //         const isCodeExist = (_code, _id) => {
-        //             const regexPattern = new RegExp(data.code, 'i');
-        //             const customer = realm.objects("customers").find((c) => regexPattern.test(c.code));
-        //             if (customer && _id)
-        //                 if (customer._id.toString() === _id) return false;
-        //             return !!customer;
-        //         };
-
-        //         if (isCodeExist(data.code, params._id))
-        //             throw new Error(`Code [${data.code}] already exist.`);
-
-        //         if (params._id) {
-        //             const customer = realm.objectForPrimaryKey("customers", new BSON.UUID(params._id));
-        //             if (customer) {
-        //                 customer.code = data.code;
-        //                 customer.name = data.name;
-        //                 customer.address = data.address;
-        //                 isNew = false;
-        //             }
-        //         }
-
-        //         if (isNew)
-        //             realm.create("customers", data);
-
-        //         ToastAndroid.show(`Customer ${isNew ? "created" : "updated"}.`, ToastAndroid.SHORT);
-
-        //         navigation.goBack();
-        //     });
-        // } catch (error) {
-        //     ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
-        // }
+        if (!list.length) return ToastAndroid.show("Add atleast one(1) product.", ToastAndroid.SHORT);
+        try {
+            realm.write(() => {
+                ToastAndroid.show("Sales invoice created.", ToastAndroid.SHORT);
+                updateDetails(data);
+                navigation.goBack();
+                navigation.reset();
+            });
+        } catch (error) {
+            ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
+        }
     }, [realm]);
 
     const showDatePicker = (onChange = () => { }) => {
@@ -71,6 +50,10 @@ const salesForm = () => {
             onChange: typeof onChange === "function" ? onChange : () => {}
         });
     };
+
+    const totalAmount = useMemo(() => {
+        return (details.totalAmount || 0).toString();
+    }, [details?.totalAmount]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -88,6 +71,7 @@ const salesForm = () => {
         switch (params.type) {
             case "customer": {
                 setValue("customerName", `${params.code && `(${params.code})`} ${params.name}`);
+                updateDetails({ customerId: params._id });
                 break;
             }
             case "product": {
@@ -206,8 +190,34 @@ const salesForm = () => {
                         </TouchableWithoutFeedback>
                     )}
                 />
+
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    name="totalAmount"
+                    defaultValue={Number(totalAmount || 0).toFixed(2)}
+                    render={({ field: { } }) => (
+                        <View>
+                            <Text className="text-slate-500">Total Revenue</Text>
+                            <TextInput className={`${inputClass} text-right`} placeholder="Total Revenue" value={totalAmount} editable={false} />
+                        </View>
+                    )}
+                />
+
                 {list.map((item, index) => (
-                    <SIProduct key={index} data={item} />
+                    <SIProduct
+                        key={index}
+                        data={item}
+                        onQtyChange={(text) => {
+                            if(text)
+                                updateProductDetail(item._id, { qty: +text });
+                        }}
+                        onAmountChange={(text) => {
+                            if (text) {
+                                updateProductDetail(item._id, { amount: +text });
+                            }
+                        }}
+                    />
                 ))}
             </View>
 

@@ -10,6 +10,8 @@ const Page = () => {
             subs.add(realm.objects("products"));
             subs.add(realm.objects("groups"));
             subs.add(realm.objects("customers"));
+            subs.add(realm.objects("salesInvoices"));
+            subs.add(realm.objects("salesProducts"));
         });
     }, [realm])
     return (
