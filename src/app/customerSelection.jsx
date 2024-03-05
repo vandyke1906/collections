@@ -3,6 +3,7 @@ import React from 'react'
 import { router, useNavigation } from "expo-router";
 import Customer from "../components/Customer";
 import { useQuery } from "@realm/react";
+import moment from "moment";
 
 const customerSelection = () => {
     const navigation = useNavigation();

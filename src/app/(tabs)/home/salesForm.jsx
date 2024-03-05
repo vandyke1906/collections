@@ -1,5 +1,5 @@
 import { } from "@react-native-community/datetimepicker";
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback, Button, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback, Button, FlatList, ScrollView, SectionList, VirtualizedList } from 'react-native';
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
@@ -10,6 +10,7 @@ import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "../../../common/common";
 import useSaleProductStore from "../../../store/saleProductStore";
+import SIProduct from "../../../components/SIProduct";
 
 
 const salesForm = () => {
@@ -20,6 +21,7 @@ const salesForm = () => {
     const navigation = useNavigation();
     const params = useLocalSearchParams();
     const productList = useSaleProductStore(state => state.list);
+    const clearList = useSaleProductStore(state => state.clearList);
 
     const [list, setList] = useState([]);
 
@@ -71,6 +73,11 @@ const salesForm = () => {
     };
 
     useEffect(() => {
+        setList([]);
+        clearList();
+    }, [])
+
+    useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             title: "Create Sales",
@@ -83,7 +90,6 @@ const salesForm = () => {
     }, [navigation]);
 
     useEffect(() => {
-        console.info({params})
         switch (params.type) {
             case "customer": {
                 setValue("customerName", `${params.code && `(${params.code})`} ${params.name}`);
@@ -106,6 +112,7 @@ const salesForm = () => {
     }, [errors]);
 
     return (
+        <ScrollView>
         <View className="flex flex-col h-full justify-between p-5">
             <View className="flex-1">
                 <Controller
@@ -200,21 +207,24 @@ const salesForm = () => {
                     )}
                 />
 
-                <FlatList
-                    className="w-full"
+                {/* <VirtualizedList
                     data={list}
+                    className="w-full"
                     keyExtractor={(item) => item._id}
-                    renderItem={({ item, index }) => (
-                        <View key={index}>
-                            <Text>{item.code || ""}</Text>
-                            <Text>{item.name || ""}</Text>
-                            <Text>{item.unit || ""}</Text>
-                            <Text>{item.qty || ""}</Text>
-                            <Text>{item.price || ""}</Text>
-                        </View>
-                    )}
-                />
-
+                    renderItem={({ item, index }) => <SIProduct key={index} data={item} />}
+                    getItemCount={(data) => data.length}
+                    getItem={(data) => {
+                        return data;
+                    }}
+                /> */}
+                {/* <SectionList
+                    sections={[{ data: list }]}
+                    className="w-full"
+                    renderItem={({ item, index }) => <SIProduct key={index} data={item} />}
+                /> */}
+                {list.map((item, index) => (
+                    <SIProduct key={index} data={item} />
+                ))}
             </View>
 
             <View className="m-2">
@@ -224,7 +234,8 @@ const salesForm = () => {
                     <Text className="text-white text-center text-[16px]">Add Products</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+            </View>
+        </ScrollView>
     );
 };
 

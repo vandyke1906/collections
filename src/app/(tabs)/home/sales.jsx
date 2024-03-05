@@ -3,6 +3,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from 'react'
 import { ROUTES } from "../../../common/common";
 import { router } from "expo-router";
+import useSaleProductStore from "../../../store/saleProductStore";
 
 const salesPage = () => {
   return (
