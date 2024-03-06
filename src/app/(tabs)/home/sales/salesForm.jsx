@@ -36,7 +36,7 @@ const salesForm = () => {
                 const latestDetails = useSalesInvoiceStore.getState().details;
 
                 const getSalesInvoice = (_invNo) => {
-                    const salesInvoice = realm.objects("salesProducts").find((c) => c.invoiceNo.toUpperCase() === _invNo.toUpperCase());
+                    const salesInvoice = realm.objects("salesInvoices").find((c) => c.invoiceNo.toUpperCase() === _invNo.toUpperCase());
                     return salesInvoice;
                 };
 
