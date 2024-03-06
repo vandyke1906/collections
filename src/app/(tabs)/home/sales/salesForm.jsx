@@ -8,11 +8,9 @@ import { BSON } from "realm";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { ROUTES } from "../../../common/common";
-import useSalesInvoiceStore from "../../../store/salesInvoiceStore";
-import SIProduct from "../../../components/SIProduct";
-
-const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
+import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
+import SIProduct from "../../../../components/SIProduct";
+import { DATE_FORMAT, ROUTES } from "../../../../common/common";
 
 const salesForm = () => {
     const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -21,8 +19,6 @@ const salesForm = () => {
     const realm = useRealm();
     const navigation = useNavigation();
     const params = useLocalSearchParams();
-
-    const salesInvoices = useQuery("salesInvoices");
 
     const productList = useSalesInvoiceStore(state => state.list);
     const details = useSalesInvoiceStore(state => state.details);
@@ -53,6 +49,7 @@ const salesForm = () => {
                 const latestDetails = useSalesInvoiceStore.getState().details;
                 const salesInvoiceData = {
                     customerId: new BSON.UUID(latestDetails.customerId),
+                    customerName: latestDetails.customerName,
                     invoiceNo: latestDetails.invoiceNo,
                     dateOfSI: moment(latestDetails.dateOfSI, DATE_FORMAT).valueOf(),
                     dateDelivered: moment(latestDetails.dateDelivered, DATE_FORMAT).valueOf(),
