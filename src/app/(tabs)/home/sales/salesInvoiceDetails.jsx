@@ -3,16 +3,71 @@ import React, { useEffect } from 'react';
 import { router, useNavigation } from "expo-router";
 import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
 import moment from "moment";
-import { DATE_FORMAT, ROUTES, amountFormat } from "../../../../common/common";
+import { DATE_FORMAT, MODE_OF_PAYMENT, ROUTES, amountFormat, formatDate } from "../../../../common/common";
+import { useQuery, useRealm } from "@realm/react";
+import { BSON } from "realm";
 
 const salesInvoiceDetails = () => {
     const navigation = useNavigation();
+    const realm = useRealm();
 
     const selectedInvoice = useSalesInvoiceStore(state => state.selected);
+    const collections = useQuery("collections", (col) => {
+        if(selectedInvoice?._id){
+            const uuidInstance = new BSON.UUID(selectedInvoice._id);
+            console.info({ uuidInstance })
+        }
+
+        const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", new BSON.UUID(selectedInvoice._id));
+        // console.info({ currentSalesInvoice })
+        if(!currentSalesInvoice) return [];
+        return col.filtered("salesInvoice == $0", currentSalesInvoice.salesInvoice);
+    }, [selectedInvoice?._id]);
 
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: "Sales Invoice Details" });
     }, [navigation]);
+
+    const renderProducts = (products) => {
+        return (
+            <View className="mt-2 mb-5 flex border-t border-gray-300">
+                <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">products</Text>
+                {products.map((item, index) => (
+                    <View key={index} className="rounded-lg bg-white mt-5 p-2">
+                        {item?.code && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">{item?.code}</Text>}
+                        {item?.name && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{item?.name}</Text>}
+                        <View className="flex flex-row items-center justify-between">
+                            <View className="flex flex-row items-center justify-between gap-2">
+                                {item?.qty && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">({item?.qty})</Text>}
+                                {item?.unit && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">{item?.unit}</Text>}
+                            </View>
+                            {item?.amount && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{amountFormat(item?.amount)}</Text>}
+                        </View>
+                    </View>
+                ))}
+            </View>
+        );
+    };
+
+    const renderCollections = () => {
+        return (
+            <View className="mt-2 mb-5 flex border-t border-gray-300">
+                <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">collections</Text>
+                {collections.map((item, index) => (
+                    <View key={index} className="rounded-lg bg-white mt-5 p-2">
+                    {item?.paymentDate && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">Payment Date: {formatDate(item?.paymentDate)}</Text>}
+                        {item?.corNo && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">COR #: {item?.corNo}</Text>}
+                        {item?.corDate && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">COR Date: {formatDate(item?.corDate)}</Text>}
+                        <View className="flex flex-row items-center justify-between">
+                            {item?.modeOfPayment && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">{MODE_OF_PAYMENT[item?.modeOfPayment]}</Text>}
+                            {item?.amount && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{amountFormat(item?.amount)}</Text>}
+                        </View>
+                    </View>
+                ))}
+            </View>
+
+        );
+    }
 
 
     const renderDetails = (data) => {
@@ -27,7 +82,10 @@ const salesInvoiceDetails = () => {
                     {data?.dateOfSI && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">SI Date: {moment(data?.dateOfSI).format(DATE_FORMAT)}</Text>}
                     {data?.dateDelivered && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Delivered Date: {moment(data?.dateDelivered).format(DATE_FORMAT)}</Text>}
 
-                    {data?.totalAmount && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {amountFormat(data?.totalAmount)}</Text>}
+                    <View className="flex flex-row items-center justify-between">
+                        {!isNaN(data?.totalAmount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {amountFormat(data?.totalAmount)}</Text>}
+                        {!isNaN(data?.unpaidAmount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Unpaid: {amountFormat(data?.unpaidAmount)}</Text>}
+                    </View>
 
 
                     <TouchableOpacity onPress={() => {
@@ -36,28 +94,16 @@ const salesInvoiceDetails = () => {
                         <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Add Collection</Text>
                     </TouchableOpacity>
 
-                    <View className="">
-                        {data.products.map((product, index) => (
-                            <View key={index} className="rounded-lg bg-white mt-5 p-2">
-                                {product?.code && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.code}</Text>}
-                                {product?.name && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.name}</Text>}
-                                <View className="flex flex-row items-center justify-between">
-                                    <View className="flex flex-row items-center justify-between gap-2">
-                                        {product?.qty && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">({product?.qty})</Text>}
-                                        {product?.unit && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.unit}</Text>}
-                                    </View>
-                                    {product?.amount && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{amountFormat(product?.amount)}</Text>}
-                                </View>
-                            </View>
-                        ))}
-                    </View>
+                    {renderProducts(data.products)}
+                    {renderCollections()}
+
                 </View>
             </View>
         )
     };
 
   return (
-      <ScrollView className="flex w-full">
+    <ScrollView className="flex w-full">
           {!!selectedInvoice && renderDetails(selectedInvoice)}
     </ScrollView>
   )

@@ -1,7 +1,6 @@
-import { } from "@react-native-community/datetimepicker";
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback, Button, FlatList, ScrollView, SectionList, VirtualizedList } from 'react-native';
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery, useRealm } from "@realm/react";
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Keyboard, TouchableWithoutFeedback, Button, FlatList, ScrollView, SectionList, VirtualizedList } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { BSON } from "realm";
@@ -44,7 +43,9 @@ const salesForm = () => {
                     throw new Error(`INvoice [${latestDetails.invoiceNo}] already exist.`);
 
                 const products = [];
+                let totalAmount = 0;
                 for (const product of productList) {
+                    totalAmount += +product.amount;
                     const productData = {
                         productId: new BSON.UUID(product._id),
                         code: product.code || "",
@@ -63,7 +64,8 @@ const salesForm = () => {
                     dateDelivered: moment(latestDetails.dateDelivered, DATE_FORMAT).valueOf(),
                     poNo: latestDetails.poNo,
                     soNo: latestDetails.soNo,
-                    totalAmount: latestDetails.totalAmount,
+                    totalAmount: totalAmount,
+                    unpaidAmount: totalAmount,
                     products: products
                 };
                 realm.create("salesInvoices", salesInvoiceData);

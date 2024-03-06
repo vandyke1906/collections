@@ -1,6 +1,6 @@
 import { View, TouchableOpacity } from 'react-native'
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ROUTES } from "../../../../common/common";
 import { router, useNavigation } from "expo-router";
 import { useRealm } from "@realm/react";
