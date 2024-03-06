@@ -1,18 +1,23 @@
 import { View, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ROUTES } from "../../../../common/common";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import moment from "moment";
 import { useQuery } from "@realm/react";
 import SalesInvoiceCard from "../../../../components/SalesInvoiceCard";
 
 const salesPage = () => {
+    const navigation = useNavigation();
     const [searchKey, setSearchKey] = useState("");
     const salesInvoices = useQuery("salesInvoices", (col) => {
         return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey);
     }, [searchKey]);
-    const fetchMoreData = () => {};
+    const fetchMoreData = () => { };
+
+    useEffect(() => {
+        navigation.setOptions({ headerShown: true, title: "Sales Invoices" });
+    }, [navigation]);
 
     return (
         <View className="flex-1">

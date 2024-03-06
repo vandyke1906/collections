@@ -28,7 +28,6 @@ const TabLayout = () => {
                     tabBarLabel: "Products",
                     title: "Products",
                     unmountOnBlur: true,
-                    // headerRight: () => <Button onPress={() => router.push("products/addProduct")} title="Add New" />,
                     tabBarIcon: ({ color }) => <FontAwesome size={24} name="cart-plus" color={color} />,
                 }}
             />
