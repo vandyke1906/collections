@@ -20,7 +20,6 @@ const collectionForm = () => {
     const { control, handleSubmit, setValue, formState: { errors }  } = useForm();
 
     const handleSubmitCollection = useCallback((data) => {
-        console.info("submit", data);
         try {
             realm.write(() => {
                 const collectionData = {

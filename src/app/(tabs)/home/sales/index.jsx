@@ -16,7 +16,7 @@ const salesPage = () => {
     const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
 
     const salesInvoices = useQuery("salesInvoices", (col) => {
-        return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey);
+        return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("siDate");
     }, [searchKey]);
     const fetchMoreData = () => { };
 

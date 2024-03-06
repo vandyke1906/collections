@@ -13,15 +13,9 @@ const salesInvoiceDetails = () => {
 
     const selectedInvoice = useSalesInvoiceStore(state => state.selected);
     const collections = useQuery("collections", (col) => {
-        if(selectedInvoice?._id){
-            const uuidInstance = new BSON.UUID(selectedInvoice._id);
-            console.info({ uuidInstance })
-        }
-
         const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", new BSON.UUID(selectedInvoice._id));
-        // console.info({ currentSalesInvoice })
         if(!currentSalesInvoice) return [];
-        return col.filtered("salesInvoice == $0", currentSalesInvoice.salesInvoice);
+        return col.filtered("salesInvoice == $0", currentSalesInvoice.salesInvoice).sorted("paymentDate");
     }, [selectedInvoice?._id]);
 
     useEffect(() => {
@@ -52,12 +46,18 @@ const salesInvoiceDetails = () => {
     const renderCollections = () => {
         return (
             <View className="mt-2 mb-5 flex border-t border-gray-300">
-                <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">collections</Text>
+                <View className="flex flex-row items-center justify-between">
+                    <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">collections</Text>
+                    <TouchableOpacity onPress={() => router.navigate({ pathname: ROUTES.COLLECTIONS_FORM }) }>
+                        <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Add Collection</Text>
+                    </TouchableOpacity>
+                </View>
+
                 {collections.map((item, index) => (
                     <View key={index} className="rounded-lg bg-white mt-5 p-2">
                     {item?.paymentDate && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">Payment Date: {formatDate(item?.paymentDate)}</Text>}
-                        {item?.corNo && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">COR #: {item?.corNo}</Text>}
                         {item?.corDate && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">COR Date: {formatDate(item?.corDate)}</Text>}
+                        {item?.corNo && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">COR #: {item?.corNo}</Text>}
                         <View className="flex flex-row items-center justify-between">
                             {item?.modeOfPayment && <Text className="block font-sans text-sm antialiased leading-normal text-gray-700 opacity-75">{MODE_OF_PAYMENT[item?.modeOfPayment]}</Text>}
                             {item?.amount && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{amountFormat(item?.amount)}</Text>}
@@ -86,13 +86,6 @@ const salesInvoiceDetails = () => {
                         {!isNaN(data?.totalAmount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {amountFormat(data?.totalAmount)}</Text>}
                         {!isNaN(data?.unpaidAmount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Unpaid: {amountFormat(data?.unpaidAmount)}</Text>}
                     </View>
-
-
-                    <TouchableOpacity onPress={() => {
-                        router.navigate({ pathname: ROUTES.COLLECTIONS_FORM });
-                    }}>
-                        <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Add Collection</Text>
-                    </TouchableOpacity>
 
                     {renderProducts(data.products)}
                     {renderCollections()}

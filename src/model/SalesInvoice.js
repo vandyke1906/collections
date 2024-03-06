@@ -1,3 +1,4 @@
+import moment from "moment";
 import Realm, { BSON } from "realm";
 
 export class SalesInvoice extends Realm.Object {
@@ -6,9 +7,9 @@ export class SalesInvoice extends Realm.Object {
         primaryKey: "_id",
         properties: {
             _id: { type: "uuid", default: () => new BSON.UUID() },
-            dateOfSI: "int?",
+            dateOfSI: { type: "int", indexed: true },
             invoiceNo: "string",
-            dateDelivered: "int?",
+            dateDelivered: { type: "int", indexed: true },
             poNo: "string",
             soNo: "string",
             totalAmount: "double",
@@ -16,7 +17,7 @@ export class SalesInvoice extends Realm.Object {
             customerId: "uuid",
             customerName: "string",
             products: "salesProducts[]",
-            dateCreated: "int?",
+            dateCreated: { type: "int", default: () => moment().valueOf() },
         },
     };
 }

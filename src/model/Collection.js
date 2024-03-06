@@ -8,7 +8,7 @@ export class Collection extends Realm.Object {
             _id: { type: "uuid", default: () => new BSON.UUID() },
             corNo: "string",
             corDate: "int",
-            paymentDate: "int",
+            paymentDate: { type: "int", indexed: true },
             amount: "double",
             modeOfPayment: "string",
             salesInvoice: "salesInvoices"

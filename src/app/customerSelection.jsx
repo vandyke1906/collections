@@ -18,7 +18,7 @@ const customerSelection = () => {
     }, [navigation]);
 
     const customers = useQuery("customers", (col) => {
-        return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey);
+        return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
     }, [searchKey]);
 
     const fetchMoreData = () => { };
