@@ -59,7 +59,7 @@ const salesForm = () => {
                     products: products
                 };
                 realm.create("salesInvoices", salesInvoiceData);
-                router.navigate({ pathname: ROUTES.HOME });
+                router.navigate({ pathname: ROUTES.SALES });
                 ToastAndroid.show("Sales invoice created.", ToastAndroid.SHORT);
             });
         } catch (error) {
@@ -95,7 +95,7 @@ const salesForm = () => {
     useEffect(() => {
         switch (params.type) {
             case "customer": {
-                setValue("customerName", `${params.code && `(${params.code})`} ${params.name}`);
+                setValue("customerName", params.name);
                 updateDetails({ customerId: params._id });
                 break;
             }
