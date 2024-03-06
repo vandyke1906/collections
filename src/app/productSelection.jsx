@@ -40,7 +40,7 @@ const customerSelection = () => {
 
     const fetchMoreData = () => { };
     return (
-        <View className="m-2 border-2 h-auto">
+        <View className="m-2 h-auto">
             <TextInput
                 className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 placeholder="Search Product..."
@@ -52,7 +52,7 @@ const customerSelection = () => {
                 data={customers}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
-                    const productId = item._id.toString();
+                    const productId = item._id;
                     const productExist = !!productList.find(p => p._id === productId);
                     return (
                         <Product data={item} enableButtons={false} isActive={productExist} onSelect={() => {

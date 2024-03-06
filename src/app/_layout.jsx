@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { Stack } from "expo-router";
 import { AppProvider, RealmProvider, UserProvider, useAuth } from "@realm/react";
 import { Product } from "../model/Product";

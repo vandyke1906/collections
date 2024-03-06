@@ -1,3 +1,4 @@
+import "react-native-get-random-values";
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useEffect } from 'react';
 import { router, useNavigation } from "expo-router";
@@ -12,9 +13,9 @@ const salesInvoiceDetails = () => {
     const realm = useRealm();
 
     const selectedInvoice = useSalesInvoiceStore(state => state.selected);
+
     const collections = useQuery("collections", (col) => {
-        const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", new BSON.UUID(selectedInvoice._id));
-        if(!currentSalesInvoice) return [];
+        const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
         return col.filtered("salesInvoice == $0", currentSalesInvoice.salesInvoice).sorted("paymentDate");
     }, [selectedInvoice?._id]);
 

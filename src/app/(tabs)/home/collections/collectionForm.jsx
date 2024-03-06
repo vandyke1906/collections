@@ -31,7 +31,7 @@ const collectionForm = () => {
                     salesInvoices: selectedInvoice
                 };
                 realm.create("collections", collectionData);
-                const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", new BSON.UUID(selectedInvoice._id));
+                const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
 
                 if (currentSalesInvoice)
                     currentSalesInvoice.unpaidAmount -= collectionData.amount;

@@ -41,7 +41,6 @@ const customerSelection = () => {
                         key: moment().valueOf(),
                         type: "customer",
                         ...item,
-                        _id: item._id.toString()
                     };
                     router.setParams(params);
                 }} />}

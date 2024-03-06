@@ -3,7 +3,6 @@ import { useCallback } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { BSON } from "realm";
 
 const productForm = () => {
     const inputClass = "my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -22,7 +21,7 @@ const productForm = () => {
                     const regexPattern = new RegExp(data.code, 'i');
                     const product = realm.objects("products").find((c) => regexPattern.test(c.code));
                     if (product && _id)
-                        if (product._id.toString() === _id) return false;
+                        if (product._id === _id) return false;
                     return !!product;
                 };
 
@@ -37,7 +36,7 @@ const productForm = () => {
                 }
 
                 if (params._id) {
-                    const product = realm.objectForPrimaryKey("products", new BSON.UUID(params._id));
+                    const product = realm.objectForPrimaryKey("products", params._id);
                     if (product) {
                         product.code = data.code;
                         product.name = data.name;

@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { ROUTES } from "../../../common/common";
 
 const Page = () => {

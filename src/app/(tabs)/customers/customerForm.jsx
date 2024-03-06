@@ -20,7 +20,7 @@ const customerForm = () => {
                     const regexPattern = new RegExp(data.code, 'i');
                     const customer = realm.objects("customers").find((c) => regexPattern.test(c.code));
                     if (customer && _id)
-                        if (customer._id.toString() === _id) return false;
+                        if (customer._id === _id) return false;
                     return !!customer;
                 };
 
@@ -28,7 +28,7 @@ const customerForm = () => {
                     throw new Error(`Code [${data.code}] already exist.`);
 
                 if (params._id) {
-                    const customer = realm.objectForPrimaryKey("customers", new BSON.UUID(params._id));
+                    const customer = realm.objectForPrimaryKey("customers", params._id);
                     if (customer) {
                         customer.code = data.code;
                         customer.name = data.name;

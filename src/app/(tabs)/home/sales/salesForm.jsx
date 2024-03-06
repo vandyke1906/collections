@@ -47,7 +47,7 @@ const salesForm = () => {
                 for (const product of productList) {
                     totalAmount += +product.amount;
                     const productData = {
-                        productId: new BSON.UUID(product._id),
+                        productId: product._id,
                         code: product.code || "",
                         name: product.name,
                         unit: product.unit,
@@ -57,7 +57,7 @@ const salesForm = () => {
                     products.push(realm.create("salesProducts", productData));
                 }
                 const salesInvoiceData = {
-                    customerId: new BSON.UUID(latestDetails.customerId),
+                    customerId: latestDetails.customerId,
                     customerName: latestDetails.customerName,
                     invoiceNo: latestDetails.invoiceNo,
                     dateOfSI: moment(latestDetails.dateOfSI, DATE_FORMAT).valueOf(),
