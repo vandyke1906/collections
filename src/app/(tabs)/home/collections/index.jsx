@@ -1,10 +1,19 @@
 import { View, TouchableOpacity } from 'react-native'
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from 'react'
-import { ROUTES } from "../../../common/common";
-import { router } from "expo-router";
+import { ROUTES } from "../../../../common/common";
+import { router, useNavigation } from "expo-router";
+import { useRealm } from "@realm/react";
 
 const collections = () => {
+
+    const navigation = useNavigation();
+    const realm = useRealm();
+
+    useEffect(() => {
+        navigation.setOptions({ headerShown: true, title: "Collections" });
+    }, [navigation]);
+
   return (
     <View className="flex-1">
         <TouchableOpacity

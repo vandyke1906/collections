@@ -1,9 +1,9 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useEffect } from 'react';
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
 import moment from "moment";
-import { DATE_FORMAT } from "../../../../common/common";
+import { DATE_FORMAT, ROUTES } from "../../../../common/common";
 
 const salesInvoiceDetails = () => {
     const navigation = useNavigation();
@@ -29,6 +29,13 @@ const salesInvoiceDetails = () => {
 
                     {data?.totalAmount && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {Number(data?.totalAmount).toFixed(2)}</Text>}
 
+
+                    <TouchableOpacity onPress={() => {
+                        router.navigate({ pathname: ROUTES.COLLECTIONS_FORM });
+                    }}>
+                        <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Add Collection</Text>
+                    </TouchableOpacity>
+
                     <View className="rounded-lg bg-white mt-5 p-2">
                         {data.products.map((product, index) => (
                             <View key={index}>
@@ -41,11 +48,6 @@ const salesInvoiceDetails = () => {
                         ))}
                     </View>
                 </View>
-                {/* {enableButtons && <View className="flex flex-row items-center justify-end border-t-2 border-neutral-100 font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">
-                    <TouchableOpacity onPress={onEdit}>
-                        <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Edit</Text>
-                    </TouchableOpacity>
-                </View>} */}
             </View>
         )
     };

@@ -5,7 +5,7 @@ export const ROUTES = {
     SALES_FORM: "/(tabs)/home/sales/salesForm",
     SALES_INVOICE_DETAILS: "/(tabs)/home/sales/salesInvoiceDetails",
     COLLECTIONS: "/(tabs)/home/collections",
-    COLLECTIONS_FORM: "/(tabs)/home/collectionsForm",
+    COLLECTIONS_FORM: "/(tabs)/home/collections/collectionForm",
     CUSTOMERS: "/(tabs)/customers",
     CUSTOMER_FORM: "/(tabs)/customers/customerForm",
     PRODUCTS: "/(tabs)/products",
