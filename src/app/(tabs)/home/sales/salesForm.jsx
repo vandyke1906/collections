@@ -33,6 +33,16 @@ const salesForm = () => {
             if (!productList.length) throw new Error("Add atleast one(1) product.");
             updateDetails(data);
             realm.write(() => {
+                const latestDetails = useSalesInvoiceStore.getState().details;
+
+                const getSalesInvoice = (_invNo) => {
+                    const salesInvoice = realm.objects("salesProducts").find((c) => c.invoiceNo === _invNo);
+                    return salesInvoice;
+                };
+
+                if (getSalesInvoice(latestDetails.invoiceNo))
+                    throw new Error(`INvoice [${latestDetails.invoiceNo}] already exist.`);
+
                 const products = [];
                 for (const product of productList) {
                     const productData = {
@@ -45,8 +55,6 @@ const salesForm = () => {
                     };
                     products.push(realm.create("salesProducts", productData));
                 }
-
-                const latestDetails = useSalesInvoiceStore.getState().details;
                 const salesInvoiceData = {
                     customerId: new BSON.UUID(latestDetails.customerId),
                     customerName: latestDetails.customerName,
