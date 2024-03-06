@@ -4,12 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { ROUTES } from "../../../../common/common";
 import { router, useNavigation } from "expo-router";
 import moment from "moment";
-import { useQuery } from "@realm/react";
+import { useQuery, useRealm } from "@realm/react";
 import SalesInvoiceCard from "../../../../components/SalesInvoiceCard";
+import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
 
 const salesPage = () => {
     const navigation = useNavigation();
+    const realm = useRealm();
+
     const [searchKey, setSearchKey] = useState("");
+    const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
+
     const salesInvoices = useQuery("salesInvoices", (col) => {
         return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey);
     }, [searchKey]);
@@ -18,6 +23,16 @@ const salesPage = () => {
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: "Sales Invoices" });
     }, [navigation]);
+
+
+    const getSalesInvoiceDetails = (item) => {
+        const salesInvoice = realm.objectForPrimaryKey("salesInvoices", item._id);
+        if (salesInvoice) {
+            const customer = realm.objectForPrimaryKey("customers", salesInvoice.customerId);
+            const siProducts = salesInvoice.products.map((p) => realm.objectForPrimaryKey("salesProducts", p._id));
+            setSelectedInvoice({ ...salesInvoice, ...customer, products: siProducts });
+        }
+    }
 
     return (
         <View className="flex-1">
@@ -35,6 +50,7 @@ const salesPage = () => {
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
                         <SalesInvoiceCard data={item} onEdit={() => router.navigate({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
+                            getSalesInvoiceDetails(item);
                             router.navigate(ROUTES.SALES_INVOICE_DETAILS);
                         }} />
                     )}

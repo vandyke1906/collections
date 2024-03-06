@@ -12,6 +12,13 @@ const useSalesInvoiceStore = create((set) => {
     return {
         list: [],
         details: DEFAULT_DETAILS,
+        selected: null,
+        setSelected: (selected = {}) => set(() => {
+            return { selected };
+        }),
+        clearSelected: () => set(() => {
+            return { selected: null };
+        }),
         updateDetails: (data = {}) => set((state) => {
             const { dateOfSI, customerId, customerName, poNo, soNo, dateDelivered, totalAmount, invoiceNo } = data;
             const newDetails = { ...state.details };
