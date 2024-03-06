@@ -10,10 +10,11 @@ import { SalesProduct } from "../model/SalesProduct";
 
 const AppLayout = () => {
     return (
-        <AppProvider id="app-collection-jxjvg">
+        <AppProvider id="app-collection-vgocb">
             <UserProvider fallback={LoginComponent}>
                 <RealmProvider
                     schema={[Product, Group, Customer, SalesInvoice, SalesProduct]}
+                    // deleteRealmIfMigrationNeeded={true}
                     sync={{
                         flexible: true,
                         newRealmFileBehavior: {

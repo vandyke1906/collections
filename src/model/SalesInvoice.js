@@ -6,12 +6,14 @@ export class SalesInvoice extends Realm.Object {
         primaryKey: "_id",
         properties: {
             _id: { type: "uuid", default: () => new BSON.UUID() },
-            dateOfSI: { type: 'date', optional: true },
-            dateDelivered: { type: 'date', optional: true },
+            dateOfSI: "int?",
+            invoiceNo: "string",
+            dateDelivered: "int?",
             poNo: "string",
             soNo: "string",
             totalAmount: "double",
-            products: { type: "linkingObjects", objectType: "salesProducts", property: "salesInvoice" }
+            customerId: "uuid",
+            products: "salesProducts[]"
         },
     };
 }

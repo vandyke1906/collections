@@ -1,7 +1,7 @@
 import { } from "@react-native-community/datetimepicker";
 import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Pressable, TouchableOpacityBase, Keyboard, TouchableWithoutFeedback, Button, FlatList, ScrollView, SectionList, VirtualizedList } from 'react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRealm } from "@realm/react";
+import { useQuery, useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { BSON } from "realm";
@@ -12,6 +12,7 @@ import { ROUTES } from "../../../common/common";
 import useSalesInvoiceStore from "../../../store/salesInvoiceStore";
 import SIProduct from "../../../components/SIProduct";
 
+const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
 
 const salesForm = () => {
     const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -20,6 +21,9 @@ const salesForm = () => {
     const realm = useRealm();
     const navigation = useNavigation();
     const params = useLocalSearchParams();
+
+    const salesInvoices = useQuery("salesInvoices");
+
     const productList = useSalesInvoiceStore(state => state.list);
     const details = useSalesInvoiceStore(state => state.details);
     const updateDetails = useSalesInvoiceStore(state => state.updateDetails);
@@ -33,10 +37,33 @@ const salesForm = () => {
             if (!productList.length) throw new Error("Add atleast one(1) product.");
             updateDetails(data);
             realm.write(() => {
+                const products = [];
+                for (const product of productList) {
+                    const productData = {
+                        productId: new BSON.UUID(product._id),
+                        code: product.code || "",
+                        name: product.name,
+                        unit: product.unit,
+                        qty: +product.qty,
+                        amount: +product.amount
+                    };
+                    products.push(realm.create("salesProducts", productData));
+                }
+
+                const latestDetails = useSalesInvoiceStore.getState().details;
+                const salesInvoiceData = {
+                    customerId: new BSON.UUID(latestDetails.customerId),
+                    invoiceNo: latestDetails.invoiceNo,
+                    dateOfSI: moment(latestDetails.dateOfSI, DATE_FORMAT).valueOf(),
+                    dateDelivered: moment(latestDetails.dateDelivered, DATE_FORMAT).valueOf(),
+                    poNo: latestDetails.poNo,
+                    soNo: latestDetails.soNo,
+                    totalAmount: latestDetails.totalAmount,
+                    products: products
+                };
+                realm.create("salesInvoices", salesInvoiceData);
+                router.navigate({ pathname: ROUTES.HOME });
                 ToastAndroid.show("Sales invoice created.", ToastAndroid.SHORT);
-                console.info({ details });
-                // navigation.reset();
-                // navigation.navigate(ROUTES.HOME)
             });
         } catch (error) {
             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
@@ -102,6 +129,18 @@ const salesForm = () => {
             <View className="flex-1">
                 <Controller
                     control={control}
+                    rules={{ required: false }}
+                    name="invoiceNo"
+                    defaultValue={params.invoiceNo || ""}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <View>
+                            <Text className="text-slate-500">Invoice Number</Text>
+                            <TextInput className={inputClass} autoCapitalize="characters" placeholder="Invoice Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                        </View>
+                    )}
+                />
+                <Controller
+                    control={control}
                     rules={{ required: true }}
                     name="dateOfSI"
                     defaultValue={params.dateOfSI || ""}
@@ -110,7 +149,7 @@ const salesForm = () => {
                             Keyboard.dismiss();
                             showDatePicker((event, date) => {
                                 if (event.type === "set")
-                                    setValue("dateOfSI", moment(date).format("(dddd), MMMM DD, YYYY"));
+                                    setValue("dateOfSI", moment(date).format(DATE_FORMAT));
                             });
                         }}>
                             <View>
@@ -131,7 +170,7 @@ const salesForm = () => {
                             Keyboard.dismiss();
                             showDatePicker((event, date) => {
                                 if (event.type === "set")
-                                    setValue("dateDelivered", moment(date).format("(dddd), MMMM DD, YYYY"));
+                                    setValue("dateDelivered", moment(date).format(DATE_FORMAT));
                             });
                         }}>
                             <View>

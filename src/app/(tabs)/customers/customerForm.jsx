@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-nat
 import { useCallback } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { BSON } from "realm";
 
 const customerForm = () => {
@@ -10,7 +10,6 @@ const customerForm = () => {
 
     const {  control, handleSubmit, formState: { errors }  } = useForm();
     const realm = useRealm();
-    const navigation = useNavigation();
     const params = useLocalSearchParams();
 
     const handleSubmitCustomer = useCallback((data) => {
@@ -42,8 +41,7 @@ const customerForm = () => {
                     realm.create("customers", data);
 
                 ToastAndroid.show(`Customer ${isNew ? "created" : "updated"}.`, ToastAndroid.SHORT);
-
-                navigation.goBack();
+                router.back();
             });
         } catch (error) {
             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);

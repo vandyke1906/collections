@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const DEFAULT_DETAILS = Object.freeze({ dateOfSI: null, customerId: null, poNo: "", soNo: "", dateDelivered: null, totalAmount: 0 });
+const DEFAULT_DETAILS = Object.freeze({ invoiceNo: "", dateOfSI: null, customerId: null, poNo: "", soNo: "", dateDelivered: null, totalAmount: 0 });
 
 const useSalesInvoiceStore = create((set) => {
     const calculateTotalAmount = (_list) => {
@@ -13,13 +13,14 @@ const useSalesInvoiceStore = create((set) => {
         list: [],
         details: DEFAULT_DETAILS,
         updateDetails: (data = {}) => set((state) => {
-            const { dateOfSI, customerId, poNo, soNo, dateDelivered, totalAmount } = data;
+            const { dateOfSI, customerId, poNo, soNo, dateDelivered, totalAmount, invoiceNo } = data;
             const newDetails = { ...state.details };
+            if (invoiceNo != null) newDetails.invoiceNo = invoiceNo;
             if (dateOfSI != null) newDetails.dateOfSI = dateOfSI;
+            if (dateDelivered != null) newDetails.dateDelivered = dateDelivered;
             if (customerId != null) newDetails.customerId = customerId;
             if (poNo != null) newDetails.poNo = poNo;
             if (soNo != null) newDetails.soNo = soNo;
-            if (dateDelivered != null) newDetails.dateDelivered = dateDelivered;
             if (totalAmount != null) newDetails.totalAmount = totalAmount;
             return { details: newDetails };
         }),
