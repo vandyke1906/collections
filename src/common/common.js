@@ -16,3 +16,12 @@ export const ROUTES = {
 };
 
 export const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
+
+export const amountFormat = (number) => {
+    const options = {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    };
+    return Number(number).toLocaleString("en-US", options);
+};

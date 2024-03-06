@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { router, useNavigation } from "expo-router";
 import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
 import moment from "moment";
-import { DATE_FORMAT, ROUTES } from "../../../../common/common";
+import { DATE_FORMAT, ROUTES, amountFormat } from "../../../../common/common";
 
 const salesInvoiceDetails = () => {
     const navigation = useNavigation();
@@ -27,7 +27,7 @@ const salesInvoiceDetails = () => {
                     {data?.dateOfSI && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">SI Date: {moment(data?.dateOfSI).format(DATE_FORMAT)}</Text>}
                     {data?.dateDelivered && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Delivered Date: {moment(data?.dateDelivered).format(DATE_FORMAT)}</Text>}
 
-                    {data?.totalAmount && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {Number(data?.totalAmount).toFixed(2)}</Text>}
+                    {data?.totalAmount && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {amountFormat(data?.totalAmount)}</Text>}
 
 
                     <TouchableOpacity onPress={() => {
@@ -36,14 +36,18 @@ const salesInvoiceDetails = () => {
                         <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Add Collection</Text>
                     </TouchableOpacity>
 
-                    <View className="rounded-lg bg-white mt-5 p-2">
+                    <View className="">
                         {data.products.map((product, index) => (
-                            <View key={index}>
+                            <View key={index} className="rounded-lg bg-white mt-5 p-2">
                                 {product?.code && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.code}</Text>}
                                 {product?.name && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.name}</Text>}
-                                {product?.unit && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.unit}</Text>}
-                                {product?.qty && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.qty}</Text>}
-                                {product?.amount && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{Number(product?.amount).toFixed(2)}</Text>}
+                                <View className="flex flex-row items-center justify-between">
+                                    <View className="flex flex-row items-center justify-between gap-2">
+                                        {product?.qty && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">({product?.qty})</Text>}
+                                        {product?.unit && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.unit}</Text>}
+                                    </View>
+                                    {product?.amount && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{amountFormat(product?.amount)}</Text>}
+                                </View>
                             </View>
                         ))}
                     </View>

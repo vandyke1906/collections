@@ -14,7 +14,8 @@ export class SalesInvoice extends Realm.Object {
             totalAmount: "double",
             customerId: "uuid",
             customerName: "string",
-            products: "salesProducts[]"
+            products: "salesProducts[]",
+            dateCreated: "int?",
         },
     };
 }
