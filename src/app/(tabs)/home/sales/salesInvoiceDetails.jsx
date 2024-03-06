@@ -1,7 +1,9 @@
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
 import { useNavigation } from "expo-router";
 import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
+import moment from "moment";
+import { DATE_FORMAT } from "../../../../common/common";
 
 const salesInvoiceDetails = () => {
     const navigation = useNavigation();
@@ -13,11 +15,9 @@ const salesInvoiceDetails = () => {
     }, [navigation]);
 
 
-
-  return (
-      <View className="flex w-full">
-          <Text>{JSON.stringify(selectedInvoice, null, 2)}</Text>
-           {/* <View className="block w-full rounded-lg bg-white text-left p-2 my-2">
+    const renderDetails = (data) => {
+        return (
+            <View className="block w-fulltext-left p-2 my-2">
                 <View className="p-2">
                     {data?.invoiceNo && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{data?.invoiceNo}</Text>}
                     {data?.customerName && <Text className="block font-sans text-sm antialiased font-bold leading-normal text-gray-900">{data?.customerName}</Text>}
@@ -28,14 +28,32 @@ const salesInvoiceDetails = () => {
                     {data?.dateDelivered && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Delivered Date: {moment(data?.dateDelivered).format(DATE_FORMAT)}</Text>}
 
                     {data?.totalAmount && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {Number(data?.totalAmount).toFixed(2)}</Text>}
+
+                    <View className="rounded-lg bg-white mt-5 p-2">
+                        {data.products.map((product, index) => (
+                            <View key={index}>
+                                {product?.code && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.code}</Text>}
+                                {product?.name && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.name}</Text>}
+                                {product?.unit && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.unit}</Text>}
+                                {product?.qty && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{product?.qty}</Text>}
+                                {product?.amount && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{Number(product?.amount).toFixed(2)}</Text>}
+                            </View>
+                        ))}
+                    </View>
                 </View>
-                {enableButtons && <View className="flex flex-row items-center justify-end border-t-2 border-neutral-100 font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">
+                {/* {enableButtons && <View className="flex flex-row items-center justify-end border-t-2 border-neutral-100 font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">
                     <TouchableOpacity onPress={onEdit}>
                         <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Edit</Text>
                     </TouchableOpacity>
-                </View>}
-            </View> */}
-    </View>
+                </View>} */}
+            </View>
+        )
+    };
+
+  return (
+      <ScrollView className="flex w-full">
+          {!!selectedInvoice && renderDetails(selectedInvoice)}
+    </ScrollView>
   )
 }
 
