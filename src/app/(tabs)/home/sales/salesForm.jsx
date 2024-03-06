@@ -131,7 +131,7 @@ const salesForm = () => {
     }, [errors]);
 
     return (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View className="flex flex-col h-full justify-between p-5">
             <View className="flex-1">
                 <Controller

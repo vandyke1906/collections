@@ -170,7 +170,7 @@ const collectionForm = () => {
 
 
     return (
-        <ScrollView className="flex w-full">
+        <ScrollView className="flex w-full" showsVerticalScrollIndicator={false}>
             {!!selectedInvoice && renderDetails(selectedInvoice)}
             <Text>{JSON.stringify(errors)}</Text>
         </ScrollView>

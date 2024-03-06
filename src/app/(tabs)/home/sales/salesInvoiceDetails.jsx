@@ -96,7 +96,7 @@ const salesInvoiceDetails = () => {
     };
 
   return (
-    <ScrollView className="flex w-full">
+    <ScrollView className="flex w-full" showsVerticalScrollIndicator={false}>
           {!!selectedInvoice && renderDetails(selectedInvoice)}
     </ScrollView>
   )
