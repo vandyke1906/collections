@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable, Text, View } from 'react-native';
 import { ROUTES } from "../../../common/common";
 import { useQuery } from "@realm/react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const Page = () => {
 
@@ -26,6 +27,12 @@ const Page = () => {
                         <Text className="text-slate-400 font-medium text-center">Collections</Text>
                     </Pressable>
                 </View>
+            </View>
+            <View className="basis-1/5">
+                 <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.navigate({ pathname: ROUTES.REPORTS })}>
+                         <FontAwesome size={64} name="bar-chart" color="gray" />
+                        <Text className="text-slate-400 font-medium text-center uppercase">View Reports</Text>
+                    </Pressable>
             </View>
 
             <View className="h-full">

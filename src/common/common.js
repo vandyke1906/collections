@@ -16,6 +16,7 @@ export const ROUTES = {
     CUSTOMER_SELECTION: "/customerSelection",
     PRODUCT_SELECTION: "/productSelection",
     GROUP_SELECTION: "/groupSelection",
+    REPORTS: "/reports",
 };
 
 export const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
@@ -24,6 +25,11 @@ export const MODE_OF_PAYMENT = Object.freeze({
     CASH: "CASH",
     CHEQUE: "CHEQUE",
     BIR_2307: "BIR-2307"
+});
+
+export const REPORT_TYPE = Object.freeze({
+    SALES: "salesInvoices",
+    COLLECTIONS: "collections",
 });
 
 export const amountFormat = (number) => {
