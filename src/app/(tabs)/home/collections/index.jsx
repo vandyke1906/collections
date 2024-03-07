@@ -22,7 +22,7 @@ const collections = () => {
     const fetchMoreData = () => { };
 
     useEffect(() => {
-        navigation.setOptions({ headerShown: true, title: "Collecations" });
+        navigation.setOptions({ headerShown: true, title: "Collections" });
     }, [navigation]);
 
 
