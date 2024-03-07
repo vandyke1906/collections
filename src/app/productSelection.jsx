@@ -38,7 +38,7 @@ const customerSelection = () => {
         return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
     }, [searchKey]);
 
-    const fetchMoreData = () => { };
+const fetchMoreData = () => { };
     return (
         <View className="m-2 h-auto">
             <TextInput

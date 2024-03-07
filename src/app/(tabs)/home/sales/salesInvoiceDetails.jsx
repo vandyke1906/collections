@@ -6,7 +6,6 @@ import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
 import moment from "moment";
 import { DATE_FORMAT, MODE_OF_PAYMENT, ROUTES, amountFormat, formatDate } from "../../../../common/common";
 import { useQuery, useRealm } from "@realm/react";
-import { BSON } from "realm";
 
 const salesInvoiceDetails = () => {
     const navigation = useNavigation();
@@ -16,7 +15,7 @@ const salesInvoiceDetails = () => {
 
     const collections = useQuery("collections", (col) => {
         const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
-        return col.filtered("salesInvoice == $0", currentSalesInvoice.salesInvoice).sorted("paymentDate");
+        return col.filtered("salesInvoice == $0", currentSalesInvoice?.salesInvoice).sorted("paymentDate");
     }, [selectedInvoice?._id]);
 
     useEffect(() => {

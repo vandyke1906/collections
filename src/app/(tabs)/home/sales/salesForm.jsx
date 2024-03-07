@@ -248,31 +248,33 @@ const salesForm = () => {
                             <TextInput className={`${inputClass} text-right`} placeholder="Total Revenue" value={totalAmount} editable={false} />
                         </View>
                     )}
-                />
-
-                {list.map((item, index) => (
-                    <SIProduct
-                        key={index}
-                        data={item}
-                        onQtyChange={(text) => {
-                            if(text)
-                                updateProductDetail(item._id, { qty: +text });
-                        }}
-                        onAmountChange={(text) => {
-                            if (text) {
-                                updateProductDetail(item._id, { amount: +text });
-                            }
-                        }}
                     />
-                ))}
-            </View>
 
-            <View className="m-2">
-                <TouchableOpacity className="p-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={() => {
-                    router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
-                }}>
-                    <Text className="text-white text-center text-[16px]">Add Products</Text>
-                </TouchableOpacity>
+                <View className="mt-2 mb-5 flex border-t border-gray-300">
+                    <View className="flex flex-row items-center justify-between">
+                        <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">products</Text>
+                        <TouchableOpacity onPress={() => router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } }) }>
+                            <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Add Products</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {list.map((item, index) => (
+                        <SIProduct
+                            key={index}
+                            data={item}
+                            onQtyChange={(text) => {
+                                if(text)
+                                    updateProductDetail(item._id, { qty: +text });
+                            }}
+                            onAmountChange={(text) => {
+                                if (text) {
+                                    updateProductDetail(item._id, { amount: +text });
+                                }
+                            }}
+                        />
+                    ))}
+                </View>
+
             </View>
             </View>
         </ScrollView>

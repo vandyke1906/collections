@@ -16,6 +16,7 @@ const collectionForm = () => {
     const navigation = useNavigation();
     const realm = useRealm();
     const selectedInvoice = useSalesInvoiceStore(state => state.selected);
+    const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
 
     const { control, handleSubmit, setValue, formState: { errors }  } = useForm();
 
@@ -30,14 +31,18 @@ const collectionForm = () => {
                     modeOfPayment: data.modeOfPayment,
                     salesInvoices: selectedInvoice
                 };
-                realm.create("collections", collectionData);
+
                 const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
+                if (currentSalesInvoice) {
+                        currentSalesInvoice.unpaidAmount -= collectionData.amount;
 
-                if (currentSalesInvoice)
-                    currentSalesInvoice.unpaidAmount -= collectionData.amount;
-
-                router.back();
-                ToastAndroid.show(`Collection on Invoice#: ${selectedInvoice.invoiceNo} added.`, ToastAndroid.SHORT);
+                    realm.create("collections", collectionData);
+                    setSelectedInvoice({ unpaidAmount: currentSalesInvoice.unpaidAmount });
+                    router.back();
+                    ToastAndroid.show(`Collection on Invoice#: ${selectedInvoice.invoiceNo} added.`, ToastAndroid.SHORT);
+                }
+                else
+                    ToastAndroid.show(`Invoice is not ready.`, ToastAndroid.SHORT);
             });
         } catch (error) {
             console.error({error})

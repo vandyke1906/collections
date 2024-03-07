@@ -30,7 +30,9 @@ const salesPage = () => {
         if (salesInvoice) {
             const customer = realm.objectForPrimaryKey("customers", salesInvoice.customerId);
             const siProducts = salesInvoice.products.map((p) => realm.objectForPrimaryKey("salesProducts", p._id));
-            setSelectedInvoice({ ...salesInvoice, ...customer, products: siProducts });
+            customer.customerId = customer._id;
+            delete customer._id;
+            setSelectedInvoice({ ...customer, ...salesInvoice, products: siProducts });
         }
     }
 
