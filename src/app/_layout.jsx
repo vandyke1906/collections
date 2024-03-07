@@ -18,12 +18,12 @@ const AppLayout = () => {
                     schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails]}
                     sync={{
                         flexible: true,
-                        newRealmFileBehavior: {
-                            type: OpenRealmBehaviorType.DownloadBeforeOpen
-                        },
-                        existingRealmFileBehavior: {
-                            type: OpenRealmBehaviorType.OpenImmediately
-                        }
+                        // newRealmFileBehavior: {
+                        //     type: OpenRealmBehaviorType.DownloadBeforeOpen
+                        // },
+                        // existingRealmFileBehavior: {
+                        //     type: OpenRealmBehaviorType.OpenImmediately
+                        // }
                     }}
                 >
                 <Stack screenOptions={{ headerShown: false }} />
