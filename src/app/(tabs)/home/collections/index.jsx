@@ -52,16 +52,16 @@ const collections = () => {
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}>
-                <View className="flex justify-center items-center">
-                    <View className="border-r-2 h-full w-full">
+                <View className="flex justify-center items-center h-full bg-slate-300">
+                    <View className="shadow-md drop-shadow-sm rounded-md ring-1 w-11/12 p-5 bg-white">
                          <View className="relative">
                             <TextInput
-                                className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                className="pr-20 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 placeholder="Invoice Number"
                                 value={invoiceNumber}
                                 onChangeText={(text) => setInvoiceNumber(text)}
                             />
-                            <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                            <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-10" onPress={() => {
                                 const found = getSalesInvoiceDetails({ invoiceNo: invoiceNumber });
                                 if (found) {
                                     setShowInvoiceModal(false);
@@ -70,13 +70,16 @@ const collections = () => {
                                 else
                                     ToastAndroid.show(`Invoice#: ${invoiceNumber} not found.`, ToastAndroid.SHORT);
                             }}>
-                                <FontAwesome size={18} name="arrow-right" color="gray" />
+                                <FontAwesome size={18} name="arrow-right" color="green" />
                             </TouchableOpacity>
-                        </View>
 
-                        <Pressable onPress={() => setShowInvoiceModal((prevState) => !prevState)}>
-                            <Text>Hide Modal</Text>
-                        </Pressable>
+                            <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                                    setShowInvoiceModal(false);
+                            }}>
+                                <FontAwesome size={18} name="times" color="gray" />
+                            </TouchableOpacity>
+
+                        </View>
                     </View>
                 </View>
             </Modal>

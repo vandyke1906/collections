@@ -18,20 +18,20 @@ const Page = () => {
             <View className="basis-1/5">
                 <View className="flex flex-row items-stretch w-full h-full rounded-lg">
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.navigate({ pathname: ROUTES.SALES })}>
-                        <Text className="text-7xl text-slate-600 font-sans">{salesInvoiceList.length}</Text>
-                        <Text className="text-slate-400 font-medium text-center">Sales Invoices</Text>
+                        <Text className="text-7xl font-sans text-blue-400">{salesInvoiceList.length}</Text>
+                        <Text className="text-slate-900 font-medium text-center">Sales Invoices</Text>
                     </Pressable>
 
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.navigate({ pathname: ROUTES.COLLECTIONS })}>
-                        <Text className="text-7xl text-slate-600 font-sans">{collectionList.length}</Text>
-                        <Text className="text-slate-400 font-medium text-center">Collections</Text>
+                        <Text className="text-7xl font-sans text-blue-400">{collectionList.length}</Text>
+                        <Text className="text-slate-900 font-medium text-center">Collections</Text>
                     </Pressable>
                 </View>
             </View>
             <View className="basis-1/5">
                  <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.navigate({ pathname: ROUTES.FILTER_REPORT })}>
-                         <FontAwesome size={64} name="bar-chart" color="gray" />
-                        <Text className="text-slate-400 font-medium text-center uppercase">View Reports</Text>
+                         <FontAwesome size={64} name="bar-chart" color="#189AB4" />
+                        <Text className="text-slate-900 font-medium text-center uppercase">View Reports</Text>
                     </Pressable>
             </View>
 
