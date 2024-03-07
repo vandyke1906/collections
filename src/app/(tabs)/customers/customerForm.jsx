@@ -39,9 +39,9 @@ const customerForm = () => {
                             });
                         }
 
-                        customer.code = data.code;
-                        customer.name = data.name;
-                        customer.address = data.address;
+                        customer.code = data.code.trim();
+                        customer.name = data.name.trim();
+                        customer.address = data.address.trim();
                         isNew = false;
                     }
                 }

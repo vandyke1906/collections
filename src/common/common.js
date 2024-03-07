@@ -15,6 +15,7 @@ export const ROUTES = {
     SETTINGS: "/(tabs)/settings",
     CUSTOMER_SELECTION: "/customerSelection",
     PRODUCT_SELECTION: "/productSelection",
+    GROUP_SELECTION: "/groupSelection",
 };
 
 export const DATE_FORMAT = "(dddd), MMMM DD, YYYY";

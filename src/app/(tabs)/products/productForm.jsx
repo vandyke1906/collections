@@ -1,16 +1,29 @@
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
-import { useCallback } from "react";
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { useCallback, useEffect } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ROUTES } from "../../../common/common";
+import { useRoute } from '@react-navigation/native';
 
 const productForm = () => {
     const inputClass = "my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
-    const {  control, handleSubmit, formState: { errors }  } = useForm();
+    const {  control, handleSubmit, setValue, formState: { errors }  } = useForm();
     const realm = useRealm();
     const navigation = useNavigation();
-    const params = useLocalSearchParams();
+    const route = useRoute();
+    const params = route.params || {};
+
+    useEffect(() => {
+        switch (params.type) {
+            case "group": {
+                setValue("group", params._id);
+                break;
+            }
+        }
+    }, [params?.key]);
 
     const handleSubmitProduct = useCallback((data) => {
         try {
@@ -38,10 +51,10 @@ const productForm = () => {
                 if (params._id) {
                     const product = realm.objectForPrimaryKey("products", params._id);
                     if (product) {
-                        product.code = data.code;
-                        product.name = data.name;
-                        product.unit = data.unit;
-                        product.group = data.group;
+                        product.code = data.code.trim();
+                        product.name = data.name.trim();
+                        product.unit = data.unit.trim();
+                        product.group = data.group.trim();
                         isNew = false;
                     }
                 }
@@ -56,6 +69,7 @@ const productForm = () => {
                 ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
         }
     }, [realm]);
+
     return (
         <View className="p-5">
             <Text>New Product</Text>
@@ -90,7 +104,7 @@ const productForm = () => {
                 )}
             />
 
-            <Controller
+            {/* <Controller
                 control={control}
                 rules={{ required: false }}
                 name="group"
@@ -98,7 +112,30 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput className={inputClass} autoCapitalize="characters" placeholder="group" onBlur={onBlur} onChangeText={onChange} value={value} />
                 )}
-            />
+            /> */}
+            <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    name="group"
+                    defaultValue={params.group || ""}
+                    render={({ field: { value } }) => (
+                        <TouchableWithoutFeedback onPress={() => {
+                            Keyboard.dismiss();
+                        }}>
+                            <View>
+                                <Text className="text-slate-500">Group</Text>
+                                <View className="relative">
+                                    <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Group" value={value} editable={false} />
+                                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                                        router.navigate({ pathname: ROUTES.GROUP_SELECTION, params: { allowAdd: 1 }  });
+                                    }}>
+                                        <FontAwesome size={18} name="search" color="gray" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    )}
+                />
 
 
             <TouchableOpacity className="p-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitProduct)}>
