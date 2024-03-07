@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import { BSON } from "realm";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -202,7 +201,7 @@ const salesForm = () => {
                                 <View className="relative">
                                     <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Customer" value={value} editable={false} />
                                     <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                                        router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION });
+                                        router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION, params: { allowAdd: 1 }  });
                                     }}>
                                         <FontAwesome size={18} name="search" color="gray" />
                                     </TouchableOpacity>
@@ -253,7 +252,7 @@ const salesForm = () => {
                 <View className="mt-2 mb-5 flex border-t border-gray-300">
                     <View className="flex flex-row items-center justify-between">
                         <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">products</Text>
-                        <TouchableOpacity onPress={() => router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } }) }>
+                        <TouchableOpacity onPress={() => router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1, allowAdd: 1 } }) }>
                             <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Add Products</Text>
                         </TouchableOpacity>
                     </View>

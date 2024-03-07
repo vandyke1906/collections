@@ -1,5 +1,5 @@
-import { View, FlatList, TextInput, ToastAndroid, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, FlatList, TextInput, TouchableOpacity } from 'react-native'
+import React from 'react'
 import { router, useNavigation } from "expo-router";
 import Product from "../components/Product";
 import { useQuery } from "@realm/react";
@@ -7,6 +7,7 @@ import moment from "moment";
 import { useRoute } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "../store/salesInvoiceStore";
+import { ROUTES } from "../common/common";
 
 
 const customerSelection = () => {
@@ -41,12 +42,21 @@ const customerSelection = () => {
 const fetchMoreData = () => { };
     return (
         <View className="m-2 h-auto">
-            <TextInput
-                className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                placeholder="Search Product..."
-                value={searchKey}
-                onChangeText={(text) => setSearchKey(text)}
-            />
+            <View className="relative">
+                <TextInput
+                    className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    placeholder="Search Product..."
+                    value={searchKey}
+                    onChangeText={(text) => setSearchKey(text)}
+                />
+                {!!+params?.allowAdd && (
+                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                        router.navigate({ pathname: ROUTES.PRODUCT_FORM });
+                    }}>
+                        <FontAwesome size={18} name="plus" color="gray" />
+                    </TouchableOpacity>
+                )}
+            </View>
             <FlatList
                 className="w-full"
                 data={customers}

@@ -1,12 +1,17 @@
-import { View, FlatList, TextInput } from 'react-native'
+import { View, FlatList, TextInput, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useRoute } from '@react-navigation/native';
 import { router, useNavigation } from "expo-router";
 import Customer from "../components/Customer";
 import { useQuery } from "@realm/react";
 import moment from "moment";
+import { ROUTES } from "../common/common";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const customerSelection = () => {
     const navigation = useNavigation();
+    const route = useRoute();
+    const params = route.params || {};
 
     const [searchKey, setSearchKey] = React.useState("");
 
@@ -25,12 +30,21 @@ const customerSelection = () => {
 
     return (
         <View className="m-2">
-            <TextInput
-                className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                placeholder="Search Customer..."
-                value={searchKey}
-                onChangeText={(text) => setSearchKey(text)}
-            />
+            <View className="relative">
+                <TextInput
+                    className="pr-10 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    placeholder="Search Customer..."
+                    value={searchKey}
+                    onChangeText={(text) => setSearchKey(text)}
+                />
+                {!!+params?.allowAdd && (
+                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                        router.navigate({ pathname: ROUTES.CUSTOMER_FORM });
+                    }}>
+                        <FontAwesome size={18} name="plus" color="gray" />
+                    </TouchableOpacity>
+                )}
+            </View>
             <FlatList
                 className="w-full"
                 data={customers}
