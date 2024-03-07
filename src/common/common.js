@@ -16,7 +16,8 @@ export const ROUTES = {
     CUSTOMER_SELECTION: "/customerSelection",
     PRODUCT_SELECTION: "/productSelection",
     GROUP_SELECTION: "/groupSelection",
-    REPORTS: "/reports",
+    FILTER_REPORT: "/reports/filterReport",
+    VIEW_REPORT: "/reports/reportView",
 };
 
 export const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
@@ -45,6 +46,11 @@ export const amountFormat = (number) => {
 export const formatDate = (date) => {
     if (!date) return "";
     return moment(date).format(DATE_FORMAT);
+};
+
+export const getDateValueOf = (date) => {
+    if (!date) return "";
+    return moment(date).valueOf();
 };
 
 export const showDatePicker = (onChange = () => { }) => {

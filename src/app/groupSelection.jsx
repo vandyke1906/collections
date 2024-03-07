@@ -8,11 +8,13 @@ import moment from "moment";
 import { ROUTES } from "../common/common";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import GroupCard from "../components/GroupCard";
+import useSelection from "../store/selectionStore";
 
 const groupSelection = () => {
     const navigation = useNavigation();
     const realm = useRealm();
     const route = useRoute();
+    const { selections, addToSelection, removeToSelection } = useSelection();
     const params = route.params || {};
 
     const [searchKey, setSearchKey] = React.useState("");
@@ -20,7 +22,15 @@ const groupSelection = () => {
     React.useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Select Group"
+            title: "Select Group",
+            headerRight: () => !!(+params?.multipleSelect) && (
+                <TouchableOpacity onPress={() => {
+                    router.back();
+                    router.setParams({ key: moment().valueOf(), type: "groupList" });
+                }}>
+                    <FontAwesome size={18} name="check" color="green" />
+                </TouchableOpacity>
+            ),
         });
     }, [navigation]);
 
@@ -75,15 +85,25 @@ const groupSelection = () => {
                 className="w-full"
                 data={groupList}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <GroupCard data={item} enableButtons={false} onSelect={() => {
-                    router.back();
-                    const params = {
-                        key: moment().valueOf(),
-                        type: "group",
-                        ...item,
-                    };
-                    router.setParams(params);
-                }} />}
+                renderItem={({ item }) => {
+                    const group = item._id;
+                    const isExist = !!selections.find(p => p._id === item._id);
+                    return (
+                        <GroupCard data={item} enableButtons={false} isActive={isExist} onSelect={() => {
+                            const item = {
+                                key: moment().valueOf(),
+                                type: "group",
+                                _id: group
+                            };
+                            if (+params?.multipleSelect)
+                                isExist ? removeToSelection({ key: "_id", value: group }, true) : addToSelection(item);
+                            else {
+                                router.back();
+                                router.setParams(item);
+                            }
+                        }} />
+                    );
+                }}
                 onEndReached={fetchMoreData}
                 onEndReachedThreshold={0.1}
                 />

@@ -8,15 +8,14 @@ import { useRoute } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "../store/salesInvoiceStore";
 import { ROUTES } from "../common/common";
+import useSelection from "../store/selectionStore";
 
 
 const customerSelection = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
-    const addProduct = useSalesInvoiceStore(state => state.addProduct);
-    const removeProduct = useSalesInvoiceStore(state => state.removeProduct);
-    const productList = useSalesInvoiceStore(state => state.list);
+    const { selections, addToSelection, removeToSelection } = useSelection();
 
     const [searchKey, setSearchKey] = React.useState("");
 
@@ -24,7 +23,7 @@ const customerSelection = () => {
         navigation.setOptions({
             headerShown: true,
             title: "Select Product",
-            headerRight: () => (+params?.multipleSelect) && (
+            headerRight: () => !!(+params?.multipleSelect) && (
                 <TouchableOpacity onPress={() => {
                     router.back();
                     router.setParams({ key: moment().valueOf(), type: "productList" });
@@ -63,9 +62,9 @@ const fetchMoreData = () => { };
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     const productId = item._id;
-                    const productExist = !!productList.find(p => p._id === productId);
+                    const isExist = !!selections.find(p => p._id === productId);
                     return (
-                        <Product data={item} enableButtons={false} isActive={productExist} onSelect={() => {
+                        <Product data={item} enableButtons={false} isActive={isExist} onSelect={() => {
                             const product = {
                                 key: moment().valueOf(),
                                 type: "product",
@@ -73,7 +72,7 @@ const fetchMoreData = () => { };
                                 _id: productId
                             };
                             if (+params?.multipleSelect) {
-                                productExist ? removeProduct(productId) : addProduct(product);
+                                isExist ? removeToSelection({ key: "_id", value: productId }, true) : addToSelection(item);
                             } else {
                                 router.back();
                                 router.setParams(product);

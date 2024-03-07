@@ -7,18 +7,28 @@ import { useQuery } from "@realm/react";
 import moment from "moment";
 import { ROUTES } from "../common/common";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import useSelection from "../store/selectionStore";
 
 const customerSelection = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
+    const { selections, addToSelection, removeToSelection } = useSelection();
 
     const [searchKey, setSearchKey] = React.useState("");
 
     React.useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Select Customer"
+            title: "Select Customer",
+            headerRight: () => !!(+params?.multipleSelect) && (
+                <TouchableOpacity onPress={() => {
+                    router.back();
+                    router.setParams({ key: moment().valueOf(), type: "customerList" });
+                }}>
+                    <FontAwesome size={18} name="check" color="green" />
+                </TouchableOpacity>
+            ),
         });
     }, [navigation]);
 
@@ -45,22 +55,33 @@ const customerSelection = () => {
                     </TouchableOpacity>
                 )}
             </View>
+
             <FlatList
                 className="w-full"
                 data={customers}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <Customer data={item} enableButtons={false} onSelect={() => {
-                    router.back();
-                    const params = {
-                        key: moment().valueOf(),
-                        type: "customer",
-                        ...item,
-                    };
-                    router.setParams(params);
-                }} />}
+                renderItem={({ item }) => {
+                    const isExist = !!selections.find(sel => sel._id === item._id);
+                    return (
+                        <Customer data={item} enableButtons={false}  isActive={isExist} onSelect={() => {
+                            const items = {
+                                key: moment().valueOf(),
+                                type: "customer",
+                                ...item,
+                            };
+                            if (+params?.multipleSelect)
+                                isExist ? removeToSelection({ key: "_id", value: item._id }, true) : addToSelection(item);
+                            else {
+                                router.back();
+                                router.setParams(items);
+                            }
+                        }} />
+                    );
+                }}
                 onEndReached={fetchMoreData}
                 onEndReachedThreshold={0.1}
-                />
+            />
+
         </View>
     )
 }

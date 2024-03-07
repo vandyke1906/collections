@@ -2,10 +2,10 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { memo } from 'react'
 import PropTypes from "prop-types";
 
-const GroupCard = ({data, onEdit, enableButtons, onSelect  }) => {
+const GroupCard = ({ data, onEdit, enableButtons, onSelect, isActive }) => {
     return (
         <TouchableOpacity disabled={typeof onSelect !== "function"} onPress={() => typeof onSelect === "function" ? onSelect() : () => { }}>
-            <View className="block w-full rounded-lg bg-white text-left p-2 my-2">
+            <View className={`block w-full rounded-lg bg-white text-left p-2 my-2 ${isActive ? "bg-blue-100" : "bg-white"}`}>
                 <View className="p-2">
                     <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">{data._id}</Text>
                 </View>
@@ -26,6 +26,7 @@ GroupCard.propTypes = {
     onEdit: PropTypes.func,
     onSelect: PropTypes.func,
     enableButtons: PropTypes.bool,
+    isActive: PropTypes.bool,
 };
 
 GroupCard.defaultProps = {

@@ -35,6 +35,9 @@ const useSalesInvoiceStore = create((set) => {
         clearDetails: () => set(() => {
             return { details: DEFAULT_DETAILS };
         }),
+        setProducts: (list) => set(() => {
+            return { list };
+        }),
         addProduct: (product) => set((state) => {
             const hasProduct = state.list.find((p) => p.code === product.code);
             if (!hasProduct) {

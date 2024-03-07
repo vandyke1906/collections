@@ -29,7 +29,7 @@ const Page = () => {
                 </View>
             </View>
             <View className="basis-1/5">
-                 <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.navigate({ pathname: ROUTES.REPORTS })}>
+                 <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.navigate({ pathname: ROUTES.FILTER_REPORT })}>
                          <FontAwesome size={64} name="bar-chart" color="gray" />
                         <Text className="text-slate-400 font-medium text-center uppercase">View Reports</Text>
                     </Pressable>

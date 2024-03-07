@@ -9,6 +9,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
 import SIProduct from "../../../../components/SIProduct";
 import { DATE_FORMAT, ROUTES } from "../../../../common/common";
+import useSelection from "../../../../store/selectionStore";
 
 const salesForm = () => {
     const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -18,11 +19,11 @@ const salesForm = () => {
     const navigation = useNavigation();
     const params = useLocalSearchParams();
 
-    const productList = useSalesInvoiceStore(state => state.list);
-    const details = useSalesInvoiceStore(state => state.details);
-    const updateDetails = useSalesInvoiceStore(state => state.updateDetails);
-    const updateProductDetail = useSalesInvoiceStore(state => state.updateProductDetail);
-    const clearList = useSalesInvoiceStore(state => state.clearList);
+    const {
+        list: productList, details, setProducts,
+        updateDetails, updateProductDetail, clearList
+    } = useSalesInvoiceStore();
+    const { selections, resetSelection, setSelections } = useSelection();
 
     const [list, setList] = useState(productList);
 
@@ -51,7 +52,8 @@ const salesForm = () => {
                         name: product.name,
                         unit: product.unit,
                         qty: +product.qty,
-                        amount: +product.amount
+                        amount: +product.amount,
+                        group: product.group
                     };
                     products.push(realm.create("salesProducts", productData));
                 }
@@ -113,7 +115,9 @@ const salesForm = () => {
                 break;
             }
             case "productList": {
-                setList(productList);
+                setList(selections);
+                setProducts(selections);
+                resetSelection();
                 break;
             }
             case "clearList": {
@@ -252,7 +256,10 @@ const salesForm = () => {
                 <View className="mt-2 mb-5 flex border-t border-gray-300">
                     <View className="flex flex-row items-center justify-between">
                         <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">products</Text>
-                        <TouchableOpacity onPress={() => router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1, allowAdd: 1 } }) }>
+                            <TouchableOpacity onPress={() => {
+                                setSelections(list);
+                                router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1, allowAdd: 1 } });
+                        }}>
                             <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Add Products</Text>
                         </TouchableOpacity>
                     </View>
