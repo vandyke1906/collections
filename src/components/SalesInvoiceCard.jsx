@@ -11,14 +11,18 @@ const SalesInvoiceCard = ({ data, onEdit, enableButtons, onSelect }) => {
                 <View className="p-2">
                     {data?.invoiceNo && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{data?.invoiceNo}</Text>}
                     {data?.customerName && <Text className="block font-sans text-sm antialiased font-bold leading-normal text-gray-900">{data?.customerName}</Text>}
-                    {data?.poNo && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">PO #:{data?.poNo}</Text>}
-                    {data?.soNo && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">SO #: {data?.soNo}</Text>}
+
+                    <View className="flex flex-row items-center justify-between">
+                        {data?.poNo && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">PO #:{data?.poNo}</Text>}
+                        {data?.soNo && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">SO #: {data?.soNo}</Text>}
+                    </View>
 
                     {data?.dateOfSI && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">SI Date: {moment(data?.dateOfSI).format(DATE_FORMAT)}</Text>}
                     {data?.dateDelivered && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Delivered Date: {moment(data?.dateDelivered).format(DATE_FORMAT)}</Text>}
 
                      <View className="flex flex-row items-center justify-between">
                         {!isNaN(data?.totalAmount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {amountFormat(data?.totalAmount)}</Text>}
+                        {!isNaN(data?.totalAmount ) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Paid: {amountFormat(data?.totalAmount - (data?.unpaidAmount || 0))}</Text>}
                         {!isNaN(data?.unpaidAmount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Unpaid: {amountFormat(data?.unpaidAmount)}</Text>}
                     </View>
 
