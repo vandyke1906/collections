@@ -14,7 +14,7 @@ const salesInvoiceDetails = () => {
     const selectedInvoice = useSalesInvoiceStore(state => state.selected);
 
     const collections = useQuery("collections", (col) => {
-        const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
+        const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice?._id || "");
         return col.filtered("salesInvoice == $0", currentSalesInvoice).sorted("paymentDate");
     }, [selectedInvoice?._id]);
 

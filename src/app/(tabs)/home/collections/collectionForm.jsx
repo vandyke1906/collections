@@ -7,7 +7,6 @@ import { DATE_FORMAT, MODE_OF_PAYMENT, amountFormat, formatDate, showDatePicker 
 import { Controller, useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { useRealm } from "@realm/react";
-import { BSON } from "realm";
 import moment from "moment";
 
 const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -24,6 +23,10 @@ const collectionForm = () => {
         try {
             realm.write(() => {
                 const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
+                const currentCollection = realm.objects("collections").find((c) => c.corNo.toUpperCase() === (data.corNo || "").toUpperCase());
+                if (currentCollection)
+                    throw new Error(`Collection Receipt#: ${data.corNo.toUpperCase()} already exist.`);
+
                 if (currentSalesInvoice) {
                         currentSalesInvoice.unpaidAmount -= +data.amount;
 

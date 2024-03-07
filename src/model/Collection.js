@@ -8,7 +8,7 @@ export class Collection extends Realm.Object {
         primaryKey: "_id",
         properties: {
             _id: { type: "string", default: () => v4() },
-            corNo: "string",
+            corNo: { type: "string", indexed: "full-text" },
             corDate: "int",
             paymentDate: { type: "int", indexed: true },
             amount: "double",
