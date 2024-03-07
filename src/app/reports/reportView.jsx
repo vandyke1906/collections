@@ -61,9 +61,7 @@ const reportView = () => {
             }
 
             let totalCollected = 0;
-            console.info(JSON.stringify(filteredResult))
             for (const collection of filteredResult) {
-                // const salesInvoice = realm.objectForPrimaryKey("salesInvoices", collection.)
                 data.push({ collection });
                 totalCollected += collection.amount;
             }
