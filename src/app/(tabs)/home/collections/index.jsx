@@ -1,19 +1,21 @@
-import { View, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, FlatList, TextInput } from 'react-native'
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ROUTES } from "../../../../common/common";
 import { router, useNavigation } from "expo-router";
-import { useRealm } from "@realm/react";
+import { useQuery, useRealm } from "@realm/react";
+import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
+import CollectionCard from "../../../../components/CollectionCard";
 
 const collections = () => {
     const navigation = useNavigation();
     const realm = useRealm();
 
     const [searchKey, setSearchKey] = useState("");
-    const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
+    // const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
 
-    const salesInvoices = useQuery("collections", (col) => {
-        return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
+    const collections = useQuery("collections", (col) => {
+        return col.filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey).sorted("corDate");
     }, [searchKey]);
     const fetchMoreData = () => { };
 
@@ -22,16 +24,16 @@ const collections = () => {
     }, [navigation]);
 
 
-    const getSalesInvoiceDetails = (item) => {
-        const salesInvoice = realm.objectForPrimaryKey("salesInvoices", item._id);
-        if (salesInvoice) {
-            const customer = realm.objectForPrimaryKey("customers", salesInvoice.customerId);
-            const siProducts = salesInvoice.products.map((p) => realm.objectForPrimaryKey("salesProducts", p._id));
-            customer.customerId = customer._id;
-            delete customer._id;
-            setSelectedInvoice({ ...customer, ...salesInvoice, products: siProducts });
-        }
-    }
+    // const getSalesInvoiceDetails = (item) => {
+    //     const salesInvoice = realm.objectForPrimaryKey("salesInvoices", item._id);
+    //     if (salesInvoice) {
+    //         const customer = realm.objectForPrimaryKey("customers", salesInvoice.customerId);
+    //         const siProducts = salesInvoice.products.map((p) => realm.objectForPrimaryKey("salesProducts", p._id));
+    //         customer.customerId = customer._id;
+    //         delete customer._id;
+    //         setSelectedInvoice({ ...customer, ...salesInvoice, products: siProducts });
+    //     }
+    // }
 
     return (
         <View className="flex-1">
@@ -39,17 +41,17 @@ const collections = () => {
             <View className="items-center justify-center m-2">
                 <TextInput
                     className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    placeholder="Search by invoice#, customer, PO#, SO#..."
+                    placeholder="Search by COR#, invoice#, customer..."
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text)}
                 />
                 <FlatList
                     className="w-full"
-                    data={salesInvoices}
+                    data={collections}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
-                        <SalesInvoiceCard data={item} onEdit={() => router.navigate({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
-                            getSalesInvoiceDetails(item);
+                        <CollectionCard data={item} onEdit={() => router.navigate({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
+                            // getSalesInvoiceDetails(item);
                             router.navigate(ROUTES.SALES_INVOICE_DETAILS);
                         }} />
                     )}
