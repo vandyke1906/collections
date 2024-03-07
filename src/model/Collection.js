@@ -15,6 +15,7 @@ export class Collection extends Realm.Object {
             modeOfPayment: "string",
             salesInvoice: "salesInvoices",
             details: 'collections_details',
+            customerId: { type: "string", indexed: true },
             dateCreated: { type: "int", default: () => moment().valueOf() },
         },
     };

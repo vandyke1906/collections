@@ -29,6 +29,16 @@ const customerForm = () => {
                 if (params._id) {
                     const customer = realm.objectForPrimaryKey("customers", params._id);
                     if (customer) {
+                        //update related fields in other collections
+                        if (customer.name !== data.name){
+                            const collections = realm.objects("collections");
+                            const filtered = collections.filter((c) => c.customerId === customer._id);
+                            filtered.forEach((coll) => {
+                                if (coll.details)
+                                    coll.details.customerName = data.name;
+                            });
+                        }
+
                         customer.code = data.code;
                         customer.name = data.name;
                         customer.address = data.address;

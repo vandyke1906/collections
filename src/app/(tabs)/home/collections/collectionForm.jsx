@@ -37,7 +37,8 @@ const collectionForm = () => {
                         details: {
                             invoiceNo: currentSalesInvoice.invoiceNo,
                             customerName: selectedInvoice.customerName
-                        }
+                        },
+                        customerId: currentSalesInvoice.customerId
                     };
                     realm.create("collections", collectionData);
                     setSelectedInvoice({ unpaidAmount: currentSalesInvoice.unpaidAmount });
