@@ -15,7 +15,7 @@ const salesInvoiceDetails = () => {
 
     const collections = useQuery("collections", (col) => {
         const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
-        return col.filtered("salesInvoice == $0", currentSalesInvoice?.salesInvoice).sorted("paymentDate");
+        return col.filtered("salesInvoice == $0", currentSalesInvoice).sorted("paymentDate");
     }, [selectedInvoice?._id]);
 
     useEffect(() => {

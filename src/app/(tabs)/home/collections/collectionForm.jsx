@@ -23,19 +23,22 @@ const collectionForm = () => {
     const handleSubmitCollection = useCallback((data) => {
         try {
             realm.write(() => {
-                const collectionData = {
-                    corNo: data.corNo,
-                    corDate: moment(data.corDate, DATE_FORMAT).valueOf(),
-                    paymentDate: moment(data.paymentDate, DATE_FORMAT).valueOf(),
-                    amount: +data.amount,
-                    modeOfPayment: data.modeOfPayment,
-                    salesInvoices: selectedInvoice
-                };
-
                 const currentSalesInvoice = realm.objectForPrimaryKey("salesInvoices", selectedInvoice._id);
                 if (currentSalesInvoice) {
-                        currentSalesInvoice.unpaidAmount -= collectionData.amount;
+                        currentSalesInvoice.unpaidAmount -= +data.amount;
 
+                    const collectionData = {
+                        corNo: data.corNo,
+                        corDate: moment(data.corDate, DATE_FORMAT).valueOf(),
+                        paymentDate: moment(data.paymentDate, DATE_FORMAT).valueOf(),
+                        amount: +data.amount,
+                        modeOfPayment: data.modeOfPayment,
+                        salesInvoice: currentSalesInvoice,
+                        details: {
+                            invoiceNo: currentSalesInvoice.invoiceNo,
+                            customerName: selectedInvoice.customerName
+                        }
+                    };
                     realm.create("collections", collectionData);
                     setSelectedInvoice({ unpaidAmount: currentSalesInvoice.unpaidAmount });
                     router.back();

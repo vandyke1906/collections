@@ -8,13 +8,14 @@ import { OpenRealmBehaviorType } from "realm";
 import { SalesInvoice } from "../model/SalesInvoice";
 import { SalesProduct } from "../model/SalesProduct";
 import { Collection } from "../model/Collection";
+import { CollectionDetails } from "../model/CollectionDetails";
 
 const AppLayout = () => {
     return (
         <AppProvider id="app-collection-vgocb">
             <UserProvider fallback={LoginComponent}>
                 <RealmProvider
-                    schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection]}
+                    schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails]}
                     // deleteRealmIfMigrationNeeded={true}
                     sync={{
                         flexible: true,
