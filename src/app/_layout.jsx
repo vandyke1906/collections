@@ -4,7 +4,6 @@ import { AppProvider, RealmProvider, UserProvider, useAuth } from "@realm/react"
 import { Product } from "../model/Product";
 import { Group } from "../model/Group";
 import { Customer } from "../model/Customer";
-import { OpenRealmBehaviorType } from "realm";
 import { SalesInvoice } from "../model/SalesInvoice";
 import { SalesProduct } from "../model/SalesProduct";
 import { Collection } from "../model/Collection";
@@ -17,13 +16,7 @@ const AppLayout = () => {
                 <RealmProvider
                     schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails]}
                     sync={{
-                        flexible: true,
-                        // newRealmFileBehavior: {
-                        //     type: OpenRealmBehaviorType.DownloadBeforeOpen
-                        // },
-                        // existingRealmFileBehavior: {
-                        //     type: OpenRealmBehaviorType.OpenImmediately
-                        // }
+                        flexible: true
                     }}
                 >
                 <Stack screenOptions={{ headerShown: false }} />
