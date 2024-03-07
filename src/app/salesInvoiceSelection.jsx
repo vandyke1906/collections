@@ -7,6 +7,7 @@ import moment from "moment";
 import { ROUTES } from "../common/common";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSelection from "../store/selectionStore";
+import InvoiceCard from "../components/InvoiceCard";
 
 const salesInvoiceSelection = () => {
     const navigation = useNavigation();
@@ -62,7 +63,7 @@ const salesInvoiceSelection = () => {
                 renderItem={({ item }) => {
                     const isExist = !!selections.find(sel => sel._id === item._id);
                     return (
-                        <Customer data={item} enableButtons={false}  isActive={isExist} onSelect={() => {
+                        <InvoiceCard data={item} isActive={isExist} onSelect={() => {
                             const currentData = {
                                 key: moment().valueOf(),
                                 type: "salesInvoice",
