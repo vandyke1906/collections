@@ -10,6 +10,13 @@ const useReportStore = create((set) => {
         groups: [],
         products: [],
         customers: [],
+        summary: {},
+        setSummary: (data = {}) => set((state) => {
+            return { summary: { ...state.summary, ...data } };
+        }),
+        clearSummary: () => set(() => {
+            return { summary: {} };
+        }),
         setReportType: (type) => set(() => {
             if (Object.values(REPORT_TYPE).includes(type))
                 return { reportType: type };
@@ -32,7 +39,7 @@ const useReportStore = create((set) => {
                 return { groups: [...state.groups, group] };
         }),
         removeGroup: (group) => set((state) => {
-            if (group) return { groups: state.groups.filter((g) => g !== group) };
+            if (group) return { groups: state.groups.filter((g) => g._id !== group._id) };
         }),
         setProducts: (list) => set(() => {
             if (list)
