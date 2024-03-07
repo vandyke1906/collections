@@ -17,7 +17,7 @@ const CollectionCard = ({ data, onEdit, enableButtons, onSelect }) => {
                     {data.details?.invoiceNo && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Invoice #:{data.details?.invoiceNo}</Text>}
 
                      <View className="flex flex-row items-center justify-between">
-                        {data.modeOfPayment && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">MOP: {data.modeOfPayment}</Text>}
+                        {data.modeOfPayment && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Mode of Payment: {data.modeOfPayment}</Text>}
                         {!isNaN(data?.amount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: {amountFormat(data?.amount)}</Text>}
                     </View>
 
