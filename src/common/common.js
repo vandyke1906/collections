@@ -16,6 +16,7 @@ export const ROUTES = {
     CUSTOMER_SELECTION: "/customerSelection",
     PRODUCT_SELECTION: "/productSelection",
     GROUP_SELECTION: "/groupSelection",
+    SALES_INVOICE_SELECTION: "/salesInvoiceSelection",
     FILTER_REPORT: "/reports/filterReport",
     VIEW_REPORT: "/reports/reportView",
 };

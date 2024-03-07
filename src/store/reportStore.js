@@ -10,6 +10,7 @@ const useReportStore = create((set) => {
         groups: [],
         products: [],
         customers: [],
+        salesInvoices: [],
         summary: {},
         setSummary: (data = {}) => set((state) => {
             return { summary: { ...state.summary, ...data } };
@@ -63,7 +64,18 @@ const useReportStore = create((set) => {
         removeCustomer: (id) => set((state) => {
             if (id) return { customers: state.customers.filter((c) => c._id !== id) };
         }),
-        /** @param {("groups" | "products" | "customers")[]} types default empty will clear all */
+        setSalesInvoices: (list) => set(() => {
+            if (list)
+                return { salesInvoices: list };
+        }),
+        addSalesInvoice: (customer) => set((state) => {
+            if (customer)
+                return { salesInvoices: [...state.salesInvoices, customer] };
+        }),
+        removeSalesInvoice: (id) => set((state) => {
+            if (id) return { salesInvoices: state.salesInvoices.filter((c) => c._id !== id) };
+        }),
+        /** @param {("groups" | "products" | "customers"|"salesInvoices")[]} types default empty will clear all */
         clearList: (types) => set((state) => {
             const latestState = {};
             for (const type of types) {
@@ -73,8 +85,10 @@ const useReportStore = create((set) => {
                     latestState.products = [];
                 if (type === "customers")
                     latestState.customers = [];
+                if (type === "salesInvoices")
+                    latestState.salesInvoices = [];
             }
-            return types.length ? { ...latestState } : { groups: [], products: [], customers: [] };
+            return types.length ? { ...latestState } : { groups: [], products: [], customers: [], salesInvoices: [] };
         })
     };
 });

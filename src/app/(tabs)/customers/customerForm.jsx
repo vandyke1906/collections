@@ -1,8 +1,8 @@
 import { View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import { useCallback } from "react";
-import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useLocalSearchParams } from "expo-router";
+import { useRealm } from "@realm/react";
 
 const customerForm = () => {
     const inputClass = "my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -56,6 +56,7 @@ const customerForm = () => {
             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
         }
     }, [realm]);
+
     return (
         <View className="p-5">
             <Text>New Customer</Text>
