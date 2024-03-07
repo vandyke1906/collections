@@ -63,8 +63,10 @@ const collections = () => {
                             />
                             <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
                                 const found = getSalesInvoiceDetails({ invoiceNo: invoiceNumber });
-                                if (found)
+                                if (found) {
+                                    setShowInvoiceModal(false);
                                     router.navigate({ pathname: ROUTES.COLLECTIONS_FORM });
+                                }
                                 else
                                     ToastAndroid.show(`Invoice#: ${invoiceNumber} not found.`, ToastAndroid.SHORT);
                             }}>
