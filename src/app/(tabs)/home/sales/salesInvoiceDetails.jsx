@@ -47,9 +47,14 @@ const salesInvoiceDetails = () => {
         return (
             <View className="mt-2 mb-5 flex border-t border-gray-300">
                 <View className="flex flex-row items-center justify-between">
-                    <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">collections</Text>
+                    <View className="flex flex-row items-start">
+                        <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">TOTAL PAID: </Text>
+                        <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-900 uppercase font-bold">
+                            {amountFormat(collections.reduce((acc, item) => (acc + (item.amount)), 0))}
+                        </Text>
+                    </View>
                     <TouchableOpacity onPress={() => router.navigate({ pathname: ROUTES.COLLECTIONS_FORM }) }>
-                        <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Add Collection</Text>
+                        <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">New Collection</Text>
                     </TouchableOpacity>
                 </View>
 
