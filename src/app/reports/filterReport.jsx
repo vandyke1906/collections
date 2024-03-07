@@ -1,11 +1,10 @@
-import { View, Text, TouchableOpacity, TouchableWithoutFeedback, TextInput, Keyboard, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableWithoutFeedback, TextInput, Keyboard, ScrollView, ToastAndroid } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DATE_FORMAT, REPORT_TYPE, ROUTES, formatDate, getDateValueOf, showDatePicker } from "../../common/common";
 import { Picker } from "@react-native-picker/picker";
 import moment from "moment";
-import { useQuery } from "@realm/react";
 import useReportStore from "../../store/reportStore";
 import { useRoute } from '@react-navigation/native';
 import useSelection from "../../store/selectionStore";
@@ -32,6 +31,10 @@ const filterReport = () => {
             title: "Filter Reports",
             headerRight: () => (
                 <TouchableOpacity onPress={() => {
+                    if (!dateFrom) {
+                        ToastAndroid.show("Date from is required.", ToastAndroid.SHORT);
+                        return;
+                    }
                     clearSummary();
                     router.navigate({ pathname: ROUTES.VIEW_REPORT })
                 }}>
@@ -39,7 +42,7 @@ const filterReport = () => {
                 </TouchableOpacity>
             ),
         });
-    }, [navigation]);
+    }, [navigation, dateFrom]);
 
     useEffect(() => {
         switch (params.type) {
@@ -109,9 +112,36 @@ const filterReport = () => {
                     </TouchableWithoutFeedback>
                 </View>
 
+                {/* CUSTOMERS */}
+                <View className="mt-2 mb-10 flex border-t border-gray-300">
+                    <View className="flex flex-row items-center justify-between">
+                        <Text className="mx-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">Customers</Text>
+                        <TouchableOpacity onPress={() => {
+                            setSelections(customers);
+                            router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION, params: { multipleSelect: 1 } });
+                        }}>
+                            <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Select Customer</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View className="flex flex-wrap flex-row">
+                        {customers.map((item, index) => (
+                            <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                <View className="flex flex-row">
+                                    <Text className="block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
+                                    <TouchableOpacity className="ml-2" onPress={() => {
+                                        removeCustomer(item._id);
+                                    }}>
+                                        <FontAwesome size={18} name="times" color="gray" />
+                                    </TouchableOpacity>
+                                </View>
+                            </MiniCardData>
+                        ))}
+                    </View>
+                </View>
+
                 {reportType === REPORT_TYPE.SALES && (
                     <View>
-
                         {/* GROUPS */}
                         <View className="mt-2 mb-10 flex border-t border-gray-300">
                             <View className="flex flex-row items-center justify-between">
@@ -159,34 +189,6 @@ const filterReport = () => {
                                             <Text className="block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
                                                 removeProduct(item._id);
-                                            }}>
-                                                <FontAwesome size={18} name="times" color="gray" />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </MiniCardData>
-                                ))}
-                            </View>
-                        </View>
-
-                        {/* CUSTOMERS */}
-                        <View className="mt-2 mb-10 flex border-t border-gray-300">
-                            <View className="flex flex-row items-center justify-between">
-                                <Text className="mx-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">Customers</Text>
-                                <TouchableOpacity onPress={() => {
-                                    setSelections(customers);
-                                    router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION, params: { multipleSelect: 1 } });
-                                }}>
-                                    <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Select Customer</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View className="flex flex-wrap flex-row">
-                                {customers.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-                                        <View className="flex flex-row">
-                                            <Text className="block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
-                                            <TouchableOpacity className="ml-2" onPress={() => {
-                                                removeCustomer(item._id);
                                             }}>
                                                 <FontAwesome size={18} name="times" color="gray" />
                                             </TouchableOpacity>

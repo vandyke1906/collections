@@ -16,7 +16,6 @@ const AppLayout = () => {
             <UserProvider fallback={LoginComponent}>
                 <RealmProvider
                     schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails]}
-                    // deleteRealmIfMigrationNeeded={true}
                     sync={{
                         flexible: true,
                         newRealmFileBehavior: {

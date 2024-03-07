@@ -9,7 +9,7 @@ export class Collection extends Realm.Object {
         properties: {
             _id: { type: "string", default: () => v4() },
             corNo: { type: "string", indexed: "full-text" },
-            corDate: "int",
+            corDate: { type: "int", indexed: true },
             paymentDate: { type: "int", indexed: true },
             amount: "double",
             modeOfPayment: "string",
