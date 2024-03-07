@@ -1,13 +1,13 @@
 import moment from "moment";
 import Realm, { BSON } from "realm";
-import { v4 } from "uuid";
+import { randomUUID } from "expo-crypto";
 
 export class SalesInvoice extends Realm.Object {
     static schema = {
         name: "salesInvoices",
         primaryKey: "_id",
         properties: {
-            _id: { type: "string", default: () => v4() },
+            _id: { type: "string", default: () => randomUUID() },
             dateOfSI: { type: "int", indexed: true },
             invoiceNo: "string",
             dateDelivered: { type: "int", indexed: true },

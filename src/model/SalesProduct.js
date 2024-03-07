@@ -1,12 +1,12 @@
 import Realm from "realm";
-import { v4 } from "uuid";
+import { randomUUID } from "expo-crypto";
 
 export class SalesProduct extends Realm.Object {
     static schema = {
         name: "salesProducts",
         primaryKey: "_id",
         properties: {
-            _id: { type: "string", default: () => v4() },
+            _id: { type: "string", default: () => randomUUID() },
             productId: "string",
             code: "string",
             name: "string",
