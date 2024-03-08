@@ -22,7 +22,7 @@ const CustomerPage = () => {
                     className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     placeholder="Search Customer..."
                     value={searchKey}
-                    onChangeText={(text) => setSearchKey(text)}
+                    onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
                 <FlatList
                     showsVerticalScrollIndicator={false}

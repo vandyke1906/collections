@@ -56,7 +56,7 @@ const collections = () => {
                                 className="text-sm pr-20 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 placeholder="Invoice Number"
                                 value={invoiceNumber}
-                                onChangeText={(text) => setInvoiceNumber(text)}
+                                onChangeText={(text) => setInvoiceNumber(text.toUpperCase())}
                             />
                             <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-10" onPress={() => {
                                 const found = getSalesInvoiceDetails({ invoiceNo: invoiceNumber });
@@ -92,7 +92,7 @@ const collections = () => {
                     className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     placeholder="Search by COR#, invoice#, customer..."
                     value={searchKey}
-                    onChangeText={(text) => setSearchKey(text)}
+                    onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
                 <FlatList
                     showsVerticalScrollIndicator={false}
