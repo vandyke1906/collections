@@ -35,7 +35,6 @@ const useReportStore = create((set) => {
                 return { reportType: type };
         }),
         setDateFrom: (number) => set(() => {
-            console.info({ number });
             if (moment(number).isValid())
                 return { dateFrom: number };
         }),

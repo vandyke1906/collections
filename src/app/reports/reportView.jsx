@@ -184,22 +184,36 @@ const reportView = () => {
                         <CardData key={index}>
                             {!!data.product && (
                                 <View>
-                                    <View className="flex flex-row items-center justify-start">
-                                        <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Product: </Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{data.product.name} ({data.product.code})</Text>
-                                    </View>
+                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">{data.product.name}</Text>
+
                                     <View className="flex flex-row items-center justify-between">
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">Qty: {data.product.qty}</Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">Unit: {data.product.unit}</Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">Amount: {amountFormat(data.product.amount)}</Text>
+                                        <View className="flex flex-row items-center justify-start">
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Code: </Text>
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">{data.product.name}</Text>
+                                        </View>
+
+                                        <View className="flex flex-row items-center justify-start">
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Qty: </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{data.product.qty}</Text>
+                                        </View>
+
+                                        <View className="flex flex-row items-center justify-start">
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Unit: </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{data.product.unit}</Text>
+                                        </View>
+
+                                        <View className="flex flex-row items-center justify-start">
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Code: </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(data.product.amount)}</Text>
+                                        </View>
                                     </View>
                                 </View>
                             )}
 
                             {!!data.invoice && (
-                                <View className="mt-5">
+                                <View className="mt-2">
                                     <View className="flex flex-row items-center justify-start">
-                                        <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Invoice #: </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">Invoice #: </Text>
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{data.invoice.invoiceNo}</Text>
                                     </View>
 
