@@ -15,6 +15,7 @@ const customerForm = () => {
 
     useEffect(() => {
         navigation.setOptions({
+            title: "Customer",
             headerRight: () => (
                 <TouchableOpacity onPress={handleSubmit(handleSubmitCustomer)}>
                     <FontAwesome size={18} name="check" color="green" />

@@ -114,9 +114,8 @@ const filterReport = () => {
                         showDatePicker((event, date) => {
                             if (event.type === "set") {
                                 const endDate = moment(date).endOf("day").valueOf();
-                                setDateFrom(endDate);
+                                setDateTo(endDate);
                             }
-                                setDateTo(getDateValueOf(date));
                         });
                     }}>
                         <View>

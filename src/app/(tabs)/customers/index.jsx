@@ -74,6 +74,7 @@ const CustomerPage = () => {
             >
                 <FontAwesome size={20} name="plus" color="white" />
             </TouchableOpacity>
+
         </View>
     );
 }

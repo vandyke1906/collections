@@ -70,7 +70,6 @@ const collectionForm = () => {
 
     useEffect(() => {
         navigation.setOptions({
-            headerShown: true,
             title: "New Collection",
             headerRight: () => (
                 <TouchableOpacity onPress={handleSubmit(handleSubmitCollection)}>

@@ -2,29 +2,29 @@ import { View, FlatList, TextInput, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useRoute } from '@react-navigation/native';
 import { router, useNavigation } from "expo-router";
-import Customer from "../components/Customer";
 import { useQuery } from "@realm/react";
 import moment from "moment";
-import { ROUTES } from "../common/common";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import useSelection from "../store/selectionStore";
+import { ROUTES } from "@common/common";
+import useSelection from "@store/selectionStore";
+import InvoiceCard from "@components/InvoiceCard";
 
-const customerSelection = () => {
+const salesInvoiceSelection = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
-    const { selections, addToSelection, removeToSelection } = useSelection();
+    const { selections, addToSelection, removeToSelection, resetSelection } = useSelection();
 
     const [searchKey, setSearchKey] = React.useState("");
 
     React.useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Select Customer",
-            headerRight: () => !!(+params?.multipleSelect) && (
+            title: "Select Sales Invoice",
+            headerRight: () => (
                 <TouchableOpacity onPress={() => {
                     router.back();
-                    router.setParams({ key: moment().valueOf(), type: "customerList" });
+                    router.setParams({ key: moment().valueOf(), type: +params?.multipleSelect ? "salesInvoiceList" : "salesInvoice" });
                 }}>
                     <FontAwesome size={18} name="check" color="green" />
                 </TouchableOpacity>
@@ -32,8 +32,8 @@ const customerSelection = () => {
         });
     }, [navigation]);
 
-    const customers = useQuery("customers", (col) => {
-        return col.filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
+    const salesInvoices = useQuery("salesInvoices", (col) => {
+        return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");
     }, [searchKey]);
 
     const fetchMoreData = () => { };
@@ -43,13 +43,13 @@ const customerSelection = () => {
             <View className="relative">
                 <TextInput
                     className="text-sm pr-10 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    placeholder="Search Customer..."
+                    placeholder="Search by Invoice Number..."
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text)}
                 />
                 {!!+params?.allowAdd && (
                     <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                        router.navigate({ pathname: ROUTES.CUSTOMER_FORM });
+                        router.navigate({ pathname: ROUTES.SALES_FORM });
                     }}>
                         <FontAwesome size={18} name="plus" color="gray" />
                     </TouchableOpacity>
@@ -58,22 +58,22 @@ const customerSelection = () => {
 
             <FlatList
                 className="w-full"
-                data={customers}
+                data={salesInvoices}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     const isExist = !!selections.find(sel => sel._id === item._id);
                     return (
-                        <Customer data={item} enableButtons={false}  isActive={isExist} onSelect={() => {
-                            const items = {
+                        <InvoiceCard data={item} isActive={isExist} onSelect={() => {
+                            const currentData = {
                                 key: moment().valueOf(),
-                                type: "customer",
+                                type: "salesInvoice",
                                 ...item,
                             };
                             if (+params?.multipleSelect)
-                                isExist ? removeToSelection({ key: "_id", value: item._id }, true) : addToSelection(item);
+                                isExist ? removeToSelection({ key: "_id", value: item._id }, true) : addToSelection(currentData);
                             else {
-                                router.back();
-                                router.setParams(items);
+                                resetSelection();
+                                addToSelection(currentData);
                             }
                         }} />
                     );
@@ -86,4 +86,4 @@ const customerSelection = () => {
     )
 }
 
-export default customerSelection
+export default salesInvoiceSelection

@@ -1,14 +1,14 @@
-import { View, FlatList, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { router, useNavigation } from "expo-router";
-import Product from "../components/Product";
+import Product from "../../../../components/Product";
 import { useQuery } from "@realm/react";
 import moment from "moment";
 import { useRoute } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import useSalesInvoiceStore from "../store/salesInvoiceStore";
-import { ROUTES } from "../common/common";
-import useSelection from "../store/selectionStore";
+import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
+import { ROUTES } from "../../../../common/common";
+import useSelection from "../../../../store/selectionStore";
 
 
 const customerSelection = () => {
@@ -38,9 +38,9 @@ const customerSelection = () => {
         return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
     }, [searchKey]);
 
-const fetchMoreData = () => { };
+    const fetchMoreData = () => { };
     return (
-        <View className="m-2 h-auto">
+        <View className="m-2 h-full">
             <View className="relative">
                 <TextInput
                     className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -48,13 +48,6 @@ const fetchMoreData = () => { };
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text)}
                 />
-                {!!+params?.allowAdd && (
-                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                        router.navigate({ pathname: ROUTES.PRODUCT_FORM });
-                    }}>
-                        <FontAwesome size={18} name="plus" color="gray" />
-                    </TouchableOpacity>
-                )}
             </View>
             <FlatList
                 className="w-full"
@@ -78,13 +71,27 @@ const fetchMoreData = () => { };
                                 router.setParams(product);
                             }
                         }} />
-                    )
+                    );
                 }}
                 onEndReached={fetchMoreData}
                 onEndReachedThreshold={0.1}
-                />
-        </View>
-    )
-}
+            />
 
-export default customerSelection
+
+            {!!+params?.allowAdd && (
+                <TouchableOpacity
+                    className="bg-blue-700 w-14 h-14 rounded-full flex justify-center items-center"
+                    style={{ position: "absolute", bottom: 30, right: 15 }}
+                    onPress={() => {
+                        router.navigate({ pathname: ROUTES.PRODUCT_FORM });
+                    }}
+                >
+                    <FontAwesome size={20} name="plus" color="white" />
+                </TouchableOpacity>
+            )}
+
+        </View>
+    );
+};
+
+export default customerSelection;

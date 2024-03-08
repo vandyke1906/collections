@@ -2,13 +2,11 @@ import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid } from
 import React from 'react';
 import { useRoute } from '@react-navigation/native';
 import { router, useNavigation } from "expo-router";
-import Customer from "../components/Customer";
 import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
-import { ROUTES } from "../common/common";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import GroupCard from "../components/GroupCard";
-import useSelection from "../store/selectionStore";
+import useSelection from "@store/selectionStore";
+import GroupCard from "src/components/GroupCard";
 
 const groupSelection = () => {
     const navigation = useNavigation();

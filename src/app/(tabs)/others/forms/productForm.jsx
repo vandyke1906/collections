@@ -4,7 +4,7 @@ import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { ROUTES } from "../../../common/common";
+import { ROUTES } from "../../../../common/common";
 import { useRoute } from '@react-navigation/native';
 
 const productForm = () => {
@@ -18,6 +18,7 @@ const productForm = () => {
 
     useEffect(() => {
         navigation.setOptions({
+            title: "Product",
             headerRight: () => (
                 <TouchableOpacity onPress={handleSubmit(handleSubmitProduct)}>
                     <FontAwesome size={18} name="check" color="green" />

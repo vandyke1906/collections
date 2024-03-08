@@ -27,6 +27,18 @@ const salesForm = () => {
 
     const [list, setList] = useState(productList);
 
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: true,
+            title: "Create Sales",
+            headerRight: () => (
+                <TouchableOpacity onPress={handleSubmit(handleSubmitCustomer)}>
+                    <FontAwesome size={18} name="check" color="green" />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation, productList, details]);
+
     const handleSubmitCustomer = useCallback((data) => {
         realm.write(() => {
             try {
@@ -90,18 +102,6 @@ const salesForm = () => {
     const totalAmount = useMemo(() => {
         return Number(details.totalAmount || 0).toFixed(2);
     }, [details?.totalAmount]);
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerShown: true,
-            title: "Create Sales",
-            headerRight: () => (
-                <TouchableOpacity onPress={handleSubmit(handleSubmitCustomer)}>
-                    <FontAwesome size={18} name="check" color="green" />
-                </TouchableOpacity>
-            ),
-        });
-    }, [navigation, productList, details]);
 
     useEffect(() => {
         switch (params.type) {
