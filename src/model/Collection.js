@@ -13,6 +13,8 @@ export class Collection extends Realm.Object {
             paymentDate: { type: "int", indexed: true },
             amount: "double",
             modeOfPayment: "string",
+            chequeNo: "string?",
+            chequeDate: "string?",
             salesInvoice: "salesInvoices",
             details: 'collections_details',
             customerId: { type: "string", indexed: true },

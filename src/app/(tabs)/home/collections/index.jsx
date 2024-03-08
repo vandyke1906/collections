@@ -56,7 +56,7 @@ const collections = () => {
                     <View className="shadow-md drop-shadow-sm rounded-md ring-1 w-11/12 p-5 bg-white">
                          <View className="relative">
                             <TextInput
-                                className="pr-20 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                className="text-sm pr-20 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 placeholder="Invoice Number"
                                 value={invoiceNumber}
                                 onChangeText={(text) => setInvoiceNumber(text)}
@@ -65,6 +65,7 @@ const collections = () => {
                                 const found = getSalesInvoiceDetails({ invoiceNo: invoiceNumber });
                                 if (found) {
                                     setShowInvoiceModal(false);
+                                    setInvoiceNumber("");
                                     router.navigate({ pathname: ROUTES.COLLECTIONS_FORM });
                                 }
                                 else
@@ -75,6 +76,7 @@ const collections = () => {
 
                             <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
                                     setShowInvoiceModal(false);
+                                    setInvoiceNumber("");
                             }}>
                                 <FontAwesome size={18} name="times" color="gray" />
                             </TouchableOpacity>
@@ -91,7 +93,7 @@ const collections = () => {
 
             <View className="items-center justify-center m-2">
                 <TextInput
-                    className="my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     placeholder="Search by COR#, invoice#, customer..."
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text)}

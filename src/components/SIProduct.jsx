@@ -11,12 +11,12 @@ const SIProduct = ({ data, onQtyChange, onAmountChange }) => {
             <Text>{data.code || ""}</Text>
             <Text>{data.name || ""}</Text>
             <Text>{data.unit || ""}</Text>
-            <TextInput placeholder="Quantity" keyboardType="number-pad" value={qty} onChangeText={(text) => {
+            <TextInput className="text-sm" placeholder="Quantity" keyboardType="number-pad" value={qty} onChangeText={(text) => {
                 setQty(text);
                 if (text && typeof onQtyChange === "function")
                     onQtyChange(text);
             }} />
-            <TextInput placeholder="Amount" keyboardType="number-pad" value={amount} onChangeText={(text) => {
+            <TextInput className="text-sm" placeholder="Amount" keyboardType="number-pad" value={amount} onChangeText={(text) => {
                 setAmount(text);
                 if (text && typeof onAmountChange === "function")
                     onAmountChange(text);

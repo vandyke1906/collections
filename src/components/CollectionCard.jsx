@@ -9,20 +9,20 @@ const CollectionCard = ({ data, onEdit, enableButtons, onSelect }) => {
         <TouchableOpacity disabled={typeof onSelect !== "function"} onPress={() => typeof onSelect === "function" ? onSelect() : () => { }}>
             <View className="block w-full rounded-lg bg-white text-left p-2 my-2">
                 <View className="p-2">
-                    {data?.corNo && <Text className="block font-sans text-sm antialiased leading-normal text-gray-900 font-bold">{data?.corNo}</Text>}
-                    {data.details?.customerName && <Text className="block font-sans text-sm antialiased font-bold leading-normal text-gray-900">{data.details?.customerName}</Text>}
+                    {data?.corNo && <Text className="block font-sans text-xs antialiased leading-normal text-gray-900 font-bold">{data?.corNo}</Text>}
+                    {data.details?.customerName && <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900">{data.details?.customerName}</Text>}
 
-                    {data?.paymentDate && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Payment Date: {moment(data?.paymentDate).format(DATE_FORMAT)}</Text>}
-                    {data?.corDate && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">COR Date: {moment(data?.corDate).format(DATE_FORMAT)}</Text>}
-                    {data.details?.invoiceNo && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Invoice #:{data.details?.invoiceNo}</Text>}
+                    {data?.paymentDate && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Payment Date: {moment(data?.paymentDate).format(DATE_FORMAT)}</Text>}
+                    {data?.corDate && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">COR Date: {moment(data?.corDate).format(DATE_FORMAT)}</Text>}
+                    {data.details?.invoiceNo && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Invoice #:{data.details?.invoiceNo}</Text>}
 
                      <View className="flex flex-row items-center justify-between">
-                        {data.modeOfPayment && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Mode of Payment: {data.modeOfPayment}</Text>}
-                        {!isNaN(data?.amount) && <Text className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: {amountFormat(data?.amount)}</Text>}
+                        {data.modeOfPayment && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Mode of Payment: {data.modeOfPayment}</Text>}
+                        {!isNaN(data?.amount) && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: {amountFormat(data?.amount)}</Text>}
                     </View>
 
                 </View>
-                {enableButtons && <View className="flex flex-row items-center justify-end border-t-2 border-neutral-100 font-sans text-sm antialiased font-normal leading-normal text-gray-700 opacity-75">
+                {enableButtons && <View className="flex flex-row items-center justify-end border-t-2 border-neutral-100 font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
                     <TouchableOpacity onPress={onEdit}>
                         <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Edit</Text>
                     </TouchableOpacity>

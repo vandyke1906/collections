@@ -11,7 +11,7 @@ import useSelection from "../../store/selectionStore";
 import MiniCardData from "../../components/MiniCardData";
 
 const filterReport = () => {
-    const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -122,7 +122,7 @@ const filterReport = () => {
                 {/* CUSTOMERS */}
                 <View className="mt-2 mb-10 flex border-t border-gray-300">
                     <View className="flex flex-row items-center justify-between">
-                        <Text className="mx-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">Customers</Text>
+                        <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Customers</Text>
                         <TouchableOpacity onPress={() => {
                             setSelections(customers);
                             router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION, params: { multipleSelect: 1 } });
@@ -133,9 +133,9 @@ const filterReport = () => {
 
                     <View className="flex flex-wrap flex-row">
                         {customers.map((item, index) => (
-                            <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                                 <View className="flex flex-row">
-                                    <Text className="block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
+                                    <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
                                     <TouchableOpacity className="ml-2" onPress={() => {
                                         removeCustomer(item._id);
                                     }}>
@@ -152,7 +152,7 @@ const filterReport = () => {
                         {/* GROUPS */}
                         <View className="mt-2 mb-10 flex border-t border-gray-300">
                             <View className="flex flex-row items-center justify-between">
-                                <Text className="mx-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">Groups</Text>
+                                <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Groups</Text>
                                 <TouchableOpacity onPress={() => {
                                     setSelections(groups);
                                     router.navigate({ pathname: ROUTES.GROUP_SELECTION, params: { multipleSelect: 1 } });
@@ -163,9 +163,9 @@ const filterReport = () => {
 
                             <View className="flex flex-wrap flex-row">
                                 {groups.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                                         <View className="flex flex-row">
-                                            <Text className="block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">{item._id}</Text>
+                                            <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item._id}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
                                                 removeGroup(item._id);
                                             }}>
@@ -180,7 +180,7 @@ const filterReport = () => {
                         {/* PRODUCTS */}
                         <View className="mt-2 mb-10 flex border-t border-gray-300">
                             <View className="flex flex-row items-center justify-between">
-                                <Text className="mx-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">Products</Text>
+                                <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Products</Text>
                                 <TouchableOpacity onPress={() => {
                                     setSelections(products);
                                     router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
@@ -191,9 +191,9 @@ const filterReport = () => {
 
                             <View className="flex flex-wrap flex-row">
                                 {products.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                                         <View className="flex flex-row">
-                                            <Text className="block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
+                                            <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
                                                 removeProduct(item._id);
                                             }}>
@@ -213,7 +213,7 @@ const filterReport = () => {
                         {/* SALES INVOICE */}
                         <View className="mt-2 mb-10 flex border-t border-gray-300">
                             <View className="flex flex-row items-center justify-between">
-                                <Text className="mx-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">Invoices</Text>
+                                <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Invoices</Text>
                                 <TouchableOpacity onPress={() => {
                                     setSelections(salesInvoices);
                                     router.navigate({ pathname: ROUTES.SALES_INVOICE_SELECTION, params: { multipleSelect: 1 } });
@@ -224,9 +224,9 @@ const filterReport = () => {
 
                             <View className="flex flex-wrap flex-row">
                                 {salesInvoices.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                                         <View className="flex flex-row">
-                                            <Text className="block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">{item.invoiceNo}</Text>
+                                            <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.invoiceNo}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
                                                 removeSalesInvoice(item._id);
                                             }}>

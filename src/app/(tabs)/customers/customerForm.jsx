@@ -5,7 +5,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useRealm } from "@realm/react";
 
 const customerForm = () => {
-    const inputClass = "my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const {  control, handleSubmit, formState: { errors }  } = useForm();
     const realm = useRealm();

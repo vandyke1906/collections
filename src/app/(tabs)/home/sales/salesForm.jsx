@@ -12,7 +12,7 @@ import { DATE_FORMAT, ROUTES } from "../../../../common/common";
 import useSelection from "../../../../store/selectionStore";
 
 const salesForm = () => {
-    const inputClass = "my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const { control, handleSubmit, setValue, formState: { errors }  } = useForm();
     const realm = useRealm();
@@ -255,7 +255,7 @@ const salesForm = () => {
 
                 <View className="mt-2 mb-5 flex border-t border-gray-300">
                     <View className="flex flex-row items-center justify-between">
-                        <Text className="mt-2 block font-sans text-sm antialiased leading-normal text-gray-500 uppercase">products</Text>
+                        <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">products</Text>
                             <TouchableOpacity onPress={() => {
                                 setSelections(list);
                                 router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1, allowAdd: 1 } });

@@ -8,7 +8,7 @@ import { ROUTES } from "../../../common/common";
 import { useRoute } from '@react-navigation/native';
 
 const productForm = () => {
-    const inputClass = "my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const {  control, handleSubmit, setValue, formState: { errors }  } = useForm();
     const realm = useRealm();
