@@ -91,7 +91,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Product Code</Text>
-                        <TextInput className={inputClass} placeholder="Product Code" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
+                        <TextInput className={`${inputClass} border ${errors.code ? "border-red-500" : ""}`} placeholder="Product Code" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
                     </View>
                 )}
             />
@@ -104,7 +104,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Product Name</Text>
-                        <TextInput className={inputClass} placeholder="Product Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
+                        <TextInput className={`${inputClass} border ${errors.name ? "border-red-500" : ""}`} placeholder="Product Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
                     </View>
                 )}
             />
@@ -117,7 +117,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Unit</Text>
-                        <TextInput className={inputClass} placeholder="Unit" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
+                        <TextInput className={`${inputClass} border ${errors.unit ? "border-red-500" : ""}`} placeholder="Unit" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
                     </View>
                 )}
             />
@@ -134,7 +134,7 @@ const productForm = () => {
                         <View>
                             <Text className="text-slate-500">Group</Text>
                             <View className="relative">
-                                <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Group" value={value} editable={false} />
+                                <TextInput className={`${inputClass} pr-10 border ${errors.group ? "border-red-500" : ""}`} autoCapitalize="characters" placeholder="Group" value={value} editable={false} />
                                 <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
                                     router.push({ pathname: ROUTES.GROUP_SELECTION });
                                 }}>

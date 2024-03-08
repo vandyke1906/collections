@@ -145,7 +145,7 @@ const salesForm = () => {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <View>
                                 <Text className="text-slate-500">Invoice Number</Text>
-                                <TextInput className={inputClass} autoCapitalize="characters" placeholder="Invoice Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
+                                <TextInput className={`${inputClass} border ${errors.invoiceNo ? "border-red-500" : ""}`} autoCapitalize="characters" placeholder="Invoice Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                             </View>
                         )}
                     />
@@ -164,7 +164,7 @@ const salesForm = () => {
                             }}>
                                 <View>
                                     <Text className="text-slate-500">SI Date</Text>
-                                    <TextInput className={inputClass} placeholder="Sales Invoice Date" value={value} editable={false} />
+                                    <TextInput className={`${inputClass} border ${errors.dateOfSI ? "border-red-500" : ""}`} placeholder="Sales Invoice Date" value={value} editable={false} />
                                 </View>
                             </TouchableWithoutFeedback>
                         )}
@@ -185,7 +185,7 @@ const salesForm = () => {
                             }}>
                                 <View>
                                     <Text className="text-slate-500">Date Delivered</Text>
-                                    <TextInput className={inputClass} placeholder="Date Delivered" value={value} editable={false} />
+                                    <TextInput className={`${inputClass} border ${errors.dateDelivered ? "border-red-500" : ""}`} placeholder="Date Delivered" value={value} editable={false} />
                                 </View>
                             </TouchableWithoutFeedback>
                         )}
@@ -203,7 +203,7 @@ const salesForm = () => {
                                 <View>
                                     <Text className="text-slate-500">Customer</Text>
                                     <View className="relative">
-                                        <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Customer" value={value} editable={false} />
+                                        <TextInput className={`${inputClass} pr-10 border ${errors.customerName ? "border-red-500" : ""}`} autoCapitalize="characters" placeholder="Customer" value={value} editable={false} />
                                         <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
                                             router.push({ pathname: ROUTES.CUSTOMER_SELECTION });
                                         }}>

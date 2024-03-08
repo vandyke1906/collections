@@ -87,7 +87,7 @@ const collectionForm = () => {
                     render={({ field: { onChange, onBlur, value } }) => (
                         <View>
                             <Text className="text-slate-500">Collection Receipt Number</Text>
-                            <TextInput className={inputClass} autoCapitalize="characters" placeholder="Collection Receipt Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
+                            <TextInput className={`${inputClass} border ${errors.corNo ? "border-red-500" : ""}`} autoCapitalize="characters" placeholder="Collection Receipt Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                         </View>
                     )}
                 />
@@ -106,7 +106,7 @@ const collectionForm = () => {
                         }}>
                             <View>
                                 <Text className="text-slate-500">Collection Receipt Date</Text>
-                                <TextInput className={inputClass} placeholder="Collection Receipt Date" value={value} editable={false} />
+                                <TextInput className={`${inputClass} border ${errors.corDate ? "border-red-500" : ""}`} placeholder="Collection Receipt Date" value={value} editable={false} />
                             </View>
                         </TouchableWithoutFeedback>
                     )}
@@ -126,7 +126,7 @@ const collectionForm = () => {
                         }}>
                             <View>
                                 <Text className="text-slate-500">Payment Date</Text>
-                                <TextInput className={inputClass} placeholder="Payment Date" value={value} editable={false} />
+                                <TextInput className={`${inputClass} border ${errors.paymentDate ? "border-red-500" : ""}`} placeholder="Payment Date" value={value} editable={false} />
                             </View>
                         </TouchableWithoutFeedback>
                     )}
@@ -139,7 +139,7 @@ const collectionForm = () => {
                     render={({ field: { value, onChange, onBlur } }) => (
                         <View>
                             <Text className="text-slate-500">Amount Paid</Text>
-                            <TextInput className={`${inputClass} text-right`} keyboardType="decimal-pad" placeholder="Amount Paid" value={value} onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} />
+                            <TextInput className={`${inputClass} text-right border ${errors.amount ? "border-red-500" : ""}`} keyboardType="decimal-pad" placeholder="Amount Paid" value={value} onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} />
                         </View>
                     )}
                 />
@@ -152,7 +152,7 @@ const collectionForm = () => {
                     render={({ field: { value, onChange } }) => (
                         <View>
                             <Text className="text-slate-500">Mode of Payment</Text>
-                            <View className={inputClass}>
+                            <View className={`${inputClass} border ${errors.modeOfPayment ? "border-red-500" : ""}`}>
                                 <Picker selectedValue={value} onValueChange={(value) => {
                                     setIsCheque(isMOPCheque(value));
                                     onChange(value);
@@ -175,7 +175,7 @@ const collectionForm = () => {
                             render={({ field: { value, onChange } }) => (
                                 <View>
                                     <Text className="text-slate-500">Cheque Number</Text>
-                                    <TextInput className={inputClass} placeholder="Cheque Number" value={value} onChangeText={(text) => onChange(text.toUpperCase())} />
+                                    <TextInput className={`${inputClass} border ${errors.chequeNo ? "border-red-500" : ""}`} placeholder="Cheque Number" value={value} onChangeText={(text) => onChange(text.toUpperCase())} />
                                 </View>
                             )}
                         />
@@ -194,7 +194,7 @@ const collectionForm = () => {
                                 }}>
                                     <View>
                                         <Text className="text-slate-500">Date of Cheque</Text>
-                                        <TextInput className={inputClass} placeholder="Date of Cheque" value={value} editable={false} />
+                                        <TextInput className={`${inputClass} border ${errors.chequeDate ? "border-red-500" : ""}`} placeholder="Date of Cheque" value={value} editable={false} />
                                     </View>
                                 </TouchableWithoutFeedback>
                             )}

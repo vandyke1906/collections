@@ -81,7 +81,7 @@ const customerForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Account Number</Text>
-                        <TextInput className={inputClass} placeholder="Customer Account Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
+                        <TextInput className={`${inputClass} border ${errors.code ? "border-red-500" : ""}`} placeholder="Customer Account Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                     </View>
                 )}
             />
@@ -94,7 +94,7 @@ const customerForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Account Name</Text>
-                        <TextInput className={inputClass} placeholder="Customer Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
+                        <TextInput className={`${inputClass} border ${errors.name ? "border-red-500" : ""}`} placeholder="Customer Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                     </View>
                 )}
             />
