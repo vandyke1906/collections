@@ -1,11 +1,11 @@
 import { View, TouchableOpacity, FlatList, TextInput, Modal, Text, Pressable, ToastAndroid } from 'react-native'
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { useEffect, useState } from 'react'
-import { ROUTES } from "../../../../common/common";
 import { router, useNavigation } from "expo-router";
 import { useQuery, useRealm } from "@realm/react";
-import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
-import CollectionCard from "../../../../components/CollectionCard";
+import { ROUTES } from "src/common/common";
+import useSalesInvoiceStore from "src/store/salesInvoiceStore";
+import CollectionCard from "src/components/CollectionCard";
 
 const collections = () => {
     const navigation = useNavigation();

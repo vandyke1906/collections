@@ -1,11 +1,11 @@
 import { router } from "expo-router";
 import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert } from "react-native";
-import Customer from "../../../components/Customer";
 import { useState } from "react";
+import moment from "moment";
 import { useQuery, useRealm } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { ROUTES } from "../../../common/common";
-import moment from "moment";
+import Customer from "src/components/Customer";
+import { ROUTES } from "src/common/common";
 
 const CustomerPage = () => {
     const realm = useRealm();

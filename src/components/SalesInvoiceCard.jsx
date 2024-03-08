@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { memo } from 'react'
 import PropTypes from "prop-types";
 import moment from "moment";
-import { DATE_FORMAT, amountFormat } from "../common/common";
+import { DATE_FORMAT, amountFormat } from "src/common/common";
 
 const SalesInvoiceCard = ({ data, onEdit, enableButtons, onSelect }) => {
     return (

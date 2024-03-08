@@ -2,8 +2,8 @@ import { View, Text, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Tex
 import React, { useCallback, useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
-import { DATE_FORMAT, MODE_OF_PAYMENT, amountFormat, formatDate, isMOPCheque, showDatePicker } from "../../../../common/common";
+import useSalesInvoiceStore from "src/store/salesInvoiceStore";
+import { DATE_FORMAT, MODE_OF_PAYMENT, amountFormat, formatDate, isMOPCheque, showDatePicker } from "src/common/common";
 import { Controller, useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { useRealm } from "@realm/react";

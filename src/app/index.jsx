@@ -1,7 +1,7 @@
 import { useRealm } from "@realm/react";
 import { Redirect } from "expo-router";
 import { useEffect } from "react";
-import { ROUTES } from "../common/common";
+import { ROUTES } from "src/common/common";
 
 const Page = () => {
     const realm = useRealm();

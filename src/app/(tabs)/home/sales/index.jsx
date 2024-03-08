@@ -1,12 +1,12 @@
 import { View, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { useEffect, useState } from 'react';
-import { ROUTES } from "../../../../common/common";
 import { router, useNavigation } from "expo-router";
 import moment from "moment";
 import { useQuery, useRealm } from "@realm/react";
-import SalesInvoiceCard from "../../../../components/SalesInvoiceCard";
-import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
+import { ROUTES } from "src/common/common";
+import SalesInvoiceCard from "src/components/SalesInvoiceCard";
+import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 
 const salesPage = () => {
     const navigation = useNavigation();
@@ -51,9 +51,9 @@ const salesPage = () => {
                     data={salesInvoices}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
-                        <SalesInvoiceCard data={item} onEdit={() => router.navigate({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
+                        <SalesInvoiceCard data={item} onEdit={() => router.push({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
                             getSalesInvoiceDetails(item);
-                            router.navigate(ROUTES.SALES_INVOICE_DETAILS);
+                            router.push(ROUTES.SALES_INVOICE_DETAILS);
                         }} />
                     )}
                     onEndReached={fetchMoreData}
@@ -69,7 +69,7 @@ const salesPage = () => {
                     right: 15
                 }}
                 onPress={() => {
-                    router.navigate({ pathname: ROUTES.SALES_FORM, params: { key: moment().valueOf(), type: "clearList" } });
+                    router.push({ pathname: ROUTES.SALES_FORM, params: { key: moment().valueOf(), type: "clearList" } });
                 }}
             >
                 <FontAwesome size={20} name="plus" color="white" />

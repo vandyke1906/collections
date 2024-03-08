@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { REPORT_TYPE } from "../common/common";
+import { REPORT_TYPE } from "src/common/common";
 import moment from "moment";
 
 const useReportStore = create((set) => {

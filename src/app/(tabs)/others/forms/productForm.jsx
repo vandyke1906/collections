@@ -4,8 +4,8 @@ import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { ROUTES } from "../../../../common/common";
 import { useRoute } from '@react-navigation/native';
+import { ROUTES } from "src/common/common";
 
 const productForm = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -136,7 +136,7 @@ const productForm = () => {
                             <View className="relative">
                                 <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Group" value={value} editable={false} />
                                 <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                                    router.navigate({ pathname: ROUTES.GROUP_SELECTION, params: { allowAdd: 1 } });
+                                    router.navigate({ pathname: ROUTES.GROUP_SELECTION });
                                 }}>
                                     <FontAwesome size={18} name="search" color="gray" />
                                 </TouchableOpacity>

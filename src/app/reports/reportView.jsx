@@ -1,10 +1,10 @@
 import { View, Text, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import useReportStore from "../../store/reportStore";
 import { useRealm } from "@realm/react";
 import { useNavigation } from "expo-router";
-import { MODE_OF_PAYMENT, REPORT_TYPE, amountFormat, formatDate, isMOPCheque } from "../../common/common";
-import CardData from "../../components/CardData";
+import useReportStore from "src/store/reportStore";
+import { REPORT_TYPE, amountFormat, formatDate, isMOPCheque } from "src/common/common";
+import CardData from "src/components/CardData";
 
 const reportView = () => {
     const navigation = useNavigation();

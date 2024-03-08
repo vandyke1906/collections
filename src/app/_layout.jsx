@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { Stack } from "expo-router";
 import { AppProvider, RealmProvider, UserProvider, useAuth } from "@realm/react";
-import { Product } from "../model/Product";
-import { Group } from "../model/Group";
-import { Customer } from "../model/Customer";
-import { SalesInvoice } from "../model/SalesInvoice";
-import { SalesProduct } from "../model/SalesProduct";
-import { Collection } from "../model/Collection";
-import { CollectionDetails } from "../model/CollectionDetails";
+import { Product } from "src/model/Product";
+import { Group } from "src/model/Group";
+import { Customer } from "src/model/Customer";
+import { SalesInvoice } from "src/model/SalesInvoice";
+import { SalesProduct } from "src/model/SalesProduct";
+import { Collection } from "src/model/Collection";
+import { CollectionDetails } from "src/model/CollectionDetails";
 import { OpenRealmBehaviorType, OpenRealmTimeOutBehavior } from "realm";
 import { ActivityIndicator, Text, View } from "react-native";
 

@@ -2,10 +2,10 @@ import "react-native-get-random-values";
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useEffect } from 'react';
 import { router, useNavigation } from "expo-router";
-import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
 import moment from "moment";
-import { DATE_FORMAT, MODE_OF_PAYMENT, ROUTES, amountFormat, formatDate } from "../../../../common/common";
 import { useQuery, useRealm } from "@realm/react";
+import useSalesInvoiceStore from "src/store/salesInvoiceStore";
+import { DATE_FORMAT, MODE_OF_PAYMENT, ROUTES, amountFormat, formatDate } from "src/common/common";
 
 const salesInvoiceDetails = () => {
     const navigation = useNavigation();
