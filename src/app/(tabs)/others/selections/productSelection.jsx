@@ -1,14 +1,13 @@
 import { View, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { router, useNavigation } from "expo-router";
-import Product from "../../../../components/Product";
 import { useQuery } from "@realm/react";
 import moment from "moment";
 import { useRoute } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
-import { ROUTES } from "../../../../common/common";
-import useSelection from "../../../../store/selectionStore";
+import Product from "src/components/Product";
+import { ROUTES } from "src/common/common";
+import useSelection from "src/store/selectionStore";
 
 
 const customerSelection = () => {
