@@ -1,5 +1,5 @@
-import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid } from 'react-native'
-import React from 'react'
+import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
+import React from 'react';
 import { useRoute } from '@react-navigation/native';
 import { router, useNavigation } from "expo-router";
 import Customer from "../components/Customer";
@@ -41,26 +41,26 @@ const groupSelection = () => {
     const fetchMoreData = () => { };
 
     const showAddConfirmation = () => {
-         Alert.alert("Continue", `Do you want to add ${searchKey.toUpperCase()}?`, [
-        {
-            text: "Cancel",
-            onPress: () => {},
-        },
-             {
-                 text: "Add",
-                 onPress: () => {
-                     try {
-                         if (!realm) throw new Error("Transaction is not ready.");
-                         realm.write(() => {
-                             const newGroup = searchKey.trim().toUpperCase();
+        Alert.alert("Continue", `Do you want to add ${searchKey.toUpperCase()}?`, [
+            {
+                text: "Cancel",
+                onPress: () => { },
+            },
+            {
+                text: "Add",
+                onPress: () => {
+                    if (!realm) ToastAndroid.show("Transaction is not ready.", ToastAndroid.SHORT);
+                    realm.write(() => {
+                        try {
+                            const newGroup = searchKey.trim().toUpperCase();
                             realm.create("groups", { _id: newGroup });
                             ToastAndroid.show(`Group ${newGroup} added.`, ToastAndroid.SHORT);
-                         });
-                     } catch (error) {
-                         ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
-                     }
-                 }
-             },
+                        } catch (error) {
+                            ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
+                        }
+                    });
+                }
+            },
         ]);
     };
 
@@ -106,9 +106,9 @@ const groupSelection = () => {
                 }}
                 onEndReached={fetchMoreData}
                 onEndReachedThreshold={0.1}
-                />
+            />
         </View>
-    )
-}
+    );
+};
 
-export default groupSelection
+export default groupSelection;

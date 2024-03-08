@@ -10,7 +10,7 @@ import { useRoute } from '@react-navigation/native';
 const productForm = () => {
     const inputClass = "text-sm my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
-    const {  control, handleSubmit, setValue, formState: { errors }  } = useForm();
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm();
     const realm = useRealm();
     const navigation = useNavigation();
     const route = useRoute();
@@ -26,8 +26,8 @@ const productForm = () => {
     }, [params?.key]);
 
     const handleSubmitProduct = useCallback((data) => {
-        try {
-            realm.write(() => {
+        realm.write(() => {
+            try {
                 let isNew = true;
 
                 const isCodeExist = (_code, _id) => {
@@ -59,15 +59,15 @@ const productForm = () => {
                     }
                 }
 
-                if(isNew)
+                if (isNew)
                     realm.create("products", data);
 
                 ToastAndroid.show(`Product ${isNew ? "created" : "updated"}.`, ToastAndroid.SHORT);
                 navigation.goBack();
-            });
-        } catch (error) {
+            } catch (error) {
                 ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
-        }
+            }
+        });
     }, [realm]);
 
     return (
@@ -114,38 +114,38 @@ const productForm = () => {
                 )}
             /> */}
             <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    name="group"
-                    defaultValue={params.group || ""}
-                    render={({ field: { value } }) => (
-                        <TouchableWithoutFeedback onPress={() => {
-                            Keyboard.dismiss();
-                        }}>
-                            <View>
-                                <Text className="text-slate-500">Group</Text>
-                                <View className="relative">
-                                    <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Group" value={value} editable={false} />
-                                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                                        router.navigate({ pathname: ROUTES.GROUP_SELECTION, params: { allowAdd: 1 }  });
-                                    }}>
-                                        <FontAwesome size={18} name="search" color="gray" />
-                                    </TouchableOpacity>
-                                </View>
+                control={control}
+                rules={{ required: true }}
+                name="group"
+                defaultValue={params.group || ""}
+                render={({ field: { value } }) => (
+                    <TouchableWithoutFeedback onPress={() => {
+                        Keyboard.dismiss();
+                    }}>
+                        <View>
+                            <Text className="text-slate-500">Group</Text>
+                            <View className="relative">
+                                <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Group" value={value} editable={false} />
+                                <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
+                                    router.navigate({ pathname: ROUTES.GROUP_SELECTION, params: { allowAdd: 1 } });
+                                }}>
+                                    <FontAwesome size={18} name="search" color="gray" />
+                                </TouchableOpacity>
                             </View>
-                        </TouchableWithoutFeedback>
-                    )}
-                />
+                        </View>
+                    </TouchableWithoutFeedback>
+                )}
+            />
 
 
             <TouchableOpacity className="p-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitProduct)}>
                 <Text className="text-white text-center text-[16px]">Save</Text>
             </TouchableOpacity>
 
-             <Text>
+            <Text>
                 {!!Object.keys(errors).length && JSON.stringify(errors)}
             </Text>
-            </View>
+        </View>
     );
 };
 

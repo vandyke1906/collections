@@ -7,13 +7,13 @@ import { useRealm } from "@realm/react";
 const customerForm = () => {
     const inputClass = "text-sm my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
-    const {  control, handleSubmit, formState: { errors }  } = useForm();
+    const { control, handleSubmit, formState: { errors } } = useForm();
     const realm = useRealm();
     const params = useLocalSearchParams();
 
     const handleSubmitCustomer = useCallback((data) => {
-        try {
-            realm.write(() => {
+        realm.write(() => {
+            try {
                 let isNew = true;
                 const isCodeExist = (_code, _id) => {
                     const regexPattern = new RegExp(data.code, 'i');
@@ -30,7 +30,7 @@ const customerForm = () => {
                     const customer = realm.objectForPrimaryKey("customers", params._id);
                     if (customer) {
                         //update related fields in other collections
-                        if (customer.name !== data.name){
+                        if (customer.name !== data.name) {
                             const collections = realm.objects("collections");
                             const filtered = collections.filter((c) => c.customerId === customer._id);
                             filtered.forEach((coll) => {
@@ -51,16 +51,16 @@ const customerForm = () => {
 
                 ToastAndroid.show(`Customer ${isNew ? "created" : "updated"}.`, ToastAndroid.SHORT);
                 router.back();
-            });
-        } catch (error) {
-            ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
-        }
+            } catch (error) {
+                ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
+            }
+        });
     }, [realm]);
 
     return (
         <View className="p-5">
             <Text>New Customer</Text>
-             <Controller
+            <Controller
                 control={control}
                 rules={{ required: false }}
                 name="code"
@@ -70,7 +70,7 @@ const customerForm = () => {
                 )}
             />
 
-             <Controller
+            <Controller
                 control={control}
                 rules={{ required: true }}
                 name="name"
@@ -80,13 +80,13 @@ const customerForm = () => {
                 )}
             />
 
-             <Controller
+            <Controller
                 control={control}
                 rules={{ required: false }}
                 name="address"
                 defaultValue={params.address || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Address" onBlur={onBlur} onChangeText={onChange} value={value}  multiline={true} numberOfLines={4} />
+                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Address" onBlur={onBlur} onChangeText={onChange} value={value} multiline={true} numberOfLines={4} />
                 )}
             />
 
@@ -94,7 +94,7 @@ const customerForm = () => {
                 <Text className="text-white text-center text-[16px]">Save</Text>
             </TouchableOpacity>
 
-             <Text>
+            <Text>
                 {!!Object.keys(errors).length && JSON.stringify(errors)}
             </Text>
         </View>
