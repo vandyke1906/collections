@@ -12,6 +12,7 @@ export const ROUTES = {
     COLLECTIONS_FORM: "/(tabs)/home/collections/collectionForm",
     CUSTOMERS: "/(tabs)/customers",
     CUSTOMER_FORM: "/(tabs)/customers/customerForm",
+    CUSTOMER_PAGE: "/(tabs)/customers/customerPage",
     PRODUCTS: "/(tabs)/products",
     PRODUCT_FORM: "/(tabs)/products/productForm",
     SETTINGS: "/(tabs)/settings",
