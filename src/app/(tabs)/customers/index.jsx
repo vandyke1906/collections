@@ -32,7 +32,7 @@ const CustomerPage = () => {
                     renderItem={({ item }) => (
                         <Customer
                             data={item} enableButtons={true}
-                            onEdit={() => router.navigate({ pathname: ROUTES.CUSTOMER_FORM, params: item })}
+                            onEdit={() => router.push({ pathname: ROUTES.CUSTOMER_FORM, params: item })}
                             onDelete={() => {
                                 Alert.alert("Delete Customer", `Do you want to delete ${item.name}?`, [
                                     { text: "Cancel" },
@@ -71,7 +71,7 @@ const CustomerPage = () => {
                     right: 15
                 }}
                 onPress={() => {
-                    router.navigate(ROUTES.CUSTOMER_FORM);
+                    router.push(ROUTES.CUSTOMER_FORM);
                 }}
             >
                 <FontAwesome size={20} name="plus" color="white" />

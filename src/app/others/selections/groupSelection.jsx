@@ -7,6 +7,7 @@ import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSelection from "@store/selectionStore";
 import GroupCard from "src/components/GroupCard";
+import { customHeaderBackButton } from "src/common/common";
 
 const groupSelection = () => {
     const navigation = useNavigation();
@@ -21,6 +22,9 @@ const groupSelection = () => {
         navigation.setOptions({
             headerShown: true,
             title: "Select Group",
+            headerLeft: () => customHeaderBackButton(() => {
+                router.back();
+            }),
             headerRight: () => !!(+params?.multipleSelect) && (
                 <TouchableOpacity onPress={() => {
                     router.back();

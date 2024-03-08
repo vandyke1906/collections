@@ -39,10 +39,10 @@ const TabLayout = () => {
                     tabBarIcon: ({ color }) => <FontAwesome size={24} name="gear" color={color} />,
                 }}
             />
-             <Tabs.Screen
+             {/* <Tabs.Screen
                 name="others"
                 options={{  href: null }} //hide tab menu
-            />
+            /> */}
         </Tabs>
     );
 };

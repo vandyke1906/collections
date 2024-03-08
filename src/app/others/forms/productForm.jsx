@@ -136,7 +136,7 @@ const productForm = () => {
                             <View className="relative">
                                 <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Group" value={value} editable={false} />
                                 <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                                    router.navigate({ pathname: ROUTES.GROUP_SELECTION });
+                                    router.push({ pathname: ROUTES.GROUP_SELECTION });
                                 }}>
                                     <FontAwesome size={18} name="search" color="gray" />
                                 </TouchableOpacity>

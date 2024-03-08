@@ -6,7 +6,7 @@ import moment from "moment";
 import { useRoute } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Product from "src/components/Product";
-import { ROUTES } from "src/common/common";
+import { ROUTES, customHeaderBackButton } from "src/common/common";
 import useSelection from "src/store/selectionStore";
 
 
@@ -22,6 +22,9 @@ const customerSelection = () => {
         navigation.setOptions({
             headerShown: true,
             title: "Select Product",
+            headerLeft: () => customHeaderBackButton(() => {
+                router.back();
+            }),
             headerRight: () => !!(+params?.multipleSelect) && (
                 <TouchableOpacity onPress={() => {
                     router.back();
@@ -83,7 +86,7 @@ const customerSelection = () => {
                     className="bg-blue-700 w-14 h-14 rounded-full flex justify-center items-center"
                     style={{ position: "absolute", bottom: 30, right: 15 }}
                     onPress={() => {
-                        router.navigate({ pathname: ROUTES.PRODUCT_FORM });
+                        router.push({ pathname: ROUTES.PRODUCT_FORM });
                     }}
                 >
                     <FontAwesome size={20} name="plus" color="white" />

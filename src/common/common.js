@@ -1,22 +1,24 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { Pressable } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import moment from "moment";
 
 export const ROUTES = {
     HOME: "/(tabs)/home",
     SALES: "/(tabs)/home/sales",
+    SALES_FORM: "/(tabs)/home/sales/salesForm",
     SALES_INVOICE_DETAILS: "/(tabs)/home/sales/salesInvoiceDetails",
     COLLECTIONS: "/(tabs)/home/collections",
     CUSTOMERS: "/(tabs)/customers",
     PRODUCTS: "/(tabs)/products",
     SETTINGS: "/(tabs)/settings",
-    SALES_FORM: "/(tabs)/others/forms/salesForm",
     COLLECTIONS_FORM: "/(tabs)/others/forms/collectionForm",
     CUSTOMER_FORM: "/(tabs)/others/forms/customerForm",
     PRODUCT_FORM: "/(tabs)/others/forms/productForm",
-    CUSTOMER_SELECTION: "/(tabs)/others/selections/customerSelection",
-    PRODUCT_SELECTION: "/(tabs)/others/selections/productSelection",
-    GROUP_SELECTION: "/(tabs)/others/selections/groupSelection",
-    SALES_INVOICE_SELECTION: "/(tabs)/others/selections/salesInvoiceSelection",
+    CUSTOMER_SELECTION: "/others/selections/customerSelection",
+    PRODUCT_SELECTION: "/others/selections/productSelection",
+    GROUP_SELECTION: "/others/selections/groupSelection",
+    SALES_INVOICE_SELECTION: "/others/selections/salesInvoiceSelection",
     FILTER_REPORT: "/reports/filterReport",
     VIEW_REPORT: "/reports/reportView",
 };
@@ -65,4 +67,12 @@ export const showDatePicker = (onChange = () => { }) => {
         display: "calendar",
         onChange: typeof onChange === "function" ? onChange : () => { }
     });
+};
+
+export const customHeaderBackButton = (onPress = () => { }) => {
+    return (
+        <Pressable className="pr-8" onPress={onPress}>
+            <Feather size={24} name="arrow-left" />
+        </Pressable>
+    );
 };

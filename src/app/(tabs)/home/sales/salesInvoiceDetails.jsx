@@ -54,7 +54,7 @@ const salesInvoiceDetails = () => {
                         </Text>
                     </View>
                     {!!unpaidAmount && (
-                        <TouchableOpacity onPress={() => router.navigate({ pathname: ROUTES.COLLECTIONS_FORM }) }>
+                        <TouchableOpacity onPress={() => router.push({ pathname: ROUTES.COLLECTIONS_FORM }) }>
                             <Text className="pointer-events-auto inline-block cursor-pointer rounded text-sm font-bold leading-normal text-blue-700 uppercase">New Collection</Text>
                         </TouchableOpacity>
                     )}

@@ -10,6 +10,7 @@ import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 import SIProduct from "src/components/SIProduct";
 import useSelection from "src/store/selectionStore";
 import { DATE_FORMAT, ROUTES } from "src/common/common";
+import useRouteNavigate from "src/store/routeNavigateStore";
 
 const salesForm = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -82,7 +83,7 @@ const salesForm = () => {
                     products: products
                 };
                 realm.create("salesInvoices", salesInvoiceData);
-                router.navigate({ pathname: ROUTES.SALES });
+                router.push({ pathname: ROUTES.SALES });
                 ToastAndroid.show("Sales invoice created.", ToastAndroid.SHORT);
             } catch (error) {
                 ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
@@ -205,7 +206,7 @@ const salesForm = () => {
                                     <View className="relative">
                                         <TextInput className={`${inputClass} pr-10`} autoCapitalize="characters" placeholder="Customer" value={value} editable={false} />
                                         <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                                            router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION });
+                                            router.push({ pathname: ROUTES.CUSTOMER_SELECTION });
                                         }}>
                                             <FontAwesome size={18} name="search" color="gray" />
                                         </TouchableOpacity>
@@ -258,7 +259,7 @@ const salesForm = () => {
                             <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">product list ({list.length})</Text>
                             <TouchableOpacity onPress={() => {
                                 setSelections(list);
-                                router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
+                                router.push({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
                             }}>
                                 <Text className="pointer-events-auto inline-block cursor-pointer rounded text-sm font-bold leading-normal text-blue-700 uppercase">Add Products</Text>
                             </TouchableOpacity>

@@ -63,7 +63,7 @@ const collections = () => {
                                 if (found) {
                                     setShowInvoiceModal(false);
                                     setInvoiceNumber("");
-                                    router.navigate({ pathname: ROUTES.COLLECTIONS_FORM });
+                                    router.push({ pathname: ROUTES.COLLECTIONS_FORM });
                                 }
                                 else
                                     ToastAndroid.show(`Invoice#: ${invoiceNumber} not found.`, ToastAndroid.SHORT);
@@ -100,9 +100,9 @@ const collections = () => {
                     data={collections}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
-                        <CollectionCard data={item} onEdt={() => router.navigate({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
+                        <CollectionCard data={item} onEdt={() => router.push({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
                             getSalesInvoiceDetails({ _id : item.salesInvoice?._id});
-                            router.navigate(ROUTES.SALES_INVOICE_DETAILS);
+                            router.push(ROUTES.SALES_INVOICE_DETAILS);
                         }} />
                     )}
                     onEndReached={fetchMoreData}

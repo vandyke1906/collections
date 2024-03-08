@@ -33,7 +33,7 @@ const ProductPage = () => {
                     renderItem={({ item }) => (
                         <Product
                             data={item} enableButtons={true}
-                            onEdit={() => router.navigate({ pathname: ROUTES.PRODUCT_FORM, params: item })}
+                            onEdit={() => router.push({ pathname: ROUTES.PRODUCT_FORM, params: item })}
                             onDelete={() => {
                                 Alert.alert("Delete Customer", `Do you want to delete ${item.name}?`, [
                                     { text: "Cancel" },
@@ -72,7 +72,7 @@ const ProductPage = () => {
                     right: 15
                 }}
                 onPress={() => {
-                    router.navigate(ROUTES.PRODUCT_FORM);
+                    router.push(ROUTES.PRODUCT_FORM);
                 }}>
                 <FontAwesome size={20} name="plus" color="white" />
             </TouchableOpacity>

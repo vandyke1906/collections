@@ -44,7 +44,7 @@ const filterReport = () => {
                         return;
                     }
                     clearSummary();
-                    router.navigate({ pathname: ROUTES.VIEW_REPORT })
+                    router.push({ pathname: ROUTES.VIEW_REPORT })
                 }}>
                     <FontAwesome size={14} name="check" color="green" />
                 </TouchableOpacity>
@@ -131,7 +131,7 @@ const filterReport = () => {
                         <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Customers</Text>
                         <TouchableOpacity onPress={() => {
                             setSelections(customers);
-                            router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION, params: { multipleSelect: 1 } });
+                            router.push({ pathname: ROUTES.CUSTOMER_SELECTION, params: { multipleSelect: 1 } });
                         }}>
                             <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Customer</Text>
                         </TouchableOpacity>
@@ -159,7 +159,7 @@ const filterReport = () => {
                             <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Invoices</Text>
                             <TouchableOpacity onPress={() => {
                                 setSelections(salesInvoices);
-                                router.navigate({ pathname: ROUTES.SALES_INVOICE_SELECTION, params: { multipleSelect: 1 } });
+                                router.push({ pathname: ROUTES.SALES_INVOICE_SELECTION, params: { multipleSelect: 1 } });
                             }}>
                                 <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Invoices</Text>
                             </TouchableOpacity>
@@ -190,7 +190,7 @@ const filterReport = () => {
                                 <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Groups</Text>
                                 <TouchableOpacity onPress={() => {
                                     setSelections(groups);
-                                    router.navigate({ pathname: ROUTES.GROUP_SELECTION, params: { multipleSelect: 1 } });
+                                    router.push({ pathname: ROUTES.GROUP_SELECTION, params: { multipleSelect: 1 } });
                                 }}>
                                     <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Group</Text>
                                 </TouchableOpacity>
@@ -218,7 +218,7 @@ const filterReport = () => {
                                 <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Products</Text>
                                 <TouchableOpacity onPress={() => {
                                     setSelections(products);
-                                    router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
+                                    router.push({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
                                 }}>
                                     <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Product</Text>
                                 </TouchableOpacity>
