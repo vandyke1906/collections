@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, TouchableWithoutFeedback, TextInput, Keyboard, ToastAndroid } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TouchableWithoutFeedback, TextInput, Keyboard, ToastAndroid, Alert } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -22,9 +22,18 @@ const collectionForm = () => {
 
     useEffect(() => {
         navigation.setOptions({
+            headerShown: true,
             title: "New Collection",
             headerRight: () => (
-                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={handleSubmit(handleSubmitCollection)}>
+                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => {
+                    Alert.alert("Collection", `Do you want to save collection for invoice ${selectedInvoice.invoiceNo}?`, [
+                        { text: "Cancel" },
+                        {
+                            text: "Continue",
+                            onPress: handleSubmit(handleSubmitCollection)
+                        }
+                    ]);
+                }}>
                     <FontAwesome size={18} name="check" color="green" />
                 </TouchableOpacity>
             ),
