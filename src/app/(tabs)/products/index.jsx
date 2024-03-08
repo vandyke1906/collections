@@ -33,6 +33,7 @@ const ProductPage = () => {
                     renderItem={({ item }) => (
                         <Product
                             data={item} enableButtons={true}
+                            onSelect={() => router.push({ pathname: ROUTES.PRODUCT_PAGE, params: item })}
                             onEdit={() => router.push({ pathname: ROUTES.PRODUCT_FORM, params: item })}
                             onDelete={() => {
                                 Alert.alert("Delete Customer", `Do you want to delete ${item.name}?`, [

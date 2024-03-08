@@ -5,7 +5,7 @@ import { TextInput } from "react-native-paper";
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
 
-const SalesSummary = ({ data, onSearch }) => {
+const InvoiceSummary = ({ data, onSearch }) => {
     const inputClass = "text-sm text-center appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
     let accPaidAmount = 0;
     let accUnpaidAmount = 0;
@@ -139,4 +139,4 @@ const SalesSummary = ({ data, onSearch }) => {
     );
 };
 
-export default SalesSummary;
+export default InvoiceSummary;

@@ -4,7 +4,7 @@ import { useQuery, useRealm } from "@realm/react";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import SalesSummary from "src/components/reports/salesInvoices/SalesSummary";
+import InvoiceSummary from "src/components/reports/salesInvoices/InvoiceSummary";
 
 const customerPage = () => {
 
@@ -43,7 +43,7 @@ const customerPage = () => {
                 {customer?.address && <Text className="block font-sans  text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Address: {customer.address}</Text>}
             </View>
 
-            <SalesSummary data={data} onSearch={(from, to) => {
+            <InvoiceSummary data={data} onSearch={(from, to) => {
                 if (!from && !to) return;
                 if (from === dateRange.from && to === dateRange.to) return;
                 setDateRange({ from, to });
