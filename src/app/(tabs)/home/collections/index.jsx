@@ -48,10 +48,7 @@ const collections = () => {
             <Modal
                 animationType="fade"
                 transparent={false}
-                visible={showInvoiceModal}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}>
+                visible={showInvoiceModal}>
                 <View className="flex justify-center items-center h-full bg-slate-300">
                     <View className="shadow-md drop-shadow-sm rounded-md ring-1 w-11/12 p-5 bg-white">
                          <View className="relative">
@@ -89,8 +86,7 @@ const collections = () => {
     }
 
     return (
-        <View className="flex-1">
-
+        <View className="flex-1 mb-5">
             <View className="items-center justify-center m-2">
                 <TextInput
                     className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -99,6 +95,7 @@ const collections = () => {
                     onChangeText={(text) => setSearchKey(text)}
                 />
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     className="w-full"
                     data={collections}
                     keyExtractor={(item) => item._id}

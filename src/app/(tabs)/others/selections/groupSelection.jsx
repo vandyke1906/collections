@@ -60,7 +60,7 @@ const groupSelection = () => {
     };
 
     return (
-        <View className="m-2">
+        <View className="m-2 mb-3">
             <View className="relative">
                 <TextInput
                     className="text-sm pr-10 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -77,6 +77,7 @@ const groupSelection = () => {
                 )}
             </View>
             <FlatList
+                showsVerticalScrollIndicator={false}
                 className="w-full"
                 data={groupList}
                 keyExtractor={(item) => item._id}

@@ -29,6 +29,10 @@ export const MODE_OF_PAYMENT = Object.freeze({
     BIR_2307: "BIR-2307"
 });
 
+export const isMOPCheque = (value) => {
+    return MODE_OF_PAYMENT[value] === MODE_OF_PAYMENT.CHEQUE;
+};
+
 export const REPORT_TYPE = Object.freeze({
     SALES: "salesInvoices",
     COLLECTIONS: "collections",

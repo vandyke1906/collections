@@ -37,7 +37,7 @@ const salesPage = () => {
     }
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 mb-5">
 
             <View className="items-center justify-center m-2">
                 <TextInput

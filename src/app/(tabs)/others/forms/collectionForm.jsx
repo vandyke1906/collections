@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "../../../../store/salesInvoiceStore";
-import { DATE_FORMAT, MODE_OF_PAYMENT, amountFormat, formatDate, showDatePicker } from "../../../../common/common";
+import { DATE_FORMAT, MODE_OF_PAYMENT, amountFormat, formatDate, isMOPCheque, showDatePicker } from "../../../../common/common";
 import { Controller, useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { useRealm } from "@realm/react";
@@ -51,9 +51,9 @@ const collectionForm = () => {
                         customerId: currentSalesInvoice.customerId
                     };
 
-                    if (isCheque) {
+                    if (isMOPCheque(data.modeOfPayment)) {
                         collectionData.chequeNo = data.chequeNo;
-                        collectionData.chequeDate = data.chequeDate;
+                        collectionData.chequeDate = moment(data.chequeDate, DATE_FORMAT).valueOf();
                     }
                     realm.create("collections", collectionData);
                     setSelectedInvoice({ unpaidAmount: currentSalesInvoice.unpaidAmount });
@@ -156,7 +156,7 @@ const collectionForm = () => {
                             <Text className="text-slate-500">Mode of Payment</Text>
                             <View className={inputClass}>
                                 <Picker selectedValue={value} onValueChange={(value) => {
-                                    setIsCheque(value === MODE_OF_PAYMENT.CHEQUE);
+                                    setIsCheque(isMOPCheque(value));
                                     onChange(value);
                                 }}>
                                     {Object.keys(MODE_OF_PAYMENT).map((mopKey) => (

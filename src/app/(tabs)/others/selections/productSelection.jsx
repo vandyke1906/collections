@@ -40,7 +40,7 @@ const customerSelection = () => {
 
     const fetchMoreData = () => { };
     return (
-        <View className="m-2 h-full">
+        <View className="m-2 mb-3 h-full">
             <View className="relative">
                 <TextInput
                     className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -50,6 +50,7 @@ const customerSelection = () => {
                 />
             </View>
             <FlatList
+                showsVerticalScrollIndicator={false}
                 className="w-full"
                 data={customers}
                 keyExtractor={(item) => item._id}

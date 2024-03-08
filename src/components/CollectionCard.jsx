@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { memo } from 'react'
 import PropTypes from "prop-types";
 import moment from "moment";
-import { DATE_FORMAT, amountFormat } from "../common/common";
+import { DATE_FORMAT, amountFormat, formatDate, isMOPCheque } from "../common/common";
 
 const CollectionCard = ({ data, onEdit, enableButtons, onSelect }) => {
     return (
@@ -20,6 +20,13 @@ const CollectionCard = ({ data, onEdit, enableButtons, onSelect }) => {
                         {data.modeOfPayment && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Mode of Payment: {data.modeOfPayment}</Text>}
                         {!isNaN(data?.amount) && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: {amountFormat(data?.amount)}</Text>}
                     </View>
+
+                    {isMOPCheque(data.modeOfPayment) && (
+                        <View className="flex">
+                            {data.modeOfPayment && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Cheque #: {data?.chequeNo}</Text>}
+                            {!isNaN(data?.amount) && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Date of Cheque: {formatDate(data?.chequeDate)}</Text>}
+                        </View>
+                    )}
 
                 </View>
                 {enableButtons && <View className="flex flex-row items-center justify-end border-t-2 border-neutral-100 font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
@@ -43,7 +50,9 @@ CollectionCard.propTypes = {
         details: PropTypes.shape({
             customerName: PropTypes.string,
             invoiceNo: PropTypes.string,
-        })
+        }),
+        chequeNo:  PropTypes.oneOfType([PropTypes.oneOf([null]), PropTypes.string]),
+        chequeDate:  PropTypes.oneOfType([PropTypes.oneOf([null]), PropTypes.string]),
     }).isRequired,
     onEdit: PropTypes.func,
     onSelect: PropTypes.func,

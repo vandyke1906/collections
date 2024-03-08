@@ -13,7 +13,7 @@ const ProductPage = () => {
     }, [searchKey]);
     const fetchMoreData = () => {};
     return (
-        <View className="flex-1">
+        <View className="flex-1 mb-5">
             <View className="m-2">
                 <TextInput
                     className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -22,6 +22,7 @@ const ProductPage = () => {
                     onChangeText={(text) => setSearchKey(text)}
                 />
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     className="w-full"
                     data={products}
                     keyExtractor={(item) => item._id}

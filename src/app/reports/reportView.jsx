@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import useReportStore from "../../store/reportStore";
 import { useRealm } from "@realm/react";
 import { useNavigation } from "expo-router";
-import { REPORT_TYPE, amountFormat, formatDate } from "../../common/common";
+import { MODE_OF_PAYMENT, REPORT_TYPE, amountFormat, formatDate, isMOPCheque } from "../../common/common";
 import CardData from "../../components/CardData";
 
 const reportView = () => {
@@ -20,10 +20,10 @@ const reportView = () => {
         if (isSales) {
             let filteredResult = realm.objects("salesInvoices");
             if (dateFrom && dateTo) {
-                filteredResult = filteredResult.filtered("dateOfSI BETWEEN { $0 , $1 }", dateFrom, dateTo);
+                filteredResult = filteredResult.filtered("dateOfSI BETWEEN { $0 , $1 }", dateFrom, dateTo).sorted("dateOfSI");
             }
             else
-                filteredResult = filteredResult.filtered("dateOfSI >= $0", dateFrom);
+                filteredResult = filteredResult.filtered("dateOfSI >= $0", dateFrom).sorted("dateOfSI");
 
             if (customers.length) {
                 const customerSet = new Set(customers.map(c => c._id));
@@ -58,10 +58,10 @@ const reportView = () => {
             let filteredResult = realm.objects("collections");
 
             if (dateFrom && dateTo) {
-                filteredResult = filteredResult.filtered("dateOfSI BETWEEN { $0 , $1 }", dateFrom, dateTo);
+                filteredResult = filteredResult.filtered("corDate BETWEEN { $0 , $1 }", dateFrom, dateTo).sorted("corDate");
             }
             else
-                filteredResult = filteredResult.filtered("dateOfSI >= $0", dateFrom);
+                filteredResult = filteredResult.filtered("corDate >= $0", dateFrom).sorted("corDate");
 
             if (customers.length) {
                 const customerSet = new Set(customers.map(c => c._id));
@@ -93,9 +93,7 @@ const reportView = () => {
 
     const renderSummary = () => {
         return (
-            <View className="mt-2 mb-2 flex">
-                <Text className="my-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">FILTER DATA</Text>
-
+            <View className="p-2 mb-2 flex">
                 {!!dateFrom && (
                     <View className="flex flex-row items-center justify-start">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Date From: </Text>
@@ -144,24 +142,24 @@ const reportView = () => {
                 )}
 
                 {!!results.length && (
-                    <View className="p-2 my-2 block w-fulltext-left border-t border-gray-300">
+                    <View className="py-2 my-2 block w-fulltext-left border-t border-gray-300">
                         <View className="flex flex-row items-center justify-between">
                             {!!summary.totalQty && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Product Quantities: </Text>
-                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{summary.totalQty || 0}</Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{summary.totalQty || 0}</Text>
                                 </View>
                             )}
                             {!!summary.totalRevenue && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Revenue: </Text>
-                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(summary.totalRevenue || 0)}</Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{amountFormat(summary.totalRevenue || 0)}</Text>
                                 </View>
                             )}
                             {!!summary.totalCollected && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Collected: </Text>
-                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(summary.totalCollected || 0)}</Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{amountFormat(summary.totalCollected || 0)}</Text>
                                 </View>
                             )}
                         </View>
@@ -173,7 +171,7 @@ const reportView = () => {
 
     const renderResults = () => {
         return (
-            <View className="mt-2 mb-2 flex border-t border-gray-300">
+            <View className="m-2 mb-2 flex border-t border-gray-300">
                 <View className="flex flex-row">
                     <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">results found</Text>
                     <Text className="mt-2 block font-sans text-xs antialiased leading-normal font-bold text-gray-500 uppercase">({results.length})</Text>
@@ -184,27 +182,27 @@ const reportView = () => {
                         <CardData key={index}>
                             {!!data.product && (
                                 <View>
-                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">{data.product.name}</Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900">{data.product.name}</Text>
 
                                     <View className="flex flex-row items-center justify-between">
                                         <View className="flex flex-row items-center justify-start">
-                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Code: </Text>
-                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">{data.product.name}</Text>
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">Code: </Text>
+                                            <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 opacity-75">{data.product.name}</Text>
                                         </View>
 
                                         <View className="flex flex-row items-center justify-start">
-                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Qty: </Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{data.product.qty}</Text>
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">Qty: </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">{data.product.qty}</Text>
                                         </View>
 
                                         <View className="flex flex-row items-center justify-start">
-                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Unit: </Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{data.product.unit}</Text>
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">Unit: </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">{data.product.unit}</Text>
                                         </View>
 
                                         <View className="flex flex-row items-center justify-start">
-                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Code: </Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(data.product.amount)}</Text>
+                                            <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">Code: </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 uppercase">{amountFormat(data.product.amount)}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -273,6 +271,23 @@ const reportView = () => {
                                             </View>
                                         </View>
 
+
+
+                                        {isMOPCheque(data.collection.modeOfPayment) && (
+                                            <View className="flex flex-row items-center justify-between">
+
+                                                <View className="flex flex-row  items-center justify-start">
+                                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Cheque Number: </Text>
+                                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{data.collection.chequeNo}</Text>
+                                                </View>
+
+                                                <View className="flex flex-row  items-center justify-start">
+                                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Date of Cheque: </Text>
+                                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{formatDate(data.collection.chequeDate)}</Text>
+                                                </View>
+                                            </View>
+                                        )}
+
                                     </View>
                                 </View>
                             )}
@@ -284,7 +299,7 @@ const reportView = () => {
     };
 
     return (
-        <ScrollView className="flex w-full p-2 bg-slate-50" showsVerticalScrollIndicator={false}>
+        <ScrollView className="flex w-full p-2bg-slate-50" showsVerticalScrollIndicator={false}>
             {renderSummary()}
             {renderResults()}
         </ScrollView>
