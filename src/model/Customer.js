@@ -10,7 +10,7 @@ export class Customer extends Realm.Object {
             code: "string?",
             name: { type: "string", indexed: "full-text" },
             address: "string",
-            deletedAt: { type: "int", default: () => 0 },
+            deletedAt: { type: "int", default: () => 0, indexed: true },
         },
     };
 }

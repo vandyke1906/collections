@@ -11,7 +11,7 @@ export class Product extends Realm.Object {
             name: { type: "string", indexed: "full-text" },
             unit: "string",
             group: { type: "string", indexed: true, optional: true },
-            deletedAt: { type: "int", default: () => 0 },
+            deletedAt: { type: "int", default: () => 0, indexed: true },
         },
     };
 }

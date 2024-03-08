@@ -19,10 +19,11 @@ const reportView = () => {
         const data = [];
         if (isSales) {
             let filteredResult = realm.objects("salesInvoices");
-            if (dateFrom)
+            if (dateFrom && dateTo) {
+                filteredResult = filteredResult.filtered("dateOfSI BETWEEN { $0 , $1 }", dateFrom, dateTo);
+            }
+            else
                 filteredResult = filteredResult.filtered("dateOfSI >= $0", dateFrom);
-            if (dateTo)
-                filteredResult = filteredResult.filtered("dateOfSI <= $0", dateTo);
 
             if (customers.length) {
                 const customerSet = new Set(customers.map(c => c._id));
@@ -53,12 +54,14 @@ const reportView = () => {
             }
             setSummary({ totalRevenue, totalQty });
         }
-        else if(isCollections){
+        else if (isCollections) {
             let filteredResult = realm.objects("collections");
-            if (dateFrom)
-                filteredResult = filteredResult.filtered("corDate >= $0", dateFrom);
-            if (dateTo)
-                filteredResult = filteredResult.filtered("corDate <= $0", dateTo);
+
+            if (dateFrom && dateTo) {
+                filteredResult = filteredResult.filtered("dateOfSI BETWEEN { $0 , $1 }", dateFrom, dateTo);
+            }
+            else
+                filteredResult = filteredResult.filtered("dateOfSI >= $0", dateFrom);
 
             if (customers.length) {
                 const customerSet = new Set(customers.map(c => c._id));
@@ -107,7 +110,7 @@ const reportView = () => {
                     </View>
                 )}
 
-                 {!!groups.length && (
+                {!!groups.length && (
                     <View className="flex flex-row items-center justify-start">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Groups: </Text>
                         {groups.map((g, index) => (
@@ -140,36 +143,41 @@ const reportView = () => {
                     </View>
                 )}
 
-                <View className="p-2 my-2 block w-fulltext-left border-t border-gray-300">
-                    <View className="flex flex-row items-center justify-between">
-                        {!!summary.totalQty && (
-                            <View className="flex flex-row items-center justify-start">
-                                <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Product Quantities: </Text>
-                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{summary.totalQty || 0}</Text>
-                            </View>
-                        )}
-                        { !!summary.totalRevenue && (
+                {!!results.length && (
+                    <View className="p-2 my-2 block w-fulltext-left border-t border-gray-300">
+                        <View className="flex flex-row items-center justify-between">
+                            {!!summary.totalQty && (
+                                <View className="flex flex-row items-center justify-start">
+                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Product Quantities: </Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{summary.totalQty || 0}</Text>
+                                </View>
+                            )}
+                            {!!summary.totalRevenue && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Revenue: </Text>
                                     <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(summary.totalRevenue || 0)}</Text>
                                 </View>
-                        )}
-                        { !!summary.totalCollected && (
-                            <View className="flex flex-row items-center justify-start">
-                                <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Collected: </Text>
-                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(summary.totalCollected || 0)}</Text>
-                            </View>
-                        )}
+                            )}
+                            {!!summary.totalCollected && (
+                                <View className="flex flex-row items-center justify-start">
+                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Collected: </Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(summary.totalCollected || 0)}</Text>
+                                </View>
+                            )}
+                        </View>
                     </View>
-                </View>
+                )}
             </View>
-    );
+        );
     };
 
     const renderResults = () => {
         return (
             <View className="mt-2 mb-2 flex border-t border-gray-300">
-                <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">results</Text>
+                <View className="flex flex-row">
+                    <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">results found</Text>
+                    <Text className="mt-2 block font-sans text-xs antialiased leading-normal font-bold text-gray-500 uppercase">({results.length})</Text>
+                </View>
 
                 {results.map((data = {}, index) => {
                     return (

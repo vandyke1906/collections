@@ -41,13 +41,10 @@ const groupSelection = () => {
     const fetchMoreData = () => { };
 
     const showAddConfirmation = () => {
-        Alert.alert("Continue", `Do you want to add ${searchKey.toUpperCase()}?`, [
+        Alert.alert("Add Group", `Do you want to add ${searchKey.toUpperCase()}?`, [
+            { text: "Cancel", onPress: () => { }, },
             {
-                text: "Cancel",
-                onPress: () => { },
-            },
-            {
-                text: "Add",
+                text: "Continue",
                 onPress: () => {
                     if (!realm) ToastAndroid.show("Transaction is not ready.", ToastAndroid.SHORT);
                     realm.write(() => {
