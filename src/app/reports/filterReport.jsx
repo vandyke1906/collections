@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, TouchableWithoutFeedback, TextInput, Keyb
 import React, { useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { DATE_FORMAT, REPORT_TYPE, ROUTES, formatDate, getDateValueOf, showDatePicker } from "../../common/common";
+import { REPORT_TYPE, ROUTES, formatDate, getDateValueOf, showDatePicker } from "../../common/common";
 import { Picker } from "@react-native-picker/picker";
 import moment from "moment";
 import useReportStore from "../../store/reportStore";
@@ -12,6 +12,7 @@ import MiniCardData from "../../components/MiniCardData";
 
 const filterReport = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const miniCardClass = "mb-2 mr-2 p-2 flex text-xs font-sans text-center text-gray-900 bg-white border border-gray-300 rounded-full text-xs dark:bg-gray-800 dark:text-white";
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -22,10 +23,15 @@ const filterReport = () => {
         setGroups, groups, removeGroup,
         setProducts, products, removeProduct,
         setCustomers, customers, removeCustomer,
-        setSalesInvoices, salesInvoices, removeSalesInvoice,
+        setSalesInvoices, salesInvoices, removeSalesInvoice, resetReportData
 
     } = useReportStore();
     const { selections, resetSelection, setSelections } = useSelection();
+
+
+    useEffect(() => {
+        resetReportData();
+    }, []);
 
     useEffect(() => {
         navigation.setOptions({
@@ -40,7 +46,7 @@ const filterReport = () => {
                     clearSummary();
                     router.navigate({ pathname: ROUTES.VIEW_REPORT })
                 }}>
-                    <FontAwesome size={18} name="check" color="green" />
+                    <FontAwesome size={14} name="check" color="green" />
                 </TouchableOpacity>
             ),
         });
@@ -72,10 +78,9 @@ const filterReport = () => {
     }, [params?.key]);
 
     return (
-        <ScrollView>
+        <ScrollView className="bg-slate-50">
             <View className="mt-5 p-2">
                 <View className="">
-
                     <Text className="text-slate-500">Type</Text>
                     <View className={inputClass}>
                         <Picker selectedValue={reportType} onValueChange={setReportType}>
@@ -122,26 +127,26 @@ const filterReport = () => {
                 </View>
 
                 {/* CUSTOMERS */}
-                <View className="mt-2 mb-10 flex border-t border-gray-300">
+                <View className="mt-2 mb-5 flex border-t border-gray-300">
                     <View className="flex flex-row items-center justify-between">
                         <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Customers</Text>
                         <TouchableOpacity onPress={() => {
                             setSelections(customers);
                             router.navigate({ pathname: ROUTES.CUSTOMER_SELECTION, params: { multipleSelect: 1 } });
                         }}>
-                            <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Select Customer</Text>
+                            <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Customer</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View className="flex flex-wrap flex-row">
                         {customers.map((item, index) => (
-                            <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                            <MiniCardData key={index} parentClass={miniCardClass}>
                                 <View className="flex flex-row">
                                     <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
                                     <TouchableOpacity className="ml-2" onPress={() => {
                                         removeCustomer(item._id);
                                     }}>
-                                        <FontAwesome size={18} name="times" color="gray" />
+                                        <FontAwesome size={14} name="times" color="gray" />
                                     </TouchableOpacity>
                                 </View>
                             </MiniCardData>
@@ -149,29 +154,58 @@ const filterReport = () => {
                     </View>
                 </View>
 
+                {/* SALES INVOICE */}
+                    <View className="mt-2 mb-5 flex border-t border-gray-300">
+                        <View className="flex flex-row items-center justify-between">
+                            <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Invoices</Text>
+                            <TouchableOpacity onPress={() => {
+                                setSelections(salesInvoices);
+                                router.navigate({ pathname: ROUTES.SALES_INVOICE_SELECTION, params: { multipleSelect: 1 } });
+                            }}>
+                                <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Invoices</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View className="flex flex-wrap flex-row">
+                            {salesInvoices.map((item, index) => (
+                                <MiniCardData key={index} parentClass={miniCardClass}>
+                                    <View className="flex flex-row">
+                                        <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.invoiceNo}</Text>
+                                        <TouchableOpacity className="ml-2" onPress={() => {
+                                            removeSalesInvoice(item._id);
+                                        }}>
+                                            <FontAwesome size={14} name="times" color="gray" />
+                                        </TouchableOpacity>
+                                    </View>
+                                </MiniCardData>
+                            ))}
+                        </View>
+                    </View>
+                </View>
+
                 {reportType === REPORT_TYPE.SALES && (
                     <View>
                         {/* GROUPS */}
-                        <View className="mt-2 mb-10 flex border-t border-gray-300">
+                        <View className="mt-2 mb-5 flex border-t border-gray-300">
                             <View className="flex flex-row items-center justify-between">
                                 <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Groups</Text>
                                 <TouchableOpacity onPress={() => {
                                     setSelections(groups);
                                     router.navigate({ pathname: ROUTES.GROUP_SELECTION, params: { multipleSelect: 1 } });
                                 }}>
-                                    <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Select Group</Text>
+                                    <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Group</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <View className="flex flex-wrap flex-row">
                                 {groups.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white">
+                                    <MiniCardData key={index} parentClass={miniCardClass}>
                                         <View className="flex flex-row">
                                             <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item._id}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
                                                 removeGroup(item._id);
                                             }}>
-                                                <FontAwesome size={18} name="times" color="gray" />
+                                                <FontAwesome size={14} name="times" color="gray" />
                                             </TouchableOpacity>
                                         </View>
                                     </MiniCardData>
@@ -180,26 +214,26 @@ const filterReport = () => {
                         </View>
 
                         {/* PRODUCTS */}
-                        <View className="mt-2 mb-10 flex border-t border-gray-300">
+                        <View className="mt-2 mb-5 flex border-t border-gray-300">
                             <View className="flex flex-row items-center justify-between">
                                 <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Products</Text>
                                 <TouchableOpacity onPress={() => {
                                     setSelections(products);
                                     router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1 } });
                                 }}>
-                                    <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Select Product</Text>
+                                    <Text className="pointer-events-auto inline-block cursor-pointer rounded text-xs font-bold leading-normal text-blue-700 uppercase m-2">Select Product</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <View className="flex flex-wrap flex-row">
                                 {products.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                                    <MiniCardData key={index} parentClass={miniCardClass}>
                                         <View className="flex flex-row">
                                             <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
                                                 removeProduct(item._id);
                                             }}>
-                                                <FontAwesome size={18} name="times" color="gray" />
+                                                <FontAwesome size={14} name="times" color="gray" />
                                             </TouchableOpacity>
                                         </View>
                                     </MiniCardData>
@@ -210,37 +244,7 @@ const filterReport = () => {
                     </View>
                 )}
 
-                {reportType === REPORT_TYPE.COLLECTIONS && (
-                    <View>
-                        {/* SALES INVOICE */}
-                        <View className="mt-2 mb-10 flex border-t border-gray-300">
-                            <View className="flex flex-row items-center justify-between">
-                                <Text className="mx-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">Invoices</Text>
-                                <TouchableOpacity onPress={() => {
-                                    setSelections(salesInvoices);
-                                    router.navigate({ pathname: ROUTES.SALES_INVOICE_SELECTION, params: { multipleSelect: 1 } });
-                                }}>
-                                    <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Select Invoices</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View className="flex flex-wrap flex-row">
-                                {salesInvoices.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600">
-                                        <View className="flex flex-row">
-                                            <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.invoiceNo}</Text>
-                                            <TouchableOpacity className="ml-2" onPress={() => {
-                                                removeSalesInvoice(item._id);
-                                            }}>
-                                                <FontAwesome size={18} name="times" color="gray" />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </MiniCardData>
-                                ))}
-                            </View>
-                        </View>
-                    </View>
-                )}
+                <View>
 
             </View>
         </ScrollView>

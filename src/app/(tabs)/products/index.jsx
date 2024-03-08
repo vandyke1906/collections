@@ -25,7 +25,9 @@ const ProductPage = () => {
                     className="w-full"
                     data={products}
                     keyExtractor={(item) => item._id}
-                    renderItem={({ item }) => <Product data={item} onEdit={() => router.navigate({ pathname: ROUTES.PRODUCT_FORM, params: item })} enableButtons={true} />}
+                    renderItem={({ item }) => (
+                        <Product data={item} onEdit={() => router.navigate({ pathname: ROUTES.PRODUCT_FORM, params: item })} enableButtons={true} />
+                    )}
                     onEndReached={fetchMoreData}
                     onEndReachedThreshold={0.1}
                     />

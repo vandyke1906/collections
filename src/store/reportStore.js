@@ -12,6 +12,18 @@ const useReportStore = create((set) => {
         customers: [],
         salesInvoices: [],
         summary: {},
+        resetReportData: () => set(() => {
+            return {
+                reportType: Object.values(REPORT_TYPE)[0],
+                dateFrom: 0,
+                dateTo: 0,
+                groups: [],
+                products: [],
+                customers: [],
+                salesInvoices: [],
+                summary: {}
+            };
+        }),
         setSummary: (data = {}) => set((state) => {
             return { summary: { ...state.summary, ...data } };
         }),
@@ -76,7 +88,7 @@ const useReportStore = create((set) => {
             if (id) return { salesInvoices: state.salesInvoices.filter((c) => c._id !== id) };
         }),
         /** @param {("groups" | "products" | "customers"|"salesInvoices")[]} types default empty will clear all */
-        clearList: (types) => set((state) => {
+        clearList: (types) => set(() => {
             const latestState = {};
             for (const type of types) {
                 if (type === "groups")

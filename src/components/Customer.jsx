@@ -7,9 +7,9 @@ const Customer = ({ data, onEdit, enableButtons, onSelect, isActive, onDelete })
         <TouchableOpacity disabled={typeof onSelect !== "function"} onPress={() => typeof onSelect === "function" ? onSelect() : () => { }}>
             <View className={`block w-full rounded-lgbg-white text-left p-2 my-2 ${isActive ? "bg-blue-100" : "bg-white"}`}>
                 <View className="p-2">
-                    {data?.code && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">{data.code}</Text>}
-                    {data?.name && <Text className="block font-sans text-xs antialiased font-medium leading-relaxed text-blue-gray-900">{data.name}</Text>}
-                    {data?.address && <Text className="block font-sans  text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">{data.address}</Text>}
+                    {data?.name && <Text className="mb-2 block font-sans text-xs antialiased font-bold leading-relaxed text-blue-gray-900">{data.name}</Text>}
+                    {data?.code && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Account #: {data.code}</Text>}
+                    {data?.address && <Text className="block font-sans  text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Address: {data.address}</Text>}
                 </View>
                 {enableButtons && (
                     <View className="pt-2 flex flex-row items-center justify-between border-t-2 border-neutral-100 font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">

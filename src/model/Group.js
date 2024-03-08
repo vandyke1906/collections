@@ -1,4 +1,4 @@
-import Realm, { BSON } from "realm";
+import Realm from "realm";
 
 export class Group extends Realm.Object {
     static schema = {

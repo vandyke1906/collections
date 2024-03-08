@@ -1,4 +1,4 @@
-import Realm, { BSON } from "realm";
+import Realm from "realm";
 import { randomUUID } from "expo-crypto";
 
 export class Product extends Realm.Object {
@@ -10,7 +10,8 @@ export class Product extends Realm.Object {
             code: "string",
             name: { type: "string", indexed: "full-text" },
             unit: "string",
-            group: { type: "string", indexed: true, optional: true }
+            group: { type: "string", indexed: true, optional: true },
+            deletedAt: { type: "int", default: () => 0 },
         },
     };
 }

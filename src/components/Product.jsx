@@ -2,29 +2,27 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { memo } from 'react'
 import PropTypes from "prop-types";
 
-const Product = ({ data, onEdit, enableButtons, onSelect, isActive }) => {
+const Product = ({ data, onEdit, enableButtons, onSelect, isActive, onDelete }) => {
     return (
         <TouchableOpacity disabled={typeof onSelect !== "function"} onPress={() => typeof onSelect === "function" ? onSelect() : () => { }}>
             <View className={`block w-full rounded-lg text-left p-2 my-2 ${isActive ? "bg-blue-100" : "bg-white"}`}>
                 <View className="p-2">
-                    <View className="flex flex-row items-e justify-between mb-2">
-                        <View className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            <Text>{data?.code || ""}</Text>
-                        </View>
-                        <View className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            <Text>({data?.unit || ""})</Text>
-                        </View>
+                    <Text className="mb-2 block font-sans text-xs antialiased font-bold leading-normal text-gray-900">{data?.name || ""}</Text>
+                        {!!data?.code && <Text className="block font-sans text-xs antialiased font-xs leading-normal text-gray-700 opacity-75">Code: {data.code}</Text>}
+                        {!!data?.unit && <Text className="block font-sans text-xs antialiased font-xs leading-normal text-gray-700 opacity-75">Unit: {data.unit}</Text>}
+                        {!!data?.group && <Text className="block font-sans text-xs antialiased font-xs leading-normal text-gray-700 opacity-75">Group: {data.group}</Text>}
+                </View>
+
+                {enableButtons && (
+                    <View className="pt-2 flex flex-row items-center justify-between border-t-2 border-neutral-100 font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
+                        <TouchableOpacity className="flex items-center justify-center" onPress={onEdit}>
+                            <Text className="pointer-events-auto px-5 inline-block cursor-pointer rounded text-sm font-normal leading-normal text-blue-700">Edit</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity className="flex items-center justify-center" onPress={onDelete}>
+                            <Text className="pointer-events-auto px-5 inline-block cursor-pointer rounded text-sm font-normal leading-normal text-red-700">Delete</Text>
+                        </TouchableOpacity>
                     </View>
-                    <Text className="block font-sans  text-xs antialiased font-medium leading-relaxed text-blue-gray-900">{data?.name || ""}</Text>
-                </View>
-                <View className="flex flex-row items-center justify-between border-t-2 border-neutral-100 font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                        <View className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            <Text>{data?.group || ""}</Text>
-                        </View>
-                        {enableButtons && <TouchableOpacity onPress={onEdit}>
-                            <Text className="pointer-events-auto mr-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700">Edit</Text>
-                        </TouchableOpacity>}
-                </View>
+                )}
             </View>
         </TouchableOpacity>
   )
@@ -39,13 +37,15 @@ Product.propTypes = {
         group: PropTypes.string,
     }).isRequired,
     onEdit: PropTypes.func,
+    onDelete: PropTypes.func,
     onSelect: PropTypes.func,
     enableButtons: PropTypes.bool,
     isActive: PropTypes.bool,
 };
 
 Product.defaultProps = {
-    onEdit: () => {}
+    onEdit: () => {},
+    onDelete: () => {}
 };
 
 export default memo(Product)

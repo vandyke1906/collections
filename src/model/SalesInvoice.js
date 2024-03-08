@@ -1,5 +1,5 @@
 import moment from "moment";
-import Realm, { BSON } from "realm";
+import Realm from "realm";
 import { randomUUID } from "expo-crypto";
 
 export class SalesInvoice extends Realm.Object {
@@ -18,7 +18,7 @@ export class SalesInvoice extends Realm.Object {
             customerId: "string",
             customerName: "string",
             products: "salesProducts[]",
-            dateCreated: { type: "int", default: () => moment().valueOf() },
+            createdAt: { type: "int", default: () => moment().valueOf() },
         },
     };
 }

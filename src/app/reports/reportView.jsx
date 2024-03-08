@@ -9,7 +9,7 @@ import CardData from "../../components/CardData";
 const reportView = () => {
     const navigation = useNavigation();
     const realm = useRealm();
-    const { reportType, dateFrom, dateTo, groups, customers, products, setSummary, summary } = useReportStore();
+    const { reportType, dateFrom, dateTo, groups, customers, products, salesInvoices, setSummary, summary } = useReportStore();
 
     const [results, setResults] = useState([]);
 
@@ -27,6 +27,11 @@ const reportView = () => {
             if (customers.length) {
                 const customerSet = new Set(customers.map(c => c._id));
                 filteredResult = filteredResult.filter((f) => customerSet.has(f.customerId));
+            }
+
+            if (salesInvoices.length) {
+                const siSet = new Set(salesInvoices.map(c => c._id));
+                filteredResult = filteredResult.filter((f) => siSet.has(f._id));
             }
 
             if (groups.length || products.length) {
@@ -58,6 +63,11 @@ const reportView = () => {
             if (customers.length) {
                 const customerSet = new Set(customers.map(c => c._id));
                 filteredResult = filteredResult.filter((f) => customerSet.has(f.customerId));
+            }
+
+            if (salesInvoices.length) {
+                const siSet = new Set(salesInvoices.map(c => c._id));
+                filteredResult = filteredResult.filter((f) => siSet.has(f.salesInvoice));
             }
 
             let totalCollected = 0;
@@ -252,7 +262,7 @@ const reportView = () => {
     };
 
     return (
-        <ScrollView className="flex w-full p-2" showsVerticalScrollIndicator={false}>
+        <ScrollView className="flex w-full p-2 bg-slate-50" showsVerticalScrollIndicator={false}>
             {renderSummary()}
             {renderResults()}
         </ScrollView>
