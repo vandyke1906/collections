@@ -30,7 +30,7 @@ const SIProduct = ({ data, onQtyChange, onAmountChange }) => {
             <View className="flex flex-row items-center justify-between mt-2">
                 <View className="flex flex-row items-center justify-center flex-1 mx-2">
                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Qty: </Text>
-                    <TextInput className={`${inputClass} grow`} placeholder="Quantity" keyboardType="number-pad" value={qty} onChangeText={(text) => {
+                    <TextInput className={`${inputClass} grow`} placeholder="Quantity" keyboardType="numeric" value={qty} onChangeText={(text) => {
                         setQty(text);
                         if (text && typeof onQtyChange === "function")
                             onQtyChange(text);
@@ -39,7 +39,7 @@ const SIProduct = ({ data, onQtyChange, onAmountChange }) => {
 
                 <View className="flex flex-row items-center justify-center flex-1 mx-2">
                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: </Text>
-                    <TextInput className={`${inputClass} text-right grow`} placeholder="Amount" keyboardType="number-pad" value={amount} onChangeText={(text) => {
+                    <TextInput className={`${inputClass} text-right grow`} placeholder="Amount" keyboardType="numeric" value={amount} onChangeText={(text) => {
                         setAmount(text);
                         if (text && typeof onAmountChange === "function")
                             onAmountChange(text);

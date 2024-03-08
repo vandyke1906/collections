@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Keyboard, TouchableWithoutFeedback, Button, FlatList, ScrollView, SectionList, VirtualizedList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Keyboard, TouchableWithoutFeedback, Button, FlatList, ScrollView, SectionList, VirtualizedList, Alert } from 'react-native';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
@@ -32,7 +32,16 @@ const salesForm = () => {
             headerShown: true,
             title: "Create Sales",
             headerRight: () => (
-                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={handleSubmit(handleSubmitCustomer)}>
+                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => {
+                    const latestDetails = useSalesInvoiceStore.getState().details;
+                    Alert.alert("Sales Invoice", `Do you want to save ${latestDetails.invoiceNo}?`, [
+                        { text: "Cancel" },
+                        {
+                            text: "Continue",
+                            onPress: handleSubmit(handleSubmitCustomer)
+                        }
+                    ]);
+                }}>
                     <FontAwesome size={18} name="check" color="green" />
                 </TouchableOpacity>
             ),
@@ -52,7 +61,7 @@ const salesForm = () => {
                 };
 
                 if (getSalesInvoice(latestDetails.invoiceNo))
-                    throw new Error(`INvoice [${latestDetails.invoiceNo}] already exist.`);
+                    throw new Error(`Invoice [${latestDetails.invoiceNo}] already exist.`);
 
                 const products = [];
                 let totalAmount = 0;

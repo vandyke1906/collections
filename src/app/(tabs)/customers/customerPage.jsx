@@ -13,7 +13,6 @@ const customerPage = () => {
     const customer = route.params || {};
     const [dateRange, setDateRange] = useState({ from: 0, to: 0 });
     const data = useQuery("salesInvoices", (coll) => {
-        console.info({ dateRange });
         if (dateRange.from && dateRange.to)
             return coll.filtered("customerId == $0 && dateOfSI BETWEEN { $1, $2 }", customer._id, dateRange.from, dateRange.to).sorted("dateOfSI");
         else if (dateRange.from)
@@ -32,8 +31,6 @@ const customerPage = () => {
             // ),
         });
     }, [navigation]);
-
-    console.info({ data });
 
     return (
         <View className="w-full">
