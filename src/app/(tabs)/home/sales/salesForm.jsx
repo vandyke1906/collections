@@ -128,11 +128,6 @@ const salesForm = () => {
         }
     }, [params?.key]);
 
-    useEffect(() => {
-        if (Object.keys(errors).length)
-            ToastAndroid.show(JSON.stringify(errors), ToastAndroid.SHORT);
-    }, [errors]);
-
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View className="flex flex-col h-full justify-between p-5">
