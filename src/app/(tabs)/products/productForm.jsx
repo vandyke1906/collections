@@ -8,13 +8,23 @@ import { ROUTES } from "../../../common/common";
 import { useRoute } from '@react-navigation/native';
 
 const productForm = () => {
-    const inputClass = "text-sm my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const { control, handleSubmit, setValue, formState: { errors } } = useForm();
     const realm = useRealm();
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={handleSubmit(handleSubmitProduct)}>
+                    <FontAwesome size={18} name="check" color="green" />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation]);
 
     useEffect(() => {
         switch (params.type) {
@@ -72,15 +82,16 @@ const productForm = () => {
 
     return (
         <View className="p-5">
-            <Text>New Product</Text>
-
             <Controller
                 control={control}
                 rules={{ required: true }}
                 name="code"
                 defaultValue={params.code || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Code" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    <View>
+                        <Text className="text-slate-500">Product Code</Text>
+                        <TextInput className={inputClass} placeholder="Product Code" onBlur={onBlur} onChangeText={onChange} value={value}/>
+                    </View>
                 )}
             />
 
@@ -90,7 +101,10 @@ const productForm = () => {
                 name="name"
                 defaultValue={params.name || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Name" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    <View>
+                        <Text className="text-slate-500">Product Name</Text>
+                        <TextInput className={inputClass} placeholder="Product Name" onBlur={onBlur} onChangeText={onChange} value={value}/>
+                    </View>
                 )}
             />
 
@@ -100,19 +114,13 @@ const productForm = () => {
                 name="unit"
                 defaultValue={params.unit || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Unit" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    <View>
+                        <Text className="text-slate-500">Unit</Text>
+                        <TextInput className={inputClass} placeholder="Unit" onBlur={onBlur} onChangeText={onChange} value={value}/>
+                    </View>
                 )}
             />
 
-            {/* <Controller
-                control={control}
-                rules={{ required: false }}
-                name="group"
-                defaultValue={params.group || ""}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="group" onBlur={onBlur} onChangeText={onChange} value={value} />
-                )}
-            /> */}
             <Controller
                 control={control}
                 rules={{ required: true }}
@@ -136,15 +144,6 @@ const productForm = () => {
                     </TouchableWithoutFeedback>
                 )}
             />
-
-
-            <TouchableOpacity className="p-4 bg-blue-500 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitProduct)}>
-                <Text className="text-white text-center text-[16px]">Save</Text>
-            </TouchableOpacity>
-
-            <Text>
-                {!!Object.keys(errors).length && JSON.stringify(errors)}
-            </Text>
         </View>
     );
 };

@@ -1,15 +1,27 @@
 import { View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm, Controller } from 'react-hook-form';
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useRealm } from "@realm/react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const customerForm = () => {
-    const inputClass = "text-sm my-4 p-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
-    const { control, handleSubmit, formState: { errors } } = useForm();
+    const navigation = useNavigation();
     const realm = useRealm();
     const params = useLocalSearchParams();
+    const { control, handleSubmit, formState: { errors } } = useForm();
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={handleSubmit(handleSubmitCustomer)}>
+                    <FontAwesome size={18} name="check" color="green" />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation]);
 
     const handleSubmitCustomer = useCallback((data) => {
         realm.write(() => {
@@ -57,16 +69,19 @@ const customerForm = () => {
         });
     }, [realm]);
 
+
     return (
         <View className="p-5">
-            <Text>New Customer</Text>
             <Controller
                 control={control}
                 rules={{ required: false }}
                 name="code"
                 defaultValue={params.code || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Code" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    <View>
+                        <Text className="text-slate-500">Account Number</Text>
+                        <TextInput className={inputClass} placeholder="Customer Account Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    </View>
                 )}
             />
 
@@ -76,7 +91,10 @@ const customerForm = () => {
                 name="name"
                 defaultValue={params.name || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Name" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    <View>
+                        <Text className="text-slate-500">Account Name</Text>
+                        <TextInput className={inputClass} placeholder="Customer Name" onBlur={onBlur} onChangeText={onChange} value={value} />
+                    </View>
                 )}
             />
 
@@ -86,17 +104,12 @@ const customerForm = () => {
                 name="address"
                 defaultValue={params.address || ""}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput className={inputClass} autoCapitalize="characters" placeholder="Address" onBlur={onBlur} onChangeText={onChange} value={value} multiline={true} numberOfLines={4} />
+                    <View>
+                        <Text className="text-slate-500">Address</Text>
+                        <TextInput className={inputClass} placeholder="Address" onBlur={onBlur} onChangeText={onChange} value={value} multiline={true} numberOfLines={6}/>
+                    </View>
                 )}
             />
-
-            <TouchableOpacity className="p-4 bg-blue-500 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitCustomer)}>
-                <Text className="text-white text-center text-[16px]">Save</Text>
-            </TouchableOpacity>
-
-            <Text>
-                {!!Object.keys(errors).length && JSON.stringify(errors)}
-            </Text>
         </View>
     );
 };
