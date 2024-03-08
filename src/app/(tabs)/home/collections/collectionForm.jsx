@@ -24,7 +24,7 @@ const collectionForm = () => {
         navigation.setOptions({
             title: "New Collection",
             headerRight: () => (
-                <TouchableOpacity className="py-3 pl-10 pr-5" onPress={handleSubmit(handleSubmitCollection)}>
+                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={handleSubmit(handleSubmitCollection)}>
                     <FontAwesome size={18} name="check" color="green" />
                 </TouchableOpacity>
             ),
