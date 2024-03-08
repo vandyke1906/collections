@@ -20,7 +20,7 @@ const productForm = () => {
         navigation.setOptions({
             title: "Product",
             headerRight: () => (
-                <TouchableOpacity onPress={handleSubmit(handleSubmitProduct)}>
+                <TouchableOpacity className="py-3 pl-10 pr-5" onPress={handleSubmit(handleSubmitProduct)}>
                     <FontAwesome size={18} name="check" color="green" />
                 </TouchableOpacity>
             ),

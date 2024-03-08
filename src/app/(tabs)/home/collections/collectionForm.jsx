@@ -18,9 +18,18 @@ const collectionForm = () => {
     const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
 
     const [isCheque, setIsCheque] = useState(false);
-
     const { control, handleSubmit, setValue, formState: { errors } } = useForm();
 
+    useEffect(() => {
+        navigation.setOptions({
+            title: "New Collection",
+            headerRight: () => (
+                <TouchableOpacity className="py-3 pl-10 pr-5" onPress={handleSubmit(handleSubmitCollection)}>
+                    <FontAwesome size={18} name="check" color="green" />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation, selectedInvoice]);
 
     const handleSubmitCollection = useCallback((data) => {
         realm.write(() => {
@@ -67,17 +76,6 @@ const collectionForm = () => {
             }
         });
     }, [realm, selectedInvoice]);
-
-    useEffect(() => {
-        navigation.setOptions({
-            title: "New Collection",
-            headerRight: () => (
-                <TouchableOpacity onPress={handleSubmit(handleSubmitCollection)}>
-                    <FontAwesome size={18} name="check" color="green" />
-                </TouchableOpacity>
-            ),
-        });
-    }, [navigation, selectedInvoice]);
 
     const renderForm = () => {
         return (
