@@ -255,12 +255,12 @@ const salesForm = () => {
 
                     <View className="mt-2 mb-5 flex border-t border-gray-300">
                         <View className="flex flex-row items-center justify-between">
-                            <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">products</Text>
+                            <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">product list ({list.length})</Text>
                             <TouchableOpacity onPress={() => {
                                 setSelections(list);
                                 router.navigate({ pathname: ROUTES.PRODUCT_SELECTION, params: { multipleSelect: 1, allowAdd: 1 } });
                             }}>
-                                <Text className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-blue-700 uppercase">Add Products</Text>
+                                <Text className="pointer-events-auto inline-block cursor-pointer rounded text-sm font-bold leading-normal text-blue-700 uppercase">Add Products</Text>
                             </TouchableOpacity>
                         </View>
 
