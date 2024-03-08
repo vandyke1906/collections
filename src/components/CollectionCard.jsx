@@ -52,7 +52,7 @@ CollectionCard.propTypes = {
             invoiceNo: PropTypes.string,
         }),
         chequeNo:  PropTypes.oneOfType([PropTypes.oneOf([null]), PropTypes.string]),
-        chequeDate:  PropTypes.oneOfType([PropTypes.oneOf([null]), PropTypes.string]),
+        chequeDate:  PropTypes.oneOfType([PropTypes.oneOf([null]), PropTypes.number]),
     }).isRequired,
     onEdit: PropTypes.func,
     onSelect: PropTypes.func,

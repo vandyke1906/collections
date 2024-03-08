@@ -1,4 +1,4 @@
-import {  router } from "expo-router";
+import { router } from "expo-router";
 import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert } from "react-native";
 import Customer from "../../../components/Customer";
 import { useState } from "react";
@@ -11,9 +11,10 @@ const CustomerPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
     const customers = useQuery("customers", (col) => {
-        return col.filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
+
+        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
     }, [searchKey]);
-    const fetchMoreData = () => {};
+    const fetchMoreData = () => { };
     return (
         <View className="flex-1 mb-5">
             <View className="items-center justify-center m-2">
@@ -41,14 +42,14 @@ const CustomerPage = () => {
                                             if (realm) {
                                                 const custObj = realm.objectForPrimaryKey("customers", item._id);
                                                 if (custObj) {
-                                                    try {
-                                                        realm.write(() => {
-                                                            custObj.deleteAt = moment().valueOf();
+                                                    realm.write(() => {
+                                                        try {
+                                                            custObj.deletedAt = moment().valueOf();
                                                             // realm.delete(custObj);
-                                                        });
-                                                    } catch (error) {
-                                                        ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
-                                                    }
+                                                        } catch (error) {
+                                                            ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
+                                                        }
+                                                    });
                                                 }
                                             }
                                         }
@@ -59,7 +60,7 @@ const CustomerPage = () => {
                     )}
                     onEndReached={fetchMoreData}
                     onEndReachedThreshold={0.1}
-                    />
+                />
             </View>
 
             <TouchableOpacity
@@ -78,6 +79,6 @@ const CustomerPage = () => {
 
         </View>
     );
-}
+};
 
-export default CustomerPage
+export default CustomerPage;
