@@ -25,13 +25,13 @@ const SalesInvoiceCard = ({ data, onEdit, enableButtons, onSelect }) => {
                         {!isNaN(data?.totalAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Paid: </Text>
-                                <Text className={`block font-sans text-xs antialiased font-bold leading-normal opacity-75 ${data.unpaidAmount ? "text-red-700" : "text-green-700"}`}>{amountFormat(data?.totalAmount - (data?.unpaidAmount || 0))}</Text>
+                                <Text className={`block font-sans text-xs antialiased font-bold leading-normal opacity-75 ${data.unpaidAmount ? "text-green-700" : "text-gray-700"}`}>{amountFormat(data?.totalAmount - (data?.unpaidAmount || 0))}</Text>
                             </View>
                         )}
                         {!isNaN(data?.unpaidAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Unpaid: </Text>
-                                <Text className={`block font-sans text-xs antialiased font-bold leading-normal opacity-75 ${data.unpaidAmount ? "text-green-700" : "text-red-700"}`}>{amountFormat(data?.unpaidAmount)}</Text>
+                                <Text className={`block font-sans text-xs antialiased font-bold leading-normal opacity-75 ${data.unpaidAmount ? "text-red-700" : "text-gray-700"}`}>{amountFormat(data?.unpaidAmount)}</Text>
                             </View>
                         )}
                     </View>
