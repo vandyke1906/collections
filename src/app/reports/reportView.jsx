@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRealm } from "@realm/react";
 import { useNavigation } from "expo-router";
 import useReportStore from "src/store/reportStore";
-import { REPORT_TYPE, amountFormat, formatDate, isMOPCheque } from "src/common/common";
+import { REPORT_TYPE, formatAmount, formatDate, isMOPCheque } from "src/common/common";
 import CardData from "src/components/CardData";
 
 const reportView = () => {
@@ -153,13 +153,13 @@ const reportView = () => {
                             {!!summary.totalRevenue && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Sales: </Text>
-                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{amountFormat(summary.totalRevenue || 0)}</Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{formatAmount(summary.totalRevenue || 0)}</Text>
                                 </View>
                             )}
                             {!!summary.totalCollected && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Collected: </Text>
-                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{amountFormat(summary.totalCollected || 0)}</Text>
+                                    <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{formatAmount(summary.totalCollected || 0)}</Text>
                                 </View>
                             )}
                         </View>
@@ -192,17 +192,17 @@ const reportView = () => {
 
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">Qty: </Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">{data.product.qty}</Text>
+                                            <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">{data.product.qty}</Text>
                                         </View>
 
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">Unit: </Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">{data.product.unit}</Text>
+                                            <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">{data.product.unit}</Text>
                                         </View>
 
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">Code: </Text>
-                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 uppercase">{amountFormat(data.product.amount)}</Text>
+                                            <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 uppercase">{formatAmount(data.product.amount)}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -267,7 +267,7 @@ const reportView = () => {
 
                                             <View className="flex flex-row  items-center justify-start">
                                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Amount Collected: </Text>
-                                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{amountFormat(data.collection.amount || 0)}</Text>
+                                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">{formatAmount(data.collection.amount || 0)}</Text>
                                             </View>
                                         </View>
 

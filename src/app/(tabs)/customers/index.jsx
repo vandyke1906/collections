@@ -11,7 +11,6 @@ const CustomerPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
     const customers = useQuery("customers", (col) => {
-
         return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
     }, [searchKey]);
     const fetchMoreData = () => { };
@@ -32,8 +31,8 @@ const CustomerPage = () => {
                     renderItem={({ item }) => (
                         <Customer
                             data={item} enableButtons={true}
-                            onSelect={() => router.push({ pathname: ROUTES.CUSTOMER_PAGE, params: item }) }
-                            onEdit={() => router.push({ pathname: ROUTES.CUSTOMER_FORM, params: item }) }
+                            onSelect={() => router.push({ pathname: ROUTES.CUSTOMER_PAGE, params: item })}
+                            onEdit={() => router.push({ pathname: ROUTES.CUSTOMER_FORM, params: item })}
                             onDelete={() => {
                                 Alert.alert("Delete Customer", `Do you want to delete ${item.name}?`, [
                                     { text: "Cancel" },

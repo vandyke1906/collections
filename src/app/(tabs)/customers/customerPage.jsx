@@ -1,30 +1,53 @@
 import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useEffect } from 'react';
-import { useRealm } from "@realm/react";
+import React, { useEffect, useState } from 'react';
+import { useQuery, useRealm } from "@realm/react";
+import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import TableSummary from "src/components/reports/salesInvoices/TableSummary";
+import SalesSummary from "src/components/reports/salesInvoices/SalesSummary";
 
 const customerPage = () => {
 
     const navigation = useNavigation();
-    const realm = useRealm();
+    const route = useRoute();
+    const customer = route.params || {};
+    const [dateRange, setDateRange] = useState({ from: 0, to: 0 });
+    const data = useQuery("salesInvoices", (coll) => {
+        console.info({ dateRange });
+        if (dateRange.from && dateRange.to)
+            return coll.filtered("customerId == $0 && dateOfSI BETWEEN { $1, $2 }", customer._id, dateRange.from, dateRange.to).sorted("dateOfSI");
+        else if (dateRange.from)
+            return coll.filtered("customerId == $0 && dateOfSI >= $1", customer._id, dateRange.from).sorted("dateOfSI");
+        else
+            return coll.filtered("customerId == $0", customer._id).sorted("dateOfSI");
+    }, [dateRange]);
 
     useEffect(() => {
         navigation.setOptions({
-            title: "Customer Page",
-            headerRight: () => (
-                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { }}>
-                    <FontAwesome size={18} name="check" color="green" />
-                </TouchableOpacity>
-            ),
+            title: customer.code || "Customer",
+            // headerRight: () => (
+            //     <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { }}>
+            //         <FontAwesome size={18} name="check" color="green" />
+            //     </TouchableOpacity>
+            // ),
         });
     }, [navigation]);
 
+    console.info({ data });
+
     return (
-        <View className="border-2 w-full">
-            <Text>customerPage</Text>
-            <TableSummary />
+        <View className="w-full">
+            <View className="block rounded-lg bg-white p-2 m-2">
+                {customer?.name && <Text className="block font-sans text-xs antialiased font-bold leading-relaxed text-blue-gray-900">{customer.name}</Text>}
+                {customer?.code && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Account #: {customer.code}</Text>}
+                {customer?.address && <Text className="block font-sans  text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Address: {customer.address}</Text>}
+            </View>
+
+            <SalesSummary data={data} onSearch={(from, to) => {
+                if (!from && !to) return;
+                if (from === dateRange.from && to === dateRange.to) return;
+                setDateRange({ from, to });
+            }} />
         </View>
     );
 };

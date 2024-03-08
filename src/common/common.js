@@ -41,7 +41,7 @@ export const REPORT_TYPE = Object.freeze({
     COLLECTIONS: "collections",
 });
 
-export const amountFormat = (number) => {
+export const formatAmount = (number) => {
     if (!isNaN) return "0.00";
     const options = {
         style: 'decimal',
@@ -51,9 +51,9 @@ export const amountFormat = (number) => {
     return (Number(number)).toLocaleString("en-US", options);
 };
 
-export const formatDate = (date) => {
+export const formatDate = (date, options = { format: DATE_FORMAT }) => {
     if (!date) return "";
-    return moment(date).format(DATE_FORMAT);
+    return moment(date).format(options.format);
 };
 
 export const getDateValueOf = (date) => {
@@ -77,3 +77,9 @@ export const customHeaderBackButton = (onPress = () => { }) => {
         </Pressable>
     );
 };
+
+export const INVOICE_STATUS = Object.freeze({
+    PAID: "PAID",
+    UNPAID: "UNPAID",
+    PARTIAL: "PARTIAL"
+});

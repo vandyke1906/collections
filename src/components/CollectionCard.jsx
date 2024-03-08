@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import React, { memo } from 'react';
 import PropTypes from "prop-types";
 import moment from "moment";
-import { DATE_FORMAT, amountFormat, formatDate, isMOPCheque } from "src/common/common";
+import { DATE_FORMAT, formatAmount, formatDate, isMOPCheque } from "src/common/common";
 
 const CollectionCard = ({ data, onEdit, enableButtons, onSelect }) => {
     return (
@@ -18,7 +18,7 @@ const CollectionCard = ({ data, onEdit, enableButtons, onSelect }) => {
 
                     <View className="flex flex-row items-center justify-between">
                         {data.modeOfPayment && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Mode of Payment: {data.modeOfPayment}</Text>}
-                        {!isNaN(data?.amount) && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: {amountFormat(data?.amount)}</Text>}
+                        {!isNaN(data?.amount) && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: {formatAmount(data?.amount)}</Text>}
                     </View>
 
                     {isMOPCheque(data.modeOfPayment) && (

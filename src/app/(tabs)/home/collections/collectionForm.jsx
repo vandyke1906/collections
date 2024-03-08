@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
-import { DATE_FORMAT, MODE_OF_PAYMENT, amountFormat, formatDate, isMOPCheque, showDatePicker } from "src/common/common";
+import { DATE_FORMAT, MODE_OF_PAYMENT, formatAmount, formatDate, isMOPCheque, showDatePicker } from "src/common/common";
 import { Controller, useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { useRealm } from "@realm/react";
@@ -160,7 +160,7 @@ const collectionForm = () => {
                                     {Object.keys(MODE_OF_PAYMENT).map((mopKey) => (
                                         <Picker.Item key={mopKey} value={mopKey} label={MODE_OF_PAYMENT[mopKey]} />
                                     ))}
-                                    </Picker>
+                                </Picker>
                             </View>
                         </View>
                     )}
@@ -221,13 +221,13 @@ const collectionForm = () => {
                         {!isNaN(data?.totalAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Sales: </Text>
-                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">: {amountFormat(data?.totalAmount)}</Text>
+                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">: {formatAmount(data?.totalAmount)}</Text>
                             </View>
                         )}
                         {!isNaN(data?.unpaidAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Unpaid: </Text>
-                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">: {amountFormat(data?.unpaidAmount)}</Text>
+                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">: {formatAmount(data?.unpaidAmount)}</Text>
                             </View>
                         )}
                     </View>
