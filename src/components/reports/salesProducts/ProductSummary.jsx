@@ -19,8 +19,6 @@ const ProductSummary = ({ data, onSearch }) => {
         else return INVOICE_STATUS.PARTIAL;
     };
 
-    console.info(JSON.stringify(data, null, 2));
-
     const renderTable = (_data) => {
         return (
             <View className="mt-2">
@@ -44,8 +42,6 @@ const ProductSummary = ({ data, onSearch }) => {
 
                 {(_data || []).map((item, index) => {
                     const paidAmount = item.totalAmount - item.unpaidAmount;
-
-                    console.info({ item });
 
                     accPaidAmount += +paidAmount;
                     accUnpaidAmount += +item.unpaidAmount;
