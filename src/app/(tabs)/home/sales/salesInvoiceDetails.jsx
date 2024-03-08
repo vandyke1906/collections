@@ -92,7 +92,7 @@ const salesInvoiceDetails = () => {
                     <View className="pt-2 flex flex-row items-center justify-between">
                         {!isNaN(data?.totalAmount) && (
                             <View className="flex flex-row">
-                                <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: </Text>
+                                <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Sales: </Text>
                                 <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">: {amountFormat(data?.totalAmount)}</Text>
                             </View>
                         )}

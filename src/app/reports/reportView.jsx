@@ -152,7 +152,7 @@ const reportView = () => {
                             )}
                             {!!summary.totalRevenue && (
                                 <View className="flex flex-row items-center justify-start">
-                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Revenue: </Text>
+                                    <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Total Sales: </Text>
                                     <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">{amountFormat(summary.totalRevenue || 0)}</Text>
                                 </View>
                             )}
@@ -173,8 +173,8 @@ const reportView = () => {
         return (
             <View className="m-2 mb-2 flex border-t border-gray-300">
                 <View className="flex flex-row">
-                    <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">results found</Text>
-                    <Text className="mt-2 block font-sans text-xs antialiased leading-normal font-bold text-gray-500 uppercase">({results.length})</Text>
+                    <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">results found </Text>
+                    <Text className="mt-2 block font-sans text-xs antialiased leading-normal font-bold text-gray-900 uppercase">({results.length})</Text>
                 </View>
 
                 {results.map((data = {}, index) => {

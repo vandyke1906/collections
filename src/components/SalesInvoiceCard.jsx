@@ -21,7 +21,7 @@ const SalesInvoiceCard = ({ data, onEdit, enableButtons, onSelect }) => {
                     {data?.dateDelivered && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Delivered Date: {moment(data?.dateDelivered).format(DATE_FORMAT)}</Text>}
 
                      <View className="pt-2 flex flex-row items-center justify-between">
-                        {!isNaN(data?.totalAmount) && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Revenue: {amountFormat(data?.totalAmount)}</Text>}
+                        {!isNaN(data?.totalAmount) && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Sales: {amountFormat(data?.totalAmount)}</Text>}
                         {!isNaN(data?.totalAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Paid: </Text>
