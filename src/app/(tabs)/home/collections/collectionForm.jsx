@@ -155,14 +155,16 @@ const collectionForm = () => {
                     render={({ field: { value, onChange } }) => (
                         <View>
                             <Text className="text-slate-500">Mode of Payment</Text>
-                            <Picker selectedValue={value} onValueChange={(value) => {
-                                setIsCheque(value === MODE_OF_PAYMENT.CHEQUE);
-                                onChange(value);
-                            }}>
-                                {Object.keys(MODE_OF_PAYMENT).map((mopKey) => (
-                                    <Picker.Item key={mopKey} value={mopKey} label={MODE_OF_PAYMENT[mopKey]} />
-                                ))}
-                            </Picker>
+                            <View className={inputClass}>
+                                <Picker selectedValue={value} onValueChange={(value) => {
+                                    setIsCheque(value === MODE_OF_PAYMENT.CHEQUE);
+                                    onChange(value);
+                                }}>
+                                    {Object.keys(MODE_OF_PAYMENT).map((mopKey) => (
+                                        <Picker.Item key={mopKey} value={mopKey} label={MODE_OF_PAYMENT[mopKey]} />
+                                    ))}
+                                    </Picker>
+                            </View>
                         </View>
                     )}
                 />
@@ -176,7 +178,7 @@ const collectionForm = () => {
                             render={({ field: { value, onChange } }) => (
                                 <View>
                                     <Text className="text-slate-500">Cheque Number</Text>
-                                    <TextInput className={`${inputClass} text-right`} placeholder="Cheque Number" value={value} onChangeText={onChange} />
+                                    <TextInput className={inputClass} placeholder="Cheque Number" value={value} onChangeText={onChange} />
                                 </View>
                             )}
                         />

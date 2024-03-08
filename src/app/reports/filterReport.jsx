@@ -77,11 +77,13 @@ const filterReport = () => {
                 <View className="">
 
                     <Text className="text-slate-500">Type</Text>
-                    <Picker selectedValue={reportType} onValueChange={setReportType}>
-                        {Object.keys(REPORT_TYPE).map((objKey) => (
-                            <Picker.Item key={objKey} value={REPORT_TYPE[objKey]} label={objKey} />
-                        ))}
-                    </Picker>
+                    <View className={inputClass}>
+                        <Picker selectedValue={reportType} onValueChange={setReportType}>
+                            {Object.keys(REPORT_TYPE).map((objKey) => (
+                                <Picker.Item key={objKey} value={REPORT_TYPE[objKey]} label={objKey} />
+                            ))}
+                        </Picker>
+                    </View>
                 </View>
 
                 <View className="bg-gray-100 rounded-lg p-2">
@@ -133,7 +135,7 @@ const filterReport = () => {
 
                     <View className="flex flex-wrap flex-row">
                         {customers.map((item, index) => (
-                            <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600">
                                 <View className="flex flex-row">
                                     <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
                                     <TouchableOpacity className="ml-2" onPress={() => {
@@ -163,7 +165,7 @@ const filterReport = () => {
 
                             <View className="flex flex-wrap flex-row">
                                 {groups.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white">
                                         <View className="flex flex-row">
                                             <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item._id}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
@@ -191,7 +193,7 @@ const filterReport = () => {
 
                             <View className="flex flex-wrap flex-row">
                                 {products.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600">
                                         <View className="flex flex-row">
                                             <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.name}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {
@@ -224,7 +226,7 @@ const filterReport = () => {
 
                             <View className="flex flex-wrap flex-row">
                                 {salesInvoices.map((item, index) => (
-                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                    <MiniCardData key={index} parentClass="flex space-x-2 m-1 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600">
                                         <View className="flex flex-row">
                                             <Text className="block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">{item.invoiceNo}</Text>
                                             <TouchableOpacity className="ml-2" onPress={() => {

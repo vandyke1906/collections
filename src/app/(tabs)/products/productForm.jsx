@@ -138,7 +138,7 @@ const productForm = () => {
             />
 
 
-            <TouchableOpacity className="p-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitProduct)}>
+            <TouchableOpacity className="p-4 bg-blue-500 text-white font-bold rounded-full" onPress={handleSubmit(handleSubmitProduct)}>
                 <Text className="text-white text-center text-[16px]">Save</Text>
             </TouchableOpacity>
 
