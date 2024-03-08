@@ -10,7 +10,6 @@ import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 import SIProduct from "src/components/SIProduct";
 import useSelection from "src/store/selectionStore";
 import { DATE_FORMAT, ROUTES } from "src/common/common";
-import useRouteNavigate from "src/store/routeNavigateStore";
 
 const salesForm = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -146,7 +145,7 @@ const salesForm = () => {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <View>
                                 <Text className="text-slate-500">Invoice Number</Text>
-                                <TextInput className={inputClass} autoCapitalize="characters" placeholder="Invoice Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                                <TextInput className={inputClass} autoCapitalize="characters" placeholder="Invoice Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                             </View>
                         )}
                     />
@@ -224,7 +223,7 @@ const salesForm = () => {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <View>
                                 <Text className="text-slate-500">PO Number</Text>
-                                <TextInput className={inputClass} autoCapitalize="characters" placeholder="Purchase Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                                <TextInput className={inputClass} autoCapitalize="characters" placeholder="Purchase Order Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                             </View>
                         )}
                     />
@@ -237,7 +236,7 @@ const salesForm = () => {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <View>
                                 <Text className="text-slate-500">SO Number</Text>
-                                <TextInput className={inputClass} autoCapitalize="characters" placeholder="Sales Order Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                                <TextInput className={inputClass} autoCapitalize="characters" placeholder="Sales Order Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                             </View>
                         )}
                     />

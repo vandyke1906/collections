@@ -87,7 +87,7 @@ const collectionForm = () => {
                     render={({ field: { onChange, onBlur, value } }) => (
                         <View>
                             <Text className="text-slate-500">Collection Receipt Number</Text>
-                            <TextInput className={inputClass} autoCapitalize="characters" placeholder="Collection Receipt Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                            <TextInput className={inputClass} autoCapitalize="characters" placeholder="Collection Receipt Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                         </View>
                     )}
                 />
@@ -139,7 +139,7 @@ const collectionForm = () => {
                     render={({ field: { value, onChange, onBlur } }) => (
                         <View>
                             <Text className="text-slate-500">Amount Paid</Text>
-                            <TextInput className={`${inputClass} text-right`} keyboardType="decimal-pad" placeholder="Amount Paid" value={value} onBlur={onBlur} onChangeText={onChange} />
+                            <TextInput className={`${inputClass} text-right`} keyboardType="decimal-pad" placeholder="Amount Paid" value={value} onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} />
                         </View>
                     )}
                 />
@@ -175,7 +175,7 @@ const collectionForm = () => {
                             render={({ field: { value, onChange } }) => (
                                 <View>
                                     <Text className="text-slate-500">Cheque Number</Text>
-                                    <TextInput className={inputClass} placeholder="Cheque Number" value={value} onChangeText={onChange} />
+                                    <TextInput className={inputClass} placeholder="Cheque Number" value={value} onChangeText={(text) => onChange(text.toUpperCase())} />
                                 </View>
                             )}
                         />

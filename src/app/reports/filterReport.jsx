@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, TouchableWithoutFeedback, TextInput, Keyboard, ScrollView, ToastAndroid } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Picker } from "@react-native-picker/picker";

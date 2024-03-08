@@ -81,7 +81,7 @@ const customerForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Account Number</Text>
-                        <TextInput className={inputClass} placeholder="Customer Account Number" onBlur={onBlur} onChangeText={onChange} value={value} />
+                        <TextInput className={inputClass} placeholder="Customer Account Number" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                     </View>
                 )}
             />
@@ -94,7 +94,7 @@ const customerForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Account Name</Text>
-                        <TextInput className={inputClass} placeholder="Customer Name" onBlur={onBlur} onChangeText={onChange} value={value} />
+                        <TextInput className={inputClass} placeholder="Customer Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                     </View>
                 )}
             />
@@ -107,7 +107,7 @@ const customerForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Address</Text>
-                        <TextInput className={inputClass} placeholder="Address" onBlur={onBlur} onChangeText={onChange} value={value} multiline={true} numberOfLines={6}/>
+                        <TextInput className={inputClass} placeholder="Address" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} multiline={true} numberOfLines={6}/>
                     </View>
                 )}
             />

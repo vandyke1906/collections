@@ -91,7 +91,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Product Code</Text>
-                        <TextInput className={inputClass} placeholder="Product Code" onBlur={onBlur} onChangeText={onChange} value={value}/>
+                        <TextInput className={inputClass} placeholder="Product Code" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
                     </View>
                 )}
             />
@@ -104,7 +104,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Product Name</Text>
-                        <TextInput className={inputClass} placeholder="Product Name" onBlur={onBlur} onChangeText={onChange} value={value}/>
+                        <TextInput className={inputClass} placeholder="Product Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
                     </View>
                 )}
             />
@@ -117,7 +117,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Unit</Text>
-                        <TextInput className={inputClass} placeholder="Unit" onBlur={onBlur} onChangeText={onChange} value={value}/>
+                        <TextInput className={inputClass} placeholder="Unit" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
                     </View>
                 )}
             />
