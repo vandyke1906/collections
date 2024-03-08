@@ -38,7 +38,7 @@ const filterReport = () => {
             headerShown: true,
             title: "Filter Reports",
             headerRight: () => (
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => {
                     if (!dateFrom) {
                         ToastAndroid.show("Date from is required.", ToastAndroid.SHORT);
                         return;
