@@ -37,7 +37,7 @@ const CustomerPage = () => {
     const fetchMoreData = () => {
         if (isEnd) return console.info("End of record");
         const nextResult = getRecords(searchKey);
-        addToDataList({ ...addToDataList });
+        addToDataList(nextResult);
     };
 
     return (
