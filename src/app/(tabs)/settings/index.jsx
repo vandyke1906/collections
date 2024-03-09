@@ -1,9 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { EncodingType, StorageAccessFramework } from "expo-file-system";
 import { getDocumentAsync } from "expo-document-picker";
+import { useState } from "react";
+import { Button } from "react-native-paper";
 
 const Page = () => {
+    const [text, setText] = useState("");
     const readDirectory = () => {
         StorageAccessFramework.requestDirectoryPermissionsAsync().then(async (permissions) => {
             if (!permissions.granted) return;
@@ -25,6 +28,7 @@ const Page = () => {
                 try {
                     const fileContent = await StorageAccessFramework.readAsStringAsync(uri, { encoding: EncodingType.UTF8 });
                     console.log("File content:", fileContent);
+                    setText(fileContent);
 
                 } catch (error) {
                     console.error("Error reading file:", error);
@@ -38,14 +42,17 @@ const Page = () => {
     };
 
     return (
-        <View className="flex-1 items-center justify-center bg-white">
-            <Pressable onPress={() => {
-                readFile();
-            }}>
-                <Text>Browse</Text>
-            </Pressable>
-            <StatusBar style="auto" />
-        </View>
+        <ScrollView >
+            <View className="h-full flex items-center justify-center bg-white">
+                <Button icon="upload" mode="outlined" onPress={() => readFile()}>
+                    Browse File
+                </Button>
+                <View className="flex-1">
+                    <Text>{text}</Text>
+                </View>
+                <StatusBar style="auto" />
+            </View >
+        </ScrollView>
     );
 };
 
