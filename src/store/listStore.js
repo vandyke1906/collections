@@ -1,15 +1,14 @@
+import { QUERY_LIMIT } from "src/common/common";
 import { create } from "zustand";
 
 const ownUseList = () => {
     return create((set) => {
         return {
             dataList: [],
-            lastRef: null,
             isEnd: false,
             counter: 1,
-            limit: 1,
+            limit: QUERY_LIMIT,
             nextCounter: () => set((state) => ({ counter: state.counter + 1 })),
-            setLastRef: (lastRef) => set(() => ({ lastId: lastRef })),
             setIsEnd: (isEnd) => set(() => ({ isEnd: !!isEnd })),
             setDataList: (dataList) => set(() => ({ dataList })),
             addToDataList: (item) => set((state) => {

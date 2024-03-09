@@ -15,11 +15,8 @@ const CustomerPage = () => {
 
     const getRecords = (searchKey) => {
         try {
-            console.info({ counter, start: (counter - 1) * limit, end: counter * limit });
-            // let query = `deletedAt == 0 && (code BEGINSWITH[c] '${searchKey}' || name CONTAINS[c] '${searchKey}') SORT(indexedName ASC) ${REALM_QUERY_LIMIT}`;
-            let query = `deletedAt == 0 && (code BEGINSWITH[c] '${searchKey}' || name CONTAINS[c] '${searchKey}')`;
-            console.info(JSON.stringify(realm.objects("customers").filtered(query).sorted("indexedName", false), null, 2));
-            let result = realm.objects("customers").filtered(query).sorted("indexedName", false).slice((counter - 1) * limit, counter * limit);
+            let result = realm.objects("customers").filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
+                .sorted("indexedName", false).slice((counter - 1) * limit, counter * limit);
             if (!result.length) setIsEnd(true);
             nextCounter();
             return Array.from(result) || [];
@@ -36,22 +33,9 @@ const CustomerPage = () => {
         setDataList(result);
     }, [realm, searchKey]);
 
-    // const customers = useQuery("customers", (col) => {
-    //     let query = `deletedAt == 0 && (code BEGINSWITH[c] '${searchKey}' || name CONTAINS[c] '${searchKey}') SORT(name ASC) ${REALM_QUERY_LIMIT}`;
-    //     if (queryId) query = `_id > ${queryId} && ${query}`;
-    //     const result = col.filtered(query);
-    //     const lastId = result[result.length - 1]?._id;
-    //     console.info({ lastId });
-    //     if (lastId)
-    //         setQueryId(lastId);
-    //     return result;
-    // }, [searchKey]);
-
     const fetchMoreData = () => {
         if (isEnd) return console.info("End of record");
-        console.info("fetch more");
         const nextResult = getRecords(searchKey);
-        console.info({ type: typeof nextResult, isArray: Array.isArray(nextResult), nextResult });
         addToDataList(nextResult);
     };
 
@@ -64,11 +48,7 @@ const CustomerPage = () => {
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
-                <Pressable onPress={() => {
-                    fetchMoreData();
-                }}>
-                    <Text>get next</Text>
-                </Pressable>
+
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     className="w-full"
@@ -104,8 +84,8 @@ const CustomerPage = () => {
                             }}
                         />
                     )}
-                // onEndReached={fetchMoreData}
-                // onEndReachedThreshold={0.1}
+                    onEndReached={fetchMoreData}
+                    onEndReachedThreshold={0.1}
                 />
             </View>
 
