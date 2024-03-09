@@ -7,28 +7,30 @@ import { ROUTES } from "src/common/common";
 import Product from "src/components/Product";
 import { useRealm } from "@realm/react";
 import moment from "moment";
-import useQueryList from "src/store/listStore";
+import ownUseList from "src/store/listStore";
+
+const useQueryList = ownUseList();
 
 const ProductPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
-    const { dataList, counter, limit, nextCounter, setDataList, addToDataList, clearDataList, isEnd, setIsEnd } = useQueryList();
+    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
 
     // const products = useQuery("products", (col) => {
     //     return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
     // }, [searchKey]);
 
     useEffect(() => {
-        setIsEnd(false);
-        clearDataList();
+        resetCounter();
         const result = getRecords(searchKey);
         setDataList(result);
     }, [realm, searchKey]);
 
     const getRecords = (searchKey) => {
+        console.info({ start: (counter - 1) * limit, end: counter * limit });
         try {
             let result = realm.objects("products").filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
-                .sorted("indexedName", false).slice((counter - 1) * limit, counter * limit);
+                .sorted("indexedName").slice((counter - 1) * limit, counter * limit);
             if (!result.length) setIsEnd(true);
             nextCounter();
             return Array.from(result) || [];

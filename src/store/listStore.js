@@ -8,6 +8,7 @@ const ownUseList = () => {
             isEnd: false,
             counter: 1,
             limit: QUERY_LIMIT,
+            resetCounter: () => set(() => ({ counter: 1, isEnd: false })),
             nextCounter: () => set((state) => ({ counter: state.counter + 1 })),
             setIsEnd: (isEnd) => set(() => ({ isEnd: !!isEnd })),
             setDataList: (dataList) => set(() => ({ dataList })),
@@ -29,7 +30,6 @@ const ownUseList = () => {
         };
     });
 };
-
-const useQueryList = ownUseList();
-
-export default useQueryList;
+// const useQueryList = ownUseList;
+// export default useQueryList;
+export default ownUseList;

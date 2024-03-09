@@ -3,7 +3,7 @@ import { Pressable } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import moment from "moment";
 
-export const QUERY_LIMIT = 1;
+export const QUERY_LIMIT = 100;
 export const REALM_QUERY_LIMIT = "LIMIT(1)";
 
 export const ROUTES = {
