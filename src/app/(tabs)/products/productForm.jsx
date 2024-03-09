@@ -66,6 +66,7 @@ const productForm = () => {
                         product.name = data.name.trim();
                         product.unit = data.unit.trim();
                         product.group = data.group.trim();
+                        product.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                         isNew = false;
                     }
                 }
@@ -91,7 +92,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Product Code</Text>
-                        <TextInput className={`${inputClass} border ${errors.code ? "border-red-500" : ""}`} placeholder="Product Code" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
+                        <TextInput className={`${inputClass} border ${errors.code ? "border-red-500" : ""}`} placeholder="Product Code" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                     </View>
                 )}
             />
@@ -104,7 +105,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Product Name</Text>
-                        <TextInput className={`${inputClass} border ${errors.name ? "border-red-500" : ""}`} placeholder="Product Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
+                        <TextInput className={`${inputClass} border ${errors.name ? "border-red-500" : ""}`} placeholder="Product Name" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                     </View>
                 )}
             />
@@ -117,7 +118,7 @@ const productForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Unit</Text>
-                        <TextInput className={`${inputClass} border ${errors.unit ? "border-red-500" : ""}`} placeholder="Unit" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value}/>
+                        <TextInput className={`${inputClass} border ${errors.unit ? "border-red-500" : ""}`} placeholder="Unit" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} />
                     </View>
                 )}
             />

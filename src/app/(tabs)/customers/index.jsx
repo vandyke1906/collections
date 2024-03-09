@@ -1,19 +1,60 @@
 import { router } from "expo-router";
-import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert } from "react-native";
-import { useState } from "react";
+import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert, Pressable, Text } from "react-native";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import { useQuery, useRealm } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Customer from "src/components/Customer";
-import { ROUTES } from "src/common/common";
+import { REALM_QUERY_LIMIT, ROUTES } from "src/common/common";
+import useQueryList from "src/store/listStore";
 
 const CustomerPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
-    const customers = useQuery("customers", (col) => {
-        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
-    }, [searchKey]);
-    const fetchMoreData = () => { };
+    const { dataList, counter, limit, nextCounter, setDataList, addToDataList, clearDataList, isEnd, setIsEnd } = useQueryList();
+
+    const getRecords = (searchKey) => {
+        try {
+            console.info({ counter, start: (counter - 1) * limit, end: counter * limit });
+            // let query = `deletedAt == 0 && (code BEGINSWITH[c] '${searchKey}' || name CONTAINS[c] '${searchKey}') SORT(indexedName ASC) ${REALM_QUERY_LIMIT}`;
+            let query = `deletedAt == 0 && (code BEGINSWITH[c] '${searchKey}' || name CONTAINS[c] '${searchKey}')`;
+            console.info(JSON.stringify(realm.objects("customers").filtered(query).sorted("indexedName", false), null, 2));
+            let result = realm.objects("customers").filtered(query).sorted("indexedName", false).slice((counter - 1) * limit, counter * limit);
+            if (!result.length) setIsEnd(true);
+            nextCounter();
+            return Array.from(result) || [];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        setIsEnd(false);
+        clearDataList();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
+    // const customers = useQuery("customers", (col) => {
+    //     let query = `deletedAt == 0 && (code BEGINSWITH[c] '${searchKey}' || name CONTAINS[c] '${searchKey}') SORT(name ASC) ${REALM_QUERY_LIMIT}`;
+    //     if (queryId) query = `_id > ${queryId} && ${query}`;
+    //     const result = col.filtered(query);
+    //     const lastId = result[result.length - 1]?._id;
+    //     console.info({ lastId });
+    //     if (lastId)
+    //         setQueryId(lastId);
+    //     return result;
+    // }, [searchKey]);
+
+    const fetchMoreData = () => {
+        if (isEnd) return console.info("End of record");
+        console.info("fetch more");
+        const nextResult = getRecords(searchKey);
+        console.info({ type: typeof nextResult, isArray: Array.isArray(nextResult), nextResult });
+        addToDataList(nextResult);
+    };
+
     return (
         <View className="flex-1 mb-5">
             <View className="items-center justify-center m-2">
@@ -23,10 +64,15 @@ const CustomerPage = () => {
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
+                <Pressable onPress={() => {
+                    fetchMoreData();
+                }}>
+                    <Text>get next</Text>
+                </Pressable>
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     className="w-full"
-                    data={customers}
+                    data={dataList}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
                         <Customer
@@ -58,8 +104,8 @@ const CustomerPage = () => {
                             }}
                         />
                     )}
-                    onEndReached={fetchMoreData}
-                    onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

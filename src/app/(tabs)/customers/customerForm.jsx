@@ -55,6 +55,7 @@ const customerForm = () => {
                         customer.code = data.code.trim();
                         customer.name = data.name.trim();
                         customer.address = data.address.trim();
+                        customer.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                         isNew = false;
                     }
                 }
@@ -107,7 +108,7 @@ const customerForm = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <Text className="text-slate-500">Address</Text>
-                        <TextInput className={inputClass} placeholder="Address" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} multiline={true} numberOfLines={6}/>
+                        <TextInput className={inputClass} placeholder="Address" onBlur={onBlur} onChangeText={(text) => onChange(text.toUpperCase())} value={value} multiline={true} numberOfLines={6} />
                     </View>
                 )}
             />

@@ -11,6 +11,7 @@ export class Customer extends Realm.Object {
             name: { type: "string", indexed: "full-text" },
             address: "string",
             deletedAt: { type: "int", default: () => 0, indexed: true },
+            indexedName: { type: "string", indexed: true },
         },
     };
 }

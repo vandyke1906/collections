@@ -66,7 +66,7 @@ const collectionForm = () => {
                             invoiceNo: currentSalesInvoice.invoiceNo,
                             customerName: selectedInvoice.customerName
                         },
-                        customerId: currentSalesInvoice.customerId
+                        customerId: currentSalesInvoice.customerId,
                     };
 
                     if (isMOPCheque(data.modeOfPayment)) {
