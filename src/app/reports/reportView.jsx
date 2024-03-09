@@ -1,8 +1,9 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ToastAndroid, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRealm } from "@realm/react";
 import { useNavigation } from "expo-router";
 import useReportStore from "src/store/reportStore";
+import { FontAwesome } from "@expo/vector-icons";
 import { REPORT_TYPE, formatAmount, formatDate, isMOPCheque } from "src/common/common";
 import CardData from "src/components/CardData";
 
@@ -87,7 +88,20 @@ const reportView = () => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: `${reportType === REPORT_TYPE.SALES ? "Sales" : "Collection"} Report`
+            title: `${reportType === REPORT_TYPE.SALES ? "Sales" : "Collection"} Report`,
+            headerRight: () => (
+                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => {
+                    Alert.alert("Download", "Do you want to save report generated?", [
+                        { text: "Cancel" },
+                        {
+                            text: "Continue",
+                            onPress: () => { ToastAndroid.show("Report downloaded", ToastAndroid.SHORT); }
+                        }
+                    ]);
+                }}>
+                    <FontAwesome size={18} name="download" />
+                </TouchableOpacity>
+            ),
         });
     }, [navigation]);
 

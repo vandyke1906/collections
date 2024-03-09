@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, Text, View } from 'react-native';
 import { EncodingType, StorageAccessFramework } from "expo-file-system";
-import {getDocumentAsync } from "expo-document-picker";
+import { getDocumentAsync } from "expo-document-picker";
 
 const Page = () => {
     const readDirectory = () => {
@@ -16,9 +16,11 @@ const Page = () => {
 
     const readFile = async () => {
         try {
-            const result = await getDocumentAsync({ type: "application/json" }); //allow all */*
+            // const result = await getDocumentAsync({ type: "*/*" }); //allow all */*
+            const result = await getDocumentAsync({ type: ["application/json", "text/csv", "text/comma-separated-values"] }); //allow all */*
             if ((result?.assets || []).length) {
-                const { uri, name, size, mimeType } = result.assets[0];
+                const selectedFile = result.assets[0];
+                const { uri, name, size, mimeType } = selectedFile;
 
                 try {
                     const fileContent = await StorageAccessFramework.readAsStringAsync(uri, { encoding: EncodingType.UTF8 });
