@@ -25,7 +25,7 @@ const customerSelection = () => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Select Product",
+            title: `Select Product (${selections.length})`,
             headerLeft: () => customHeaderBackButton(() => {
                 router.back();
             }),

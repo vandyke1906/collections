@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useSelection = create((set) => {
+const useSelection = create((set, get) => {
     return {
         selections: [],
         setSelections: (list) => set(() => {

@@ -16,7 +16,7 @@ const customerSelection = () => {
     const route = useRoute();
     const params = route.params || {};
 
-    const { selections, addToSelection, removeToSelection } = useSelection();
+    const { selections, addToSelection, removeToSelection, count } = useSelection();
     // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useCustomer();
 
     const [searchKey, setSearchKey] = useState("");
@@ -24,7 +24,7 @@ const customerSelection = () => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Select Customer",
+            title: `Select Customer (${selections.length})`,
             headerLeft: () => customHeaderBackButton(() => {
                 router.back();
             }),
@@ -37,11 +37,16 @@ const customerSelection = () => {
                 </TouchableOpacity>
             ),
         });
-    }, [navigation]);
+    }, [navigation, selections]);
+
+    useEffect(() => {
+
+    }, []);
 
     const dataList = useQuery("customers", (col) => {
         return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
     }, [searchKey]);
+
 
     // useEffect(() => {
     //     resetCounter();

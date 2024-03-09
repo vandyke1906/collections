@@ -25,7 +25,7 @@ const salesInvoiceSelection = () => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Select Sales Invoice",
+            title: `Select Sales Invoice (${selections.length})`,
             headerLeft: () => customHeaderBackButton(() => {
                 router.back();
             }),

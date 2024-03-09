@@ -24,7 +24,7 @@ const groupSelection = () => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Select Group",
+            title: `Select Group (${selections.length})`,
             headerLeft: () => customHeaderBackButton(() => {
                 router.back();
             }),
