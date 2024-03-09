@@ -25,7 +25,7 @@ const productPage = () => {
 
     useEffect(() => {
         navigation.setOptions({
-            title: product.code || "Customer",
+            title: `Code: ${product.code || "Customer"}`,
             // headerRight: () => (
             //     <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { }}>
             //         <FontAwesome size={18} name="check" color="green" />
@@ -37,12 +37,15 @@ const productPage = () => {
     return (
         <View className="w-full">
             <View className="block rounded-lg bg-white p-2 m-2">
-                {product?.name && <Text className="block font-sans text-xs antialiased font-bold leading-relaxed text-blue-gray-900">{product.name}</Text>}
-                {product?.code && <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Account #: {product.code}</Text>}
-                {product?.address && <Text className="block font-sans  text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Address: {product.address}</Text>}
+                <Text className="mb-2 block font-sans text-xs antialiased font-bold leading-normal text-gray-900">{product?.name || ""}</Text>
+                <View className="flex flex-row items-center justify-between">
+                    {!!product?.code && <Text className="block font-sans text-xs antialiased font-xs leading-normal text-gray-700 opacity-75">Code: {product.code}</Text>}
+                    {!!product?.unit && <Text className="block font-sans text-xs antialiased font-xs leading-normal text-gray-700 opacity-75">Unit: {product.unit}</Text>}
+                    {!!product?.group && <Text className="block font-sans text-xs antialiased font-xs leading-normal text-gray-700 opacity-75">Group: {product.group}</Text>}
+                </View>
             </View>
 
-            <ProductSummary data={data} onSearch={(from, to) => {
+            <ProductSummary product={product} data={data} onSearch={(from, to) => {
                 if (!from && !to) return;
                 if (from === dateRange.from && to === dateRange.to) return;
                 setDateRange({ from, to });

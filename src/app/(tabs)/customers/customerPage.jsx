@@ -23,7 +23,7 @@ const customerPage = () => {
 
     useEffect(() => {
         navigation.setOptions({
-            title: customer.code || "Customer",
+            title: `CAN: ${customer.code || "Customer"}`,
             // headerRight: () => (
             //     <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { }}>
             //         <FontAwesome size={18} name="check" color="green" />

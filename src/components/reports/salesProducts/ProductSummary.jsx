@@ -1,23 +1,19 @@
 import { View, Text, ScrollView, Keyboard, Pressable } from 'react-native';
 import React, { useState } from 'react';
-import { INVOICE_STATUS, formatAmount, formatDate, showDatePicker } from "src/common/common";
+import { DATE_FORMAT, INVOICE_STATUS, formatAmount, formatDate, getDateValueOf, showDatePicker } from "src/common/common";
 import { TextInput } from "react-native-paper";
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ProductSummary = ({ data, onSearch }) => {
+const ProductSummary = ({ product, data, onSearch }) => {
     const inputClass = "text-sm text-center appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
-    let accPaidAmount = 0;
-    let accUnpaidAmount = 0;
+    let accQty = 0;
+    let accAmount = 0;
+
+    console.info(JSON.stringify(data, null, 2));
 
     const [dateFrom, setDateFrom] = useState(0);
     const [dateTo, setDateTo] = useState(0);
-
-    const getStatus = (paid, unpaid) => {
-        if (!unpaid) return INVOICE_STATUS.PAID;
-        else if (!paid) return INVOICE_STATUS.UNPAID;
-        else return INVOICE_STATUS.PARTIAL;
-    };
 
     const renderTable = (_data) => {
         return (
@@ -30,24 +26,25 @@ const ProductSummary = ({ data, onSearch }) => {
                         <Text className="text-xs">SI Date</Text>
                     </View>
                     <View className="flex-1 flex-row items-center justify-center">
-                        <Text className="text-xs">Status</Text>
+                        <Text className="text-xs">Qty</Text>
                     </View>
                     <View className="flex-1 flex-row items-center justify-center">
-                        <Text className="text-xs">Paid</Text>
-                    </View>
-                    <View className="flex-1 flex-row items-center justify-center">
-                        <Text className="text-xs">Balance</Text>
+                        <Text className="text-xs">Amound</Text>
                     </View>
                 </View>
 
                 {(_data || []).map((item, index) => {
-                    const paidAmount = item.totalAmount - item.unpaidAmount;
 
-                    accPaidAmount += +paidAmount;
-                    accUnpaidAmount += +item.unpaidAmount;
+                    (item.products || []).forEach((p) => {
+                        if (p.productId === product._id) {
+                            accQty += p.qty;
+                            accAmount += p.amount;
+                        }
+                    });
+
                     return (
                         <View key={index} className="flex border border-gray-200 py-1">
-                            <View className="items-center justify-center">
+                            <View className="items-center justify-center pt-2">
                                 <Text className="text-xs font-bold">{item.customerName}</Text>
                             </View>
 
@@ -58,14 +55,11 @@ const ProductSummary = ({ data, onSearch }) => {
                                 <View className="flex-1 items-center justify-center">
                                     <Text className="text-xs">{formatDate(item.dateOfSI, { format: "DD-MMM-YYYY" }).toUpperCase()}</Text>
                                 </View>
-                                <View className="flex-1 items-center justify-center">
-                                    <Text className="text-xs">{getStatus(paidAmount, item.unpaidAmount)}</Text>
-                                </View>
                                 <View className="flex-1 items-center justify-end">
-                                    <Text className={`text-xs ${!item.paidAmount ? "text-red-900" : "text-green-900"}`}>{formatAmount(paidAmount)}</Text>
+                                    <Text className={`text-xs text-gray-90`}>{accQty || 0}</Text>
                                 </View>
                                 <View className="flex-1 items-center justify-end pr-1">
-                                    <Text className={`text-xs ${item.unpaidAmount ? "text-red-900" : "text-green-900"}`}>{formatAmount(item.unpaidAmount)}</Text>
+                                    <Text className={`text-xs text-gray-90`}>{formatAmount(accAmount)}</Text>
                                 </View>
                             </View>
                         </View>
@@ -78,13 +72,11 @@ const ProductSummary = ({ data, onSearch }) => {
                     </View>
                     <View className="flex-1 items-center justify-center">
                     </View>
-                    <View className="flex-1 items-center justify-center">
-                    </View>
                     <View className="flex-1 items-center justify-end">
-                        <Text className={`text-xs font-bold ${!accPaidAmount ? "text-red-900" : "text-green-900"}`}>{formatAmount(accPaidAmount)}</Text>
+                        <Text className="text-xs font-bold text-green-900">{accQty}</Text>
                     </View>
                     <View className="flex-1 items-center justify-end pr-1">
-                        <Text className={`text-xs font-bold ${accUnpaidAmount ? "text-red-900" : "text-green-900"}`}>{formatAmount(accUnpaidAmount)}</Text>
+                        <Text className="text-xs font-bold text-green-900">{formatAmount(accAmount)}</Text>
                     </View>
                 </View>
 
@@ -102,10 +94,13 @@ const ProductSummary = ({ data, onSearch }) => {
                 <View className="flex-1 mr-2">
                     <Pressable className="flex-1" onPress={() => {
                         Keyboard.dismiss();
-                        showDatePicker((event, date) => {
-                            if (event.type === "set") {
-                                const startDate = moment(date).startOf("day").valueOf();
-                                setDateFrom(startDate);
+                        showDatePicker({
+                            date: getDateValueOf(value, { format: DATE_FORMAT }),
+                            onChange: (event, date) => {
+                                if (event.type === "set") {
+                                    const startDate = moment(date).startOf("day").valueOf();
+                                    setDateFrom(startDate);
+                                }
                             }
                         });
                     }}>
@@ -116,10 +111,13 @@ const ProductSummary = ({ data, onSearch }) => {
                 <View className="flex-1">
                     <Pressable className="flex-1" onPress={() => {
                         Keyboard.dismiss();
-                        showDatePicker((event, date) => {
-                            if (event.type === "set") {
-                                const endDate = moment(date).endOf("day").valueOf();
-                                setDateTo(endDate);
+                        showDatePicker({
+                            date: getDateValueOf(value, { format: DATE_FORMAT }),
+                            onChange: (event, date) => {
+                                if (event.type === "set") {
+                                    const endDate = moment(date).endOf("day").valueOf();
+                                    setDateTo(endDate);
+                                }
                             }
                         });
                     }}>

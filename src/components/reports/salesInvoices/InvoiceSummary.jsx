@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Keyboard, Pressable } from 'react-native';
 import React, { useState } from 'react';
-import { INVOICE_STATUS, formatAmount, formatDate, showDatePicker } from "src/common/common";
+import { DATE_FORMAT, INVOICE_STATUS, formatAmount, formatDate, getDateValueOf, showDatePicker } from "src/common/common";
 import { TextInput } from "react-native-paper";
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
@@ -96,10 +96,13 @@ const InvoiceSummary = ({ data, onSearch }) => {
                 <View className="flex-1 mr-2">
                     <Pressable className="flex-1" onPress={() => {
                         Keyboard.dismiss();
-                        showDatePicker((event, date) => {
-                            if (event.type === "set") {
-                                const startDate = moment(date).startOf("day").valueOf();
-                                setDateFrom(startDate);
+                        showDatePicker({
+                            date: getDateValueOf(value, { format: DATE_FORMAT }),
+                            onChange: (event, date) => {
+                                if (event.type === "set") {
+                                    const startDate = moment(date).startOf("day").valueOf();
+                                    setDateFrom(startDate);
+                                }
                             }
                         });
                     }}>
@@ -110,10 +113,13 @@ const InvoiceSummary = ({ data, onSearch }) => {
                 <View className="flex-1">
                     <Pressable className="flex-1" onPress={() => {
                         Keyboard.dismiss();
-                        showDatePicker((event, date) => {
-                            if (event.type === "set") {
-                                const endDate = moment(date).endOf("day").valueOf();
-                                setDateTo(endDate);
+                        showDatePicker({
+                            date: getDateValueOf(value, { format: DATE_FORMAT }),
+                            onChange: (event, date) => {
+                                if (event.type === "set") {
+                                    const endDate = moment(date).endOf("day").valueOf();
+                                    setDateTo(endDate);
+                                }
                             }
                         });
                     }}>

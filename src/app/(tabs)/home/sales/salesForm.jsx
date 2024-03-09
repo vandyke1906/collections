@@ -9,7 +9,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 import SIProduct from "src/components/SIProduct";
 import useSelection from "src/store/selectionStore";
-import { DATE_FORMAT, ROUTES } from "src/common/common";
+import { DATE_FORMAT, ROUTES, formatDate, getDateValueOf, showDatePicker } from "src/common/common";
 
 const salesForm = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -99,15 +99,6 @@ const salesForm = () => {
         });
     }, [realm, productList, details]);
 
-    const showDatePicker = (onChange = () => { }) => {
-        DateTimePickerAndroid.open({
-            value: new Date(),
-            mode: "date",
-            display: "calendar",
-            onChange: typeof onChange === "function" ? onChange : () => { }
-        });
-    };
-
     const totalAmount = useMemo(() => {
         return Number(details.totalAmount || 0).toFixed(2);
     }, [details?.totalAmount]);
@@ -161,9 +152,12 @@ const salesForm = () => {
                         render={({ field: { value } }) => (
                             <TouchableWithoutFeedback onPress={() => {
                                 Keyboard.dismiss();
-                                showDatePicker((event, date) => {
-                                    if (event.type === "set")
-                                        setValue("dateOfSI", moment(date).format(DATE_FORMAT));
+                                showDatePicker({
+                                    date: getDateValueOf(value, { format: DATE_FORMAT }),
+                                    onChange: (event, date) => {
+                                        if (event.type === "set")
+                                            setValue("dateOfSI", formatDate(date));
+                                    }
                                 });
                             }}>
                                 <View>
@@ -182,9 +176,12 @@ const salesForm = () => {
                         render={({ field: { value } }) => (
                             <TouchableWithoutFeedback onPress={() => {
                                 Keyboard.dismiss();
-                                showDatePicker((event, date) => {
-                                    if (event.type === "set")
-                                        setValue("dateDelivered", moment(date).format(DATE_FORMAT));
+                                showDatePicker({
+                                    date: getDateValueOf(value, { format: DATE_FORMAT }),
+                                    onChange: (event, date) => {
+                                        if (event.type === "set")
+                                            setValue("dateDelivered", formatDate(date));
+                                    }
                                 });
                             }}>
                                 <View>

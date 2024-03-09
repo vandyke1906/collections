@@ -57,17 +57,19 @@ export const formatDate = (date, options = { format: DATE_FORMAT }) => {
     return moment(date).format(options.format);
 };
 
-export const getDateValueOf = (date) => {
+export const getDateValueOf = (date, options = { format: "" }) => {
     if (!date) return "";
+    if (options.format)
+        return moment(date, options.for).valueOf();
     return moment(date).valueOf();
 };
 
-export const showDatePicker = (onChange = () => { }) => {
+export const showDatePicker = (options = { date: 0, onChange: () => { } }) => {
     DateTimePickerAndroid.open({
-        value: new Date(),
+        value: options.date ? new Date(options.date) : new Date(),
         mode: "date",
         display: "calendar",
-        onChange: typeof onChange === "function" ? onChange : () => { }
+        onChange: typeof options.onChange === "function" ? options.onChange : () => { }
     });
 };
 

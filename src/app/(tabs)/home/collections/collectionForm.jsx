@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
-import { DATE_FORMAT, MODE_OF_PAYMENT, formatAmount, formatDate, isMOPCheque, showDatePicker } from "src/common/common";
+import { DATE_FORMAT, MODE_OF_PAYMENT, formatAmount, formatDate, getDateValueOf, isMOPCheque, showDatePicker } from "src/common/common";
 import { Controller, useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { useRealm } from "@realm/react";
@@ -108,9 +108,12 @@ const collectionForm = () => {
                     render={({ field: { value } }) => (
                         <TouchableWithoutFeedback onPress={() => {
                             Keyboard.dismiss();
-                            showDatePicker((event, date) => {
-                                if (event.type === "set")
-                                    setValue("corDate", formatDate(date));
+                            showDatePicker({
+                                date: getDateValueOf(value, { format: DATE_FORMAT }),
+                                onChange: (event, date) => {
+                                    if (event.type === "set")
+                                        setValue("corDate", formatDate(date));
+                                }
                             });
                         }}>
                             <View>
@@ -128,9 +131,12 @@ const collectionForm = () => {
                     render={({ field: { value } }) => (
                         <TouchableWithoutFeedback onPress={() => {
                             Keyboard.dismiss();
-                            showDatePicker((event, date) => {
-                                if (event.type === "set")
-                                    setValue("paymentDate", formatDate(date));
+                            showDatePicker({
+                                date: getDateValueOf(value, { format: DATE_FORMAT }),
+                                onChange: (event, date) => {
+                                    if (event.type === "set")
+                                        setValue("paymentDate", formatDate(date));
+                                }
                             });
                         }}>
                             <View>
@@ -196,9 +202,12 @@ const collectionForm = () => {
                             render={({ field: { value } }) => (
                                 <TouchableWithoutFeedback onPress={() => {
                                     Keyboard.dismiss();
-                                    showDatePicker((event, date) => {
-                                        if (event.type === "set")
-                                            setValue("chequeDate", formatDate(date));
+                                    showDatePicker({
+                                        date: getDateValueOf(value, { format: DATE_FORMAT }),
+                                        onChange: (event, date) => {
+                                            if (event.type === "set")
+                                                setValue("chequeDate", formatDate(date));
+                                        }
                                     });
                                 }}>
                                     <View>
