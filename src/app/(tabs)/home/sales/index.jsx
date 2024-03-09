@@ -7,6 +7,9 @@ import { useQuery, useRealm } from "@realm/react";
 import { ROUTES } from "src/common/common";
 import SalesInvoiceCard from "src/components/SalesInvoiceCard";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
+import ownUseList from "src/store/listStore";
+
+const useQueryList = ownUseList();
 
 const salesPage = () => {
     const navigation = useNavigation();
@@ -14,15 +17,41 @@ const salesPage = () => {
 
     const [searchKey, setSearchKey] = useState("");
     const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
+    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
 
-    const salesInvoices = useQuery("salesInvoices", (col) => {
-        return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
-    }, [searchKey]);
-    const fetchMoreData = () => { };
 
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: "Sales Invoices" });
     }, [navigation]);
+
+    useEffect(() => {
+        resetCounter();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
+
+    // const salesInvoices = useQuery("salesInvoices", (col) => {
+    //     return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
+    // }, [searchKey]);
+    const getRecords = (searchKey) => {
+        try {
+            let result = realm.objects("salesInvoices").filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey)
+                .sorted("dateOfSI").slice((counter - 1) * limit, counter * limit);
+            if (!result.length) setIsEnd(true);
+            nextCounter();
+            return Array.from(result) || [];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    };
+
+    const fetchMoreData = () => {
+        if (isEnd) return console.info("End of record");
+        const nextResult = getRecords(searchKey);
+        addToDataList(nextResult);
+    };
 
 
     const getSalesInvoiceDetails = (item) => {
@@ -34,7 +63,7 @@ const salesPage = () => {
             delete customer._id;
             setSelectedInvoice({ ...customer, ...salesInvoice, products: siProducts });
         }
-    }
+    };
 
     return (
         <View className="flex-1 mb-5">
@@ -48,7 +77,7 @@ const salesPage = () => {
                 />
                 <FlatList
                     className="w-full"
-                    data={salesInvoices}
+                    data={dataList}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
                         <SalesInvoiceCard data={item} onEdit={() => router.push({ pathname: ROUTES.SALES_INVOICE_DETAILS, params: item })} enableButtons={false} onSelect={() => {
@@ -58,7 +87,7 @@ const salesPage = () => {
                     )}
                     onEndReached={fetchMoreData}
                     onEndReachedThreshold={0.1}
-                    />
+                />
             </View>
 
             <TouchableOpacity
