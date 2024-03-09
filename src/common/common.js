@@ -60,7 +60,7 @@ export const formatDate = (date, options = { format: DATE_FORMAT }) => {
 export const getDateValueOf = (date, options = { format: "" }) => {
     if (!date) return "";
     if (options.format)
-        return moment(date, options.for).valueOf();
+        return moment(date, options.format).valueOf();
     return moment(date).valueOf();
 };
 
