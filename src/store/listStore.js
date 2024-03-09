@@ -1,6 +1,8 @@
 import { QUERY_LIMIT } from "src/common/common";
 import { create } from "zustand";
 
+const OWNERS = {};
+
 const ownUseList = () => {
     return create((set) => {
         return {
@@ -30,6 +32,15 @@ const ownUseList = () => {
         };
     });
 };
+
 // const useQueryList = ownUseList;
 // export default useQueryList;
-export default ownUseList;
+// export default ownUseList;
+const useQueryList = (id = "") => {
+    if (typeof id !== "string") throw new Error("ID must be a string.");
+    id = id.toUpperCase().replace(/\s/g, "");
+    if (!OWNERS[id])
+        OWNERS[id] = ownUseList;
+    return OWNERS[id];
+};
+export default useQueryList;

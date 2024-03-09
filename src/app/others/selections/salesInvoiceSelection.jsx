@@ -9,9 +9,7 @@ import { ROUTES } from "@common/common";
 import useSelection from "@store/selectionStore";
 import InvoiceCard from "@components/InvoiceCard";
 import { customHeaderBackButton } from "src/common/common";
-import ownUseList from "src/store/listStore";
-
-const useQueryList = ownUseList();
+// import useInvoice from "src/store/invoiceStore";
 
 const salesInvoiceSelection = () => {
     const navigation = useNavigation();
@@ -20,7 +18,7 @@ const salesInvoiceSelection = () => {
     const params = route.params || {};
 
     const { selections, addToSelection, removeToSelection, resetSelection } = useSelection();
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useInvoice();
 
     const [searchKey, setSearchKey] = useState("");
 
@@ -42,34 +40,34 @@ const salesInvoiceSelection = () => {
         });
     }, [navigation]);
 
-    // const salesInvoices = useQuery("salesInvoices", (col) => {
-    //     return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");
-    // }, [searchKey]);
+    const dataList = useQuery("salesInvoices", (col) => {
+        return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");
+    }, [searchKey]);
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
-    const getRecords = (searchKey) => {
-        try {
-            let result = realm.objects("salesInvoices").filtered("invoiceNo BEGINSWITH[c] $0", searchKey)
-                .sorted("dateOfSI").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         let result = realm.objects("salesInvoices").filtered("invoiceNo BEGINSWITH[c] $0", searchKey)
+    //             .sorted("dateOfSI").slice((counter - 1) * limit, counter * limit);
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return Array.from(result) || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
+    // const fetchMoreData = () => {
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult);
+    // };
 
     return (
         <View className="m-2 mb-3">
@@ -112,8 +110,8 @@ const salesInvoiceSelection = () => {
                         }} />
                     );
                 }}
-                onEndReached={fetchMoreData}
-                onEndReachedThreshold={0.1}
+            // onEndReached={fetchMoreData}
+            // onEndReachedThreshold={0.1}
             />
 
         </View>

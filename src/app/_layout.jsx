@@ -12,11 +12,11 @@ import { OpenRealmBehaviorType, OpenRealmTimeOutBehavior } from "realm";
 import { ActivityIndicator, Text, View } from "react-native";
 
 const AppLayout = () => {
-  const realmAccessBehavior = {
-    type: OpenRealmBehaviorType.DownloadBeforeOpen,
-    timeOutBehavior: OpenRealmTimeOutBehavior.OpenLocalRealm,
-    timeOut: 1000,
-  };
+    const realmAccessBehavior = {
+        type: OpenRealmBehaviorType.DownloadBeforeOpen,
+        timeOutBehavior: OpenRealmTimeOutBehavior.OpenLocalRealm,
+        timeOut: 3000,
+    };
     return (
         <AppProvider id="app-collection-vgocb">
             <UserProvider fallback={LoginComponent}>
@@ -29,27 +29,27 @@ const AppLayout = () => {
                         onError: console.error
                     }}
                 >
-                <Stack screenOptions={{ headerShown: false }} />
+                    <Stack screenOptions={{ headerShown: false }} />
                 </RealmProvider>
             </UserProvider>
         </AppProvider>
-  )
-}
+    );
+};
 
 const LoginComponent = () => {
     const { logInWithAnonymous, result } = useAuth();
     useEffect(() => {
         logInWithAnonymous();
-    }, [])
+    }, []);
     return (
-    <View className="flex h-full w-full items-center justify-center">
-        {!result.error && <Text>Please Continue</Text>}
-        <View>
-            {result.pending && <ActivityIndicator />}
-            {result.error && JSON.stringify(result.error)}
+        <View className="flex h-full w-full items-center justify-center">
+            {!result.error && <Text>Please Continue</Text>}
+            <View>
+                {result.pending && <ActivityIndicator />}
+                {result.error && JSON.stringify(result.error)}
+            </View>
         </View>
-    </View>
-  );
+    );
 };
 
-export default AppLayout
+export default AppLayout;

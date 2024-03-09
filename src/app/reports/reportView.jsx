@@ -7,6 +7,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { REPORT_TYPE, formatAmount, formatDate, isMOPCheque } from "src/common/common";
 import CardData from "src/components/CardData";
 
+
 const reportView = () => {
     const navigation = useNavigation();
     const realm = useRealm();

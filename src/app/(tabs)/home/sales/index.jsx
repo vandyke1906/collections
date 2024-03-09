@@ -7,9 +7,8 @@ import { useQuery, useRealm } from "@realm/react";
 import { ROUTES } from "src/common/common";
 import SalesInvoiceCard from "src/components/SalesInvoiceCard";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
-import ownUseList from "src/store/listStore";
+// import useInvoice from "src/store/invoiceStore";
 
-const useQueryList = ownUseList();
 
 const salesPage = () => {
     const navigation = useNavigation();
@@ -17,42 +16,42 @@ const salesPage = () => {
 
     const [searchKey, setSearchKey] = useState("");
     const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useInvoice();
 
+
+    const dataList = useQuery("salesInvoices", (col) => {
+        return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
+    }, [searchKey]);
 
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: "Sales Invoices" });
     }, [navigation]);
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
 
-    // const salesInvoices = useQuery("salesInvoices", (col) => {
-    //     return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
-    // }, [searchKey]);
-    const getRecords = (searchKey) => {
-        try {
-            let result = realm.objects("salesInvoices").filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey)
-                .sorted("dateOfSI").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         let result = realm.objects("salesInvoices").filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey)
+    //             .sorted("dateOfSI").slice((counter - 1) * limit, counter * limit);
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return Array.from(result) || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
-
+    // const fetchMoreData = () => {
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult);
+    // };
 
     const getSalesInvoiceDetails = (item) => {
         const salesInvoice = realm.objectForPrimaryKey("salesInvoices", item._id);
@@ -85,8 +84,8 @@ const salesPage = () => {
                             router.push(ROUTES.SALES_INVOICE_DETAILS);
                         }} />
                     )}
-                    onEndReached={fetchMoreData}
-                    onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

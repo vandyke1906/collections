@@ -1,50 +1,74 @@
 import { router } from "expo-router";
 import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { useQuery } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "src/common/common";
 import Product from "src/components/Product";
-import { useRealm } from "@realm/react";
+import { useRealm, useQuery } from "@realm/react";
 import moment from "moment";
-import ownUseList from "src/store/listStore";
-
-const useQueryList = ownUseList();
+// import useProduct from "src/store/productStore";
 
 const ProductPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useProduct();
 
-    // const products = useQuery("products", (col) => {
-    //     return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
-    // }, [searchKey]);
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
+    const dataList = useQuery("products", (col) => {
+        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("indexedName");
+    }, [searchKey]);
 
-    const getRecords = (searchKey) => {
-        console.info({ start: (counter - 1) * limit, end: counter * limit });
-        try {
-            let result = realm.objects("products").filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
-                .sorted("indexedName").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         const products = realm.objects("products");
+    //         products.removeAllListeners();
+    //         products.addListener((coll, changes) => {
+    //             console.info({ coll, changes });
+    //             // Handle deleted Dog objects
+    //             changes.deletions.forEach((index) => {
+    //                 console.log(`Looks like Dog #${index} has left the realm.`);
+    //             });
+    //             // Handle newly added Dog objects
+    //             changes.insertions.forEach((index) => {
+    //                 const insertedDog = coll[index];
+    //                 console.log(`Welcome our new friend, ${insertedDog.name}!`);
+    //             });
+    //             // Handle Dog objects that were modified
+    //             changes.newModifications.forEach((index) => {
+    //                 const modifiedDog = coll[index];
+    //                 console.log(`Hey ${modifiedDog.name}, you look different!`);
+    //             });
+    //             // Handle Dog objects that were modified
+    //             changes.oldModifications.forEach((index) => {
+    //                 const modifiedDog = coll[index];
+    //                 console.log(`Old Modif ${modifiedDog.name}, you look different!`);
+    //             });
+    //         });
+
+    //         let result = products.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
+    //             .sorted("indexedName").slice((counter - 1) * limit, counter * limit);
+
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return result || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
+
+    // const fetchMoreData = () => {
+    //     console.info("fetch data");
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult, { isArray: true, checkBeforeAdd: true });
+    // };
 
     return (
         <View className="flex-1 mb-5">
@@ -90,8 +114,8 @@ const ProductPage = () => {
                             }}
                         />
                     )}
-                    onEndReached={fetchMoreData}
-                    onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

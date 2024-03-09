@@ -8,9 +8,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Product from "src/components/Product";
 import { ROUTES, customHeaderBackButton } from "src/common/common";
 import useSelection from "src/store/selectionStore";
-import ownUseList from "src/store/listStore";
-
-const useQueryList = ownUseList();
+// import useProduct from "src/store/productStore";
 
 
 const customerSelection = () => {
@@ -20,7 +18,7 @@ const customerSelection = () => {
     const params = route.params || {};
 
     const { selections, addToSelection, removeToSelection } = useSelection();
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useProduct();
 
     const [searchKey, setSearchKey] = useState("");
 
@@ -42,34 +40,34 @@ const customerSelection = () => {
         });
     }, [navigation]);
 
-    // const customers = useQuery("products", (col) => {
-    //     return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
-    // }, [searchKey]);
+    const dataList = useQuery("products", (col) => {
+        return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
+    }, [searchKey]);
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
-    const getRecords = (searchKey) => {
-        try {
-            let result = realm.objects("products").filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
-                .sorted("name").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         let result = realm.objects("products").filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
+    //             .sorted("name").slice((counter - 1) * limit, counter * limit);
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return Array.from(result) || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
+    // const fetchMoreData = () => {
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult);
+    // };
 
     return (
         <View className="m-2 mb-3 h-full">
@@ -106,8 +104,8 @@ const customerSelection = () => {
                         }} />
                     );
                 }}
-                onEndReached={fetchMoreData}
-                onEndReachedThreshold={0.1}
+            // onEndReached={fetchMoreData}
+            // onEndReachedThreshold={0.1}
             />
 
 

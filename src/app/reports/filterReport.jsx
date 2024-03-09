@@ -28,7 +28,6 @@ const filterReport = () => {
     } = useReportStore();
     const { selections, resetSelection, setSelections } = useSelection();
 
-
     useEffect(() => {
         resetReportData();
     }, []);

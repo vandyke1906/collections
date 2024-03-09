@@ -6,9 +6,7 @@ import { useQuery, useRealm } from "@realm/react";
 import { ROUTES } from "src/common/common";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 import CollectionCard from "src/components/CollectionCard";
-import ownUseList from "src/store/listStore";
-
-const useQueryList = ownUseList();
+// import useCollection from "src/store/collectionStore";
 
 const collections = () => {
     const navigation = useNavigation();
@@ -18,41 +16,41 @@ const collections = () => {
     const [invoiceNumber, setInvoiceNumber] = useState("");
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
     const setSelectedInvoice = useSalesInvoiceStore(state => state.setSelected);
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useCollection();
 
 
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: "Collections" });
     }, [navigation]);
 
-    // const collections = useQuery("collections", (col) => {
-    //     return col.filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey).sorted("corDate");
-    // }, [searchKey]);
+    const dataList = useQuery("collections", (col) => {
+        return col.filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey).sorted("corDate");
+    }, [searchKey]);
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
-    const getRecords = (searchKey) => {
-        try {
-            let result = realm.objects("collections").filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey)
-                .sorted("corDate").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         let result = realm.objects("collections").filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey)
+    //             .sorted("corDate").slice((counter - 1) * limit, counter * limit);
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return Array.from(result) || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
+    // const fetchMoreData = () => {
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult);
+    // };
 
     const getSalesInvoiceDetails = ({ _id, invoiceNo = "" }) => {
         let salesInvoice;
@@ -133,8 +131,8 @@ const collections = () => {
                             router.push(ROUTES.SALES_INVOICE_DETAILS);
                         }} />
                     )}
-                    onEndReached={fetchMoreData}
-                    onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

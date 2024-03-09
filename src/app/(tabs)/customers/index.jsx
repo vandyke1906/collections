@@ -6,39 +6,41 @@ import { useQuery, useRealm } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Customer from "src/components/Customer";
 import { ROUTES } from "src/common/common";
-import ownUseList from "src/store/listStore";
-
-const useQueryList = ownUseList();
+// import useCustomer from "src/store/customerStore";
 
 const CustomerPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useCustomer();
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
+    const dataList = useQuery("customers", (coll) => {
+        return coll.filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("indexedName");
+    }, [searchKey]);
 
-    const getRecords = (searchKey) => {
-        try {
-            let result = realm.objects("customers").filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
-                .sorted("indexedName").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         let result = realm.objects("customers").filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
+    //             .sorted("indexedName").slice((counter - 1) * limit, counter * limit);
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return Array.from(result) || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
+
+    // const fetchMoreData = () => {
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult);
+    // };
 
     return (
         <View className="flex-1 mb-5">
@@ -85,8 +87,8 @@ const CustomerPage = () => {
                             }}
                         />
                     )}
-                    onEndReached={fetchMoreData}
-                    onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

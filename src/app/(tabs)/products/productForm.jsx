@@ -6,6 +6,7 @@ import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRoute } from '@react-navigation/native';
 import { ROUTES } from "src/common/common";
+import useProduct from "src/store/productStore";
 
 const productForm = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -15,6 +16,8 @@ const productForm = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
+
+    const { addToDataList } = useProduct();
 
     useEffect(() => {
         navigation.setOptions({
@@ -69,10 +72,14 @@ const productForm = () => {
                         product.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                         isNew = false;
                     }
+                } else {
+                    data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                 }
 
-                if (isNew)
-                    realm.create("products", data);
+                if (isNew) {
+                    const productObj = realm.create("products", data);
+                    addToDataList(productObj, { isFirst: true, checkBeforeAdd: true });
+                }
 
                 ToastAndroid.show(`Product ${isNew ? "created" : "updated"}.`, ToastAndroid.SHORT);
                 navigation.goBack();

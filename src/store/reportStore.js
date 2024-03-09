@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { REPORT_TYPE } from "src/common/common";
+import { QUERY_LIMIT, REPORT_TYPE } from "src/common/common";
 import moment from "moment";
 
 const useReportStore = create((set) => {
@@ -12,6 +12,12 @@ const useReportStore = create((set) => {
         customers: [],
         salesInvoices: [],
         summary: {},
+        isEnd: false,
+        counter: 1,
+        limit: QUERY_LIMIT,
+        resetCounter: () => set(() => ({ counter: 1, isEnd: false })),
+        nextCounter: () => set((state) => ({ counter: state.counter + 1 })),
+        setIsEnd: (isEnd) => set(() => ({ isEnd: !!isEnd })),
         resetReportData: () => set(() => {
             return {
                 reportType: Object.values(REPORT_TYPE)[0],
@@ -21,7 +27,9 @@ const useReportStore = create((set) => {
                 products: [],
                 customers: [],
                 salesInvoices: [],
-                summary: {}
+                summary: {},
+                isEnd: false,
+                counter: 1
             };
         }),
         setSummary: (data = {}) => set((state) => {

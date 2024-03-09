@@ -57,6 +57,8 @@ const customerForm = () => {
                         customer.address = data.address.trim();
                         customer.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                         isNew = false;
+                    } else {
+                        data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                     }
                 }
 

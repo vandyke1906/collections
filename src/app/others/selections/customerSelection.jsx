@@ -8,9 +8,7 @@ import moment from "moment";
 import Customer from "src/components/Customer";
 import { ROUTES, customHeaderBackButton } from "src/common/common";
 import useSelection from "src/store/selectionStore";
-import ownUseList from "src/store/listStore";
-
-const useQueryList = ownUseList();
+// import useCustomer from "src/store/customerStore";
 
 const customerSelection = () => {
     const navigation = useNavigation();
@@ -19,7 +17,7 @@ const customerSelection = () => {
     const params = route.params || {};
 
     const { selections, addToSelection, removeToSelection } = useSelection();
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useCustomer();
 
     const [searchKey, setSearchKey] = useState("");
 
@@ -41,34 +39,34 @@ const customerSelection = () => {
         });
     }, [navigation]);
 
-    // const customers = useQuery("customers", (col) => {
-    //     return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
-    // }, [searchKey]);
+    const dataList = useQuery("customers", (col) => {
+        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
+    }, [searchKey]);
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
-    const getRecords = (searchKey) => {
-        try {
-            let result = realm.objects("customers").filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
-                .sorted("name").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         let result = realm.objects("customers").filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
+    //             .sorted("name").slice((counter - 1) * limit, counter * limit);
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return Array.from(result) || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
+    // const fetchMoreData = () => {
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult);
+    // };
 
     return (
         <View className="m-2 h-full mb-5">
@@ -105,8 +103,8 @@ const customerSelection = () => {
                         }} />
                     );
                 }}
-                onEndReached={fetchMoreData}
-                onEndReachedThreshold={0.1}
+            // onEndReached={fetchMoreData}
+            // onEndReachedThreshold={0.1}
             />
 
             {!!+params?.allowAdd && (

@@ -8,9 +8,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSelection from "@store/selectionStore";
 import GroupCard from "src/components/GroupCard";
 import { customHeaderBackButton } from "src/common/common";
-import ownUseList from "src/store/listStore";
-
-const useQueryList = ownUseList();
+// import useGroup from "src/store/groupStore";
 
 const groupSelection = () => {
     const navigation = useNavigation();
@@ -19,7 +17,7 @@ const groupSelection = () => {
     const params = route.params || {};
 
     const { selections, addToSelection, removeToSelection } = useSelection();
-    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
+    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useGroup();
 
     const [searchKey, setSearchKey] = useState("");
 
@@ -41,34 +39,35 @@ const groupSelection = () => {
         });
     }, [navigation]);
 
-    // const groupList = useQuery("groups", (col) => {
-    //     return col.filtered("_id CONTAINS[c] $0", searchKey);
-    // }, [searchKey]);
+    const groupList = useQuery("groups", (col) => {
+        return col.filtered("_id CONTAINS[c] $0", searchKey).sorted("_id");
+    }, [searchKey]);
 
-    useEffect(() => {
-        resetCounter();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
 
-    const getRecords = (searchKey) => {
-        try {
-            let result = realm.objects("groups").filtered("_id CONTAINS[c] $0", searchKey)
-                .sorted("_id").slice((counter - 1) * limit, counter * limit);
-            if (!result.length) setIsEnd(true);
-            nextCounter();
-            return Array.from(result) || [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+    // useEffect(() => {
+    //     resetCounter();
+    //     const result = getRecords(searchKey);
+    //     setDataList(result);
+    // }, [realm, searchKey]);
 
-    const fetchMoreData = () => {
-        if (isEnd) return console.info("End of record");
-        const nextResult = getRecords(searchKey);
-        addToDataList(nextResult);
-    };
+    // const getRecords = (searchKey) => {
+    //     try {
+    //         let result = realm.objects("groups").filtered("_id CONTAINS[c] $0", searchKey)
+    //             .sorted("_id").slice((counter - 1) * limit, counter * limit);
+    //         if (!result.length) setIsEnd(true);
+    //         nextCounter();
+    //         return Array.from(result) || [];
+    //     } catch (error) {
+    //         console.error(error);
+    //         return [];
+    //     }
+    // };
+
+    // const fetchMoreData = () => {
+    //     if (isEnd) return console.info("End of record");
+    //     const nextResult = getRecords(searchKey);
+    //     addToDataList(nextResult, { isArray: true, checkBeforeAdd: true });
+    // };
 
     const showAddConfirmation = () => {
         Alert.alert("Add Group", `Do you want to add ${searchKey.toUpperCase()}?`, [
@@ -80,7 +79,8 @@ const groupSelection = () => {
                     realm.write(() => {
                         try {
                             const newGroup = searchKey.trim().toUpperCase();
-                            realm.create("groups", { _id: newGroup });
+                            const group = realm.create("groups", { _id: newGroup });
+                            addToDataList(group, { isFirst: true, checkBeforeAdd: true });
                             ToastAndroid.show(`Group ${newGroup} added.`, ToastAndroid.SHORT);
                         } catch (error) {
                             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
@@ -132,8 +132,8 @@ const groupSelection = () => {
                         }} />
                     );
                 }}
-                onEndReached={fetchMoreData}
-                onEndReachedThreshold={0.1}
+            // onEndReached={fetchMoreData}
+            // onEndReachedThreshold={0.1}
             />
         </View>
     );
