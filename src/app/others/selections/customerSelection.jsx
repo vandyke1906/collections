@@ -1,24 +1,29 @@
-import { View, FlatList, TextInput, TouchableOpacity, Text, Pressable } from 'react-native'
-import React from 'react'
+import { View, FlatList, TextInput, TouchableOpacity, Text, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { FontAwesome } from "@expo/vector-icons";
 import { useRoute } from '@react-navigation/native';
 import { router, useNavigation } from "expo-router";
-import { useQuery } from "@realm/react";
+import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
 import Customer from "src/components/Customer";
 import { ROUTES, customHeaderBackButton } from "src/common/common";
 import useSelection from "src/store/selectionStore";
+import ownUseList from "src/store/listStore";
+
+const useQueryList = ownUseList();
 
 const customerSelection = () => {
     const navigation = useNavigation();
+    const realm = useRealm();
     const route = useRoute();
     const params = route.params || {};
 
     const { selections, addToSelection, removeToSelection } = useSelection();
+    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
 
-    const [searchKey, setSearchKey] = React.useState("");
+    const [searchKey, setSearchKey] = useState("");
 
-    React.useEffect(() => {
+    useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             title: "Select Customer",
@@ -36,11 +41,34 @@ const customerSelection = () => {
         });
     }, [navigation]);
 
-    const customers = useQuery("customers", (col) => {
-        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
-    }, [searchKey]);
+    // const customers = useQuery("customers", (col) => {
+    //     return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
+    // }, [searchKey]);
 
-    const fetchMoreData = () => { };
+    useEffect(() => {
+        resetCounter();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
+    const getRecords = (searchKey) => {
+        try {
+            let result = realm.objects("customers").filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
+                .sorted("name").slice((counter - 1) * limit, counter * limit);
+            if (!result.length) setIsEnd(true);
+            nextCounter();
+            return Array.from(result) || [];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    };
+
+    const fetchMoreData = () => {
+        if (isEnd) return console.info("End of record");
+        const nextResult = getRecords(searchKey);
+        addToDataList(nextResult);
+    };
 
     return (
         <View className="m-2 h-full mb-5">
@@ -57,12 +85,12 @@ const customerSelection = () => {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 className="w-full"
-                data={customers}
+                data={dataList}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     const isExist = !!selections.find(sel => sel._id === item._id);
                     return (
-                        <Customer data={item} enableButtons={false}  isActive={isExist} onSelect={() => {
+                        <Customer data={item} enableButtons={false} isActive={isExist} onSelect={() => {
                             const items = {
                                 key: moment().valueOf(),
                                 type: "customer",
@@ -84,7 +112,7 @@ const customerSelection = () => {
             {!!+params?.allowAdd && (
                 <TouchableOpacity
                     className="bg-blue-700 w-14 h-14 rounded-full flex justify-center items-center"
-                    style={{ position: "absolute", bottom: 30, right: 15  }}
+                    style={{ position: "absolute", bottom: 30, right: 15 }}
                     onPress={() => {
                         router.push({ pathname: ROUTES.CUSTOMER_FORM });
                     }}
@@ -94,7 +122,7 @@ const customerSelection = () => {
             )}
 
         </View>
-    )
-}
+    );
+};
 
-export default customerSelection
+export default customerSelection;

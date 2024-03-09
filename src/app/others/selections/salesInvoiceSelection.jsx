@@ -1,24 +1,30 @@
-import { View, FlatList, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { router, useNavigation } from "expo-router";
-import { useQuery } from "@realm/react";
+import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "@common/common";
 import useSelection from "@store/selectionStore";
 import InvoiceCard from "@components/InvoiceCard";
 import { customHeaderBackButton } from "src/common/common";
+import ownUseList from "src/store/listStore";
+
+const useQueryList = ownUseList();
 
 const salesInvoiceSelection = () => {
     const navigation = useNavigation();
+    const realm = useRealm();
     const route = useRoute();
     const params = route.params || {};
+
     const { selections, addToSelection, removeToSelection, resetSelection } = useSelection();
+    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
 
-    const [searchKey, setSearchKey] = React.useState("");
+    const [searchKey, setSearchKey] = useState("");
 
-    React.useEffect(() => {
+    useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             title: "Select Sales Invoice",
@@ -36,11 +42,34 @@ const salesInvoiceSelection = () => {
         });
     }, [navigation]);
 
-    const salesInvoices = useQuery("salesInvoices", (col) => {
-        return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");
-    }, [searchKey]);
+    // const salesInvoices = useQuery("salesInvoices", (col) => {
+    //     return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");
+    // }, [searchKey]);
 
-    const fetchMoreData = () => { };
+    useEffect(() => {
+        resetCounter();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
+    const getRecords = (searchKey) => {
+        try {
+            let result = realm.objects("salesInvoices").filtered("invoiceNo BEGINSWITH[c] $0", searchKey)
+                .sorted("dateOfSI").slice((counter - 1) * limit, counter * limit);
+            if (!result.length) setIsEnd(true);
+            nextCounter();
+            return Array.from(result) || [];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    };
+
+    const fetchMoreData = () => {
+        if (isEnd) return console.info("End of record");
+        const nextResult = getRecords(searchKey);
+        addToDataList(nextResult);
+    };
 
     return (
         <View className="m-2 mb-3">
@@ -63,7 +92,7 @@ const salesInvoiceSelection = () => {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 className="w-full"
-                data={salesInvoices}
+                data={dataList}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     const isExist = !!selections.find(sel => sel._id === item._id);
@@ -88,7 +117,7 @@ const salesInvoiceSelection = () => {
             />
 
         </View>
-    )
-}
+    );
+};
 
-export default salesInvoiceSelection
+export default salesInvoiceSelection;

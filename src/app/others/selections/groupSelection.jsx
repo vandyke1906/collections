@@ -1,5 +1,5 @@
 import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { router, useNavigation } from "expo-router";
 import { useQuery, useRealm } from "@realm/react";
@@ -8,17 +8,22 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSelection from "@store/selectionStore";
 import GroupCard from "src/components/GroupCard";
 import { customHeaderBackButton } from "src/common/common";
+import ownUseList from "src/store/listStore";
+
+const useQueryList = ownUseList();
 
 const groupSelection = () => {
     const navigation = useNavigation();
     const realm = useRealm();
     const route = useRoute();
-    const { selections, addToSelection, removeToSelection } = useSelection();
     const params = route.params || {};
 
-    const [searchKey, setSearchKey] = React.useState("");
+    const { selections, addToSelection, removeToSelection } = useSelection();
+    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
 
-    React.useEffect(() => {
+    const [searchKey, setSearchKey] = useState("");
+
+    useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             title: "Select Group",
@@ -36,11 +41,34 @@ const groupSelection = () => {
         });
     }, [navigation]);
 
-    const groupList = useQuery("groups", (col) => {
-        return col.filtered("_id CONTAINS[c] $0", searchKey);
-    }, [searchKey]);
+    // const groupList = useQuery("groups", (col) => {
+    //     return col.filtered("_id CONTAINS[c] $0", searchKey);
+    // }, [searchKey]);
 
-    const fetchMoreData = () => { };
+    useEffect(() => {
+        resetCounter();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
+    const getRecords = (searchKey) => {
+        try {
+            let result = realm.objects("groups").filtered("_id CONTAINS[c] $0", searchKey)
+                .sorted("_id").slice((counter - 1) * limit, counter * limit);
+            if (!result.length) setIsEnd(true);
+            nextCounter();
+            return Array.from(result) || [];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    };
+
+    const fetchMoreData = () => {
+        if (isEnd) return console.info("End of record");
+        const nextResult = getRecords(searchKey);
+        addToDataList(nextResult);
+    };
 
     const showAddConfirmation = () => {
         Alert.alert("Add Group", `Do you want to add ${searchKey.toUpperCase()}?`, [
@@ -83,7 +111,7 @@ const groupSelection = () => {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 className="w-full"
-                data={groupList}
+                data={dataList}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     const group = item._id;

@@ -1,24 +1,30 @@
 import { View, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { router, useNavigation } from "expo-router";
-import { useQuery } from "@realm/react";
+import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
 import { useRoute } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Product from "src/components/Product";
 import { ROUTES, customHeaderBackButton } from "src/common/common";
 import useSelection from "src/store/selectionStore";
+import ownUseList from "src/store/listStore";
+
+const useQueryList = ownUseList();
 
 
 const customerSelection = () => {
     const navigation = useNavigation();
+    const realm = useRealm();
     const route = useRoute();
     const params = route.params || {};
+
     const { selections, addToSelection, removeToSelection } = useSelection();
+    const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useQueryList();
 
-    const [searchKey, setSearchKey] = React.useState("");
+    const [searchKey, setSearchKey] = useState("");
 
-    React.useEffect(() => {
+    useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             title: "Select Product",
@@ -36,11 +42,35 @@ const customerSelection = () => {
         });
     }, [navigation]);
 
-    const customers = useQuery("products", (col) => {
-        return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
-    }, [searchKey]);
+    // const customers = useQuery("products", (col) => {
+    //     return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");
+    // }, [searchKey]);
 
-    const fetchMoreData = () => { };
+    useEffect(() => {
+        resetCounter();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
+    const getRecords = (searchKey) => {
+        try {
+            let result = realm.objects("products").filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
+                .sorted("name").slice((counter - 1) * limit, counter * limit);
+            if (!result.length) setIsEnd(true);
+            nextCounter();
+            return Array.from(result) || [];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    };
+
+    const fetchMoreData = () => {
+        if (isEnd) return console.info("End of record");
+        const nextResult = getRecords(searchKey);
+        addToDataList(nextResult);
+    };
+
     return (
         <View className="m-2 mb-3 h-full">
             <View className="relative">
@@ -54,7 +84,7 @@ const customerSelection = () => {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 className="w-full"
-                data={customers}
+                data={dataList}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     const productId = item._id;
