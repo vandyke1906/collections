@@ -13,6 +13,13 @@ const CustomerPage = () => {
     const [searchKey, setSearchKey] = useState("");
     const { dataList, counter, limit, nextCounter, setDataList, addToDataList, clearDataList, isEnd, setIsEnd } = useQueryList();
 
+    useEffect(() => {
+        setIsEnd(false);
+        clearDataList();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
     const getRecords = (searchKey) => {
         try {
             let result = realm.objects("customers").filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
@@ -25,13 +32,6 @@ const CustomerPage = () => {
             return [];
         }
     };
-
-    useEffect(() => {
-        setIsEnd(false);
-        clearDataList();
-        const result = getRecords(searchKey);
-        setDataList(result);
-    }, [realm, searchKey]);
 
     const fetchMoreData = () => {
         if (isEnd) return console.info("End of record");

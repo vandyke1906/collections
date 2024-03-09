@@ -1,21 +1,49 @@
 import { router } from "expo-router";
-import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert } from "react-native";
-import { useState } from "react";
+import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert, Pressable } from "react-native";
+import { useEffect, useState } from "react";
 import { useQuery } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "src/common/common";
 import Product from "src/components/Product";
 import { useRealm } from "@realm/react";
 import moment from "moment";
+import useQueryList from "src/store/listStore";
 
 const ProductPage = () => {
     const realm = useRealm();
-
     const [searchKey, setSearchKey] = useState("");
-    const products = useQuery("products", (col) => {
-        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
-    }, [searchKey]);
-    const fetchMoreData = () => { };
+    const { dataList, counter, limit, nextCounter, setDataList, addToDataList, clearDataList, isEnd, setIsEnd } = useQueryList();
+
+    // const products = useQuery("products", (col) => {
+    //     return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
+    // }, [searchKey]);
+
+    useEffect(() => {
+        setIsEnd(false);
+        clearDataList();
+        const result = getRecords(searchKey);
+        setDataList(result);
+    }, [realm, searchKey]);
+
+    const getRecords = (searchKey) => {
+        try {
+            let result = realm.objects("products").filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
+                .sorted("indexedName", false).slice((counter - 1) * limit, counter * limit);
+            if (!result.length) setIsEnd(true);
+            nextCounter();
+            return Array.from(result) || [];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    };
+
+    const fetchMoreData = () => {
+        if (isEnd) return console.info("End of record");
+        const nextResult = getRecords(searchKey);
+        addToDataList(nextResult);
+    };
+
     return (
         <View className="flex-1 mb-5">
             <View className="m-2">
@@ -28,7 +56,7 @@ const ProductPage = () => {
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     className="w-full"
-                    data={products}
+                    data={dataList}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
                         <Product
