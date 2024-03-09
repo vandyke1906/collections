@@ -38,7 +38,7 @@ const customerSelection = () => {
                 </TouchableOpacity>
             ),
         });
-    }, [navigation]);
+    }, [navigation, selections]);
 
     const dataList = useQuery("products", (col) => {
         return col.filtered("code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("name");

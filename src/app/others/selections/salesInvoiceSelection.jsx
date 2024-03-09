@@ -38,7 +38,7 @@ const salesInvoiceSelection = () => {
                 </TouchableOpacity>
             ),
         });
-    }, [navigation]);
+    }, [navigation, selections]);
 
     const dataList = useQuery("salesInvoices", (col) => {
         return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");

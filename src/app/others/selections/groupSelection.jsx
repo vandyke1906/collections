@@ -37,9 +37,9 @@ const groupSelection = () => {
                 </TouchableOpacity>
             ),
         });
-    }, [navigation]);
+    }, [navigation, selections]);
 
-    const groupList = useQuery("groups", (col) => {
+    const dataList = useQuery("groups", (col) => {
         return col.filtered("_id CONTAINS[c] $0", searchKey).sorted("_id");
     }, [searchKey]);
 
@@ -100,7 +100,7 @@ const groupSelection = () => {
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
-                {!!+params?.allowAdd && !groupList.length && !!searchKey && (
+                {!!+params?.allowAdd && !dataList.length && !!searchKey && (
                     <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
                         showAddConfirmation();
                     }}>
