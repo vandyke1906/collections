@@ -10,8 +10,6 @@ const ProductSummary = ({ product, data, onSearch }) => {
     let accQty = 0;
     let accAmount = 0;
 
-    console.info(JSON.stringify(data, null, 2));
-
     const [dateFrom, setDateFrom] = useState(0);
     const [dateTo, setDateTo] = useState(0);
 
@@ -26,10 +24,10 @@ const ProductSummary = ({ product, data, onSearch }) => {
                         <Text className="text-xs">SI Date</Text>
                     </View>
                     <View className="flex-1 flex-row items-center justify-center">
-                        <Text className="text-xs">Qty</Text>
+                        <Text className="text-xs">Quantities</Text>
                     </View>
                     <View className="flex-1 flex-row items-center justify-center">
-                        <Text className="text-xs">Amound</Text>
+                        <Text className="text-xs">Total Amount</Text>
                     </View>
                 </View>
 
