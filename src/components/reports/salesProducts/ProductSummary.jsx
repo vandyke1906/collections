@@ -1,17 +1,32 @@
 import { View, Text, ScrollView, Keyboard, Pressable } from 'react-native';
-import React, { useState } from 'react';
-import { DATE_FORMAT, INVOICE_STATUS, formatAmount, formatDate, getDateValueOf, showDatePicker } from "src/common/common";
+import React, { useEffect, useState } from 'react';
+import { DATE_FORMAT, formatAmount, formatDate, getDateValueOf, showDatePicker } from "src/common/common";
 import { TextInput } from "react-native-paper";
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
 
 const ProductSummary = ({ product, data, onSearch }) => {
     const inputClass = "text-sm text-center appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
-    let accQty = 0;
-    let accAmount = 0;
 
     const [dateFrom, setDateFrom] = useState(0);
     const [dateTo, setDateTo] = useState(0);
+    const [accData, setAccData] = useState({ qty: 0, amount: 0 });
+
+    useEffect(() => {
+        let qty = 0;
+        let amount = 0;
+        if (product && data) {
+            for (const item of data) {
+                for (const prod of item.products) {
+                    if (prod.productId === product._id) {
+                        qty += prod.qty;
+                        amount += prod.amount;
+                    }
+                }
+            }
+            setAccData({ qty, amount });
+        }
+    }, [product, data]);
 
     const renderTable = (_data) => {
         return (
@@ -32,14 +47,7 @@ const ProductSummary = ({ product, data, onSearch }) => {
                 </View>
 
                 {(_data || []).map((item, index) => {
-
-                    (item.products || []).forEach((p) => {
-                        if (p.productId === product._id) {
-                            accQty += p.qty;
-                            accAmount += p.amount;
-                        }
-                    });
-
+                    const prod = item.products.find((p) => p.productId === product._id);
                     return (
                         <View key={index} className="flex border border-gray-200 py-1">
                             <View className="items-center justify-center pt-2">
@@ -54,10 +62,10 @@ const ProductSummary = ({ product, data, onSearch }) => {
                                     <Text className="text-xs">{formatDate(item.dateOfSI, { format: "DD-MMM-YYYY" }).toUpperCase()}</Text>
                                 </View>
                                 <View className="flex-1 items-center justify-end">
-                                    <Text className={`text-xs text-gray-90`}>{accQty || 0}</Text>
+                                    <Text className={`text-xs text-gray-90`}>{prod?.qty || 0}</Text>
                                 </View>
                                 <View className="flex-1 items-center justify-end pr-1">
-                                    <Text className={`text-xs text-gray-90`}>{formatAmount(accAmount)}</Text>
+                                    <Text className={`text-xs text-gray-90`}>{formatAmount(prod?.amount || 0)}</Text>
                                 </View>
                             </View>
                         </View>
@@ -71,10 +79,10 @@ const ProductSummary = ({ product, data, onSearch }) => {
                     <View className="flex-1 items-center justify-center">
                     </View>
                     <View className="flex-1 items-center justify-end">
-                        <Text className="text-xs font-bold text-green-900">{accQty}</Text>
+                        <Text className="text-xs font-bold text-green-900">{accData.qty}</Text>
                     </View>
                     <View className="flex-1 items-center justify-end pr-1">
-                        <Text className="text-xs font-bold text-green-900">{formatAmount(accAmount)}</Text>
+                        <Text className="text-xs font-bold text-green-900">{formatAmount(accData.amount)}</Text>
                     </View>
                 </View>
 
