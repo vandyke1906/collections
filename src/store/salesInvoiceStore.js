@@ -5,7 +5,7 @@ const DEFAULT_DETAILS = Object.freeze({ invoiceNo: "", dateOfSI: null, customerI
 const useSalesInvoiceStore = create((set) => {
     const calculateTotalAmount = (_list) => {
         const totalAmount = _list.reduce((acc, current) => {
-            return acc + (current.amount || 0);
+            return acc + (current?.amount || 0);
         }, 0);
         return totalAmount;
     };
@@ -51,12 +51,12 @@ const useSalesInvoiceStore = create((set) => {
         updateProductDetail: (id, data) => set((state) => {
             const productIndex = state.list.findIndex((p) => p._id === id);
             let list = state.list;
-            let { qty, amount } = data;
-            if (qty == null) qty = 1;
-            if (amount == null) amount = 0.00;
+            let { qty, amount } = data || {};
             if (productIndex > -1) {
-                const prevData = list[productIndex];
-                list[productIndex] = { ...prevData, qty, amount };
+                const currentData = list[productIndex];
+                currentData.qty = qty || currentData.qty || 1;
+                currentData.amount = amount || currentData.amount || 0;
+                list[productIndex] = currentData;
             }
             const totalAmount = calculateTotalAmount(list);
             return { list, details: { ...state.details, totalAmount } };

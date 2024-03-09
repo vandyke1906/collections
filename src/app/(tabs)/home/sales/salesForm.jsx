@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRealm } from "@realm/react";
 import { useForm, Controller } from 'react-hook-form';
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
@@ -65,19 +64,25 @@ const salesForm = () => {
 
                 const products = [];
                 let totalAmount = 0;
+                let productHasError = false;
                 for (const product of productList) {
-                    totalAmount += +product.amount;
+                    totalAmount += product.amount || 0;
                     const productData = {
                         productId: product._id,
                         code: product.code || "",
                         name: product.name,
                         unit: product.unit,
-                        qty: +product.qty,
-                        amount: +product.amount,
+                        qty: product.qty || 0,
+                        amount: product.amount || 0,
                         group: product.group
                     };
+
+                    if (!productData.qty || !productData.amount) productHasError = true;
                     products.push(realm.create("salesProducts", productData));
                 }
+                if (productHasError)
+                    throw new Error("Invalid qty/amount on some products.");
+
                 const salesInvoiceData = {
                     customerId: latestDetails.customerId,
                     customerName: latestDetails.customerName,
@@ -244,8 +249,9 @@ const salesForm = () => {
 
                     <Controller
                         control={control}
-                        rules={{ required: false }}
+                        rules={{ required: true }}
                         name="totalAmount"
+                        defaultValue={0}
                         render={({ field: { } }) => (
                             <View>
                                 <Text className="text-slate-500">Total Revenue</Text>
@@ -274,9 +280,8 @@ const salesForm = () => {
                                         updateProductDetail(item._id, { qty: +text });
                                 }}
                                 onAmountChange={(text) => {
-                                    if (text) {
+                                    if (text)
                                         updateProductDetail(item._id, { amount: +text });
-                                    }
                                 }}
                             />
                         ))}
