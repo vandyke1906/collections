@@ -4,7 +4,7 @@ import { useRealm } from "@realm/react";
 import { useNavigation } from "expo-router";
 import useReportStore from "src/store/reportStore";
 import { FontAwesome } from "@expo/vector-icons";
-import { REPORT_TYPE, formatAmount, formatDate, isMOPCheque } from "src/common/common";
+import { REPORT_TYPE, formatAmount, formatDate, isMOPCheque, saveAsFile } from "src/common/common";
 import CardData from "src/components/CardData";
 
 const reportView = () => {
@@ -90,9 +90,10 @@ const reportView = () => {
     }, [reportType]);
 
     useEffect(() => {
+        const isSales = reportType === REPORT_TYPE.SALES;
         navigation.setOptions({
             headerShown: true,
-            title: `${reportType === REPORT_TYPE.SALES ? "Sales" : "Collection"} Report`,
+            title: `${isSales ? "Sales" : "Collection"} Report`,
             headerRight: () => (
                 <TouchableOpacity
                     className="py-3 pl-10 pr-3"
@@ -102,7 +103,19 @@ const reportView = () => {
                             {
                                 text: "Continue",
                                 onPress: () => {
-                                    ToastAndroid.show("Report downloaded", ToastAndroid.SHORT);
+                                    saveAsFile(JSON.stringify(salesInvoices), {
+                                        type: "json",
+                                        filename: isSales ? "sales-report" : "collection-report",
+                                    })
+                                        .then(() => {
+                                            ToastAndroid.show("Report downloaded.", ToastAndroid.SHORT);
+                                        })
+                                        .catch(() => {
+                                            ToastAndroid.show(
+                                                `Failed to download file. ${error.message || error}.`,
+                                                ToastAndroid.SHORT
+                                            );
+                                        });
                                 },
                             },
                         ]);

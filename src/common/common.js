@@ -1,4 +1,12 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import {
+    documentDirectory,
+    writeAsStringAsync,
+    readDirectoryAsync,
+    readAsStringAsync,
+    StorageAccessFramework,
+    EncodingType,
+} from "expo-file-system";
 import { Pressable } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import moment from "moment";
@@ -33,7 +41,7 @@ export const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
 export const MODE_OF_PAYMENT = Object.freeze({
     CASH: "CASH",
     CHEQUE: "CHEQUE",
-    BIR_2307: "BIR-2307"
+    BIR_2307: "BIR-2307",
 });
 
 export const isMOPCheque = (value) => {
@@ -48,11 +56,11 @@ export const REPORT_TYPE = Object.freeze({
 export const formatAmount = (number) => {
     if (!isNaN) return "0.00";
     const options = {
-        style: 'decimal',
+        style: "decimal",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     };
-    return (Number(number)).toLocaleString("en-US", options);
+    return Number(number).toLocaleString("en-US", options);
 };
 
 export const formatDate = (date, options = { format: DATE_FORMAT }) => {
@@ -62,21 +70,20 @@ export const formatDate = (date, options = { format: DATE_FORMAT }) => {
 
 export const getDateValueOf = (date, options = { format: "" }) => {
     if (!date) return "";
-    if (options.format)
-        return moment(date, options.format).valueOf();
+    if (options.format) return moment(date, options.format).valueOf();
     return moment(date).valueOf();
 };
 
-export const showDatePicker = (options = { date: 0, onChange: () => { } }) => {
+export const showDatePicker = (options = { date: 0, onChange: () => {} }) => {
     DateTimePickerAndroid.open({
         value: options.date ? new Date(options.date) : new Date(),
         mode: "date",
         display: "calendar",
-        onChange: typeof options.onChange === "function" ? options.onChange : () => { }
+        onChange: typeof options.onChange === "function" ? options.onChange : () => {},
     });
 };
 
-export const customHeaderBackButton = (onPress = () => { }) => {
+export const customHeaderBackButton = (onPress = () => {}) => {
     return (
         <Pressable className="pr-8" onPress={onPress}>
             <Feather size={24} name="arrow-left" />
@@ -87,5 +94,30 @@ export const customHeaderBackButton = (onPress = () => { }) => {
 export const INVOICE_STATUS = Object.freeze({
     PAID: "PAID",
     UNPAID: "UNPAID",
-    PARTIAL: "PARTIAL"
+    PARTIAL: "PARTIAL",
 });
+
+export const saveAsFile = async (value, options = { type: "text", filename: moment().valueOf() }) => {
+    try {
+        const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+        if (!permissions.granted) throw new Error("Permission denied.");
+        let extn = ".txt";
+        let mimeType = "plain/text";
+        switch (options.type) {
+            case "json":
+                extn = ".json";
+                mimeType = "application/json";
+                break;
+        }
+        // options.filename = `${options.filename}${extn}`;
+        if (typeof value !== "string") throw new Error("Value must be a string.");
+        const fileDir = await StorageAccessFramework.createFileAsync(
+            permissions.directoryUri,
+            options.filename,
+            mimeType
+        );
+        return await writeAsStringAsync(fileDir, value, { encoding: EncodingType.UTF8 });
+    } catch (error) {
+        throw error;
+    }
+};

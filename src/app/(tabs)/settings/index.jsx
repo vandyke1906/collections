@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { EncodingType, StorageAccessFramework } from "expo-file-system";
 import { getDocumentAsync } from "expo-document-picker";
 import { useState } from "react";
