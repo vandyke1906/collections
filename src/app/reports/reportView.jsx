@@ -140,7 +140,7 @@ const reportView = () => {
                 )}
 
                 {!!groups.length && (
-                    <View className="flex flex-row items-center justify-start">
+                    <View className="flex flex-row items-center justify-start flex-wrap">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
                             Groups:{" "}
                         </Text>
@@ -158,7 +158,7 @@ const reportView = () => {
                 )}
 
                 {!!products.length && (
-                    <View className="flex flex-row items-center justify-start">
+                    <View className="flex flex-row items-center justify-start flex-wrap">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
                             Products:{" "}
                         </Text>
@@ -176,7 +176,7 @@ const reportView = () => {
                 )}
 
                 {!!customers.length && (
-                    <View className="flex flex-row items-center justify-start">
+                    <View className="flex flex-row items-center justify-start flex-wrap">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
                             Customers:{" "}
                         </Text>

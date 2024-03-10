@@ -278,14 +278,6 @@ const salesForm = () => {
                                                 pointerEvents="none"
                                             />
                                         </TouchableOpacity>
-                                        {/* <TouchableOpacity
-                                            className="absolute inset-y-0 right-0 flex items-center justify-center pr-4"
-                                            onPress={() => {
-                                                router.push({ pathname: ROUTES.CUSTOMER_SELECTION });
-                                            }}
-                                        >
-                                            <FontAwesome size={18} name="search" color="gray" />
-                                        </TouchableOpacity> */}
                                     </View>
                                 </View>
                             </TouchableWithoutFeedback>
