@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { EncodingType, StorageAccessFramework } from "expo-file-system";
 import { getDocumentAsync } from "expo-document-picker";
 import { useState } from "react";
@@ -20,16 +20,19 @@ const Page = () => {
     const readFile = async () => {
         try {
             // const result = await getDocumentAsync({ type: "*/*" }); //allow all */*
-            const result = await getDocumentAsync({ type: ["application/json", "text/csv", "text/comma-separated-values"] }); //allow all */*
+            const result = await getDocumentAsync({
+                type: ["application/json", "text/csv", "text/comma-separated-values"],
+            }); //allow all */*
             if ((result?.assets || []).length) {
                 const selectedFile = result.assets[0];
                 const { uri, name, size, mimeType } = selectedFile;
 
                 try {
-                    const fileContent = await StorageAccessFramework.readAsStringAsync(uri, { encoding: EncodingType.UTF8 });
+                    const fileContent = await StorageAccessFramework.readAsStringAsync(uri, {
+                        encoding: EncodingType.UTF8,
+                    });
                     console.log("File content:", fileContent);
                     setText(fileContent);
-
                 } catch (error) {
                     console.error("Error reading file:", error);
                 }
@@ -42,7 +45,7 @@ const Page = () => {
     };
 
     return (
-        <ScrollView >
+        <ScrollView>
             <View className="h-full flex items-center justify-center bg-white">
                 <Button icon="upload" mode="outlined" onPress={() => readFile()}>
                     Browse File
@@ -50,8 +53,8 @@ const Page = () => {
                 <View className="flex-1">
                     <Text>{text}</Text>
                 </View>
-                <StatusBar style="auto" />
-            </View >
+            </View>
+            <StatusBar style="auto" />
         </ScrollView>
     );
 };

@@ -1,6 +1,6 @@
-import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useRoute } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
 import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
@@ -25,24 +25,31 @@ const groupSelection = () => {
         navigation.setOptions({
             headerShown: true,
             title: `Select Group (${selections.length})`,
-            headerLeft: () => customHeaderBackButton(() => {
-                router.back();
-            }),
-            headerRight: () => !!(+params?.multipleSelect) && (
-                <TouchableOpacity onPress={() => {
+            headerLeft: () =>
+                customHeaderBackButton(() => {
                     router.back();
-                    router.setParams({ key: moment().valueOf(), type: "groupList" });
-                }}>
-                    <FontAwesome size={18} name="check" color="green" />
-                </TouchableOpacity>
-            ),
+                }),
+            headerRight: () =>
+                !!+params?.multipleSelect && (
+                    <TouchableOpacity
+                        onPress={() => {
+                            router.back();
+                            router.setParams({ key: moment().valueOf(), type: "groupList" });
+                        }}
+                    >
+                        <FontAwesome size={18} name="check" color="green" />
+                    </TouchableOpacity>
+                ),
         });
     }, [navigation, selections]);
 
-    const dataList = useQuery("groups", (col) => {
-        return col.filtered("_id CONTAINS[c] $0", searchKey).sorted("_id");
-    }, [searchKey]);
-
+    const dataList = useQuery(
+        "groups",
+        (col) => {
+            return col.filtered("_id CONTAINS[c] $0", searchKey).sorted("_id");
+        },
+        [searchKey]
+    );
 
     // useEffect(() => {
     //     resetCounter();
@@ -71,7 +78,7 @@ const groupSelection = () => {
 
     const showAddConfirmation = () => {
         Alert.alert("Add Group", `Do you want to add ${searchKey.toUpperCase()}?`, [
-            { text: "Cancel", onPress: () => { }, },
+            { text: "Cancel", onPress: () => {} },
             {
                 text: "Continue",
                 onPress: () => {
@@ -86,13 +93,13 @@ const groupSelection = () => {
                             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
                         }
                     });
-                }
+                },
             },
         ]);
     };
 
     return (
-        <View className="m-2 mb-3">
+        <View className="m-2 mb-5">
             <View className="relative">
                 <TextInput
                     className="text-sm pr-10 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -101,9 +108,12 @@ const groupSelection = () => {
                     onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
                 {!!+params?.allowAdd && !dataList.length && !!searchKey && (
-                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                        showAddConfirmation();
-                    }}>
+                    <TouchableOpacity
+                        className="absolute inset-y-0 right-0 flex items-center justify-center pr-4"
+                        onPress={() => {
+                            showAddConfirmation();
+                        }}
+                    >
                         <FontAwesome size={18} name="plus" color="gray" />
                     </TouchableOpacity>
                 )}
@@ -115,26 +125,35 @@ const groupSelection = () => {
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     const group = item._id;
-                    const isExist = !!selections.find(p => p._id === item._id);
+                    const isExist = !!selections.find((p) => p._id === item._id);
                     return (
-                        <GroupCard data={item} enableButtons={false} isActive={isExist} onSelect={() => {
-                            const item = {
-                                key: moment().valueOf(),
-                                type: "group",
-                                _id: group
-                            };
-                            if (+params?.multipleSelect)
-                                isExist ? removeToSelection({ key: "_id", value: group }, true) : addToSelection(item);
-                            else {
-                                router.back();
-                                router.setParams(item);
-                            }
-                        }} />
+                        <GroupCard
+                            data={item}
+                            enableButtons={false}
+                            isActive={isExist}
+                            onSelect={() => {
+                                const item = {
+                                    key: moment().valueOf(),
+                                    type: "group",
+                                    _id: group,
+                                };
+                                if (+params?.multipleSelect)
+                                    isExist
+                                        ? removeToSelection({ key: "_id", value: group }, true)
+                                        : addToSelection(item);
+                                else {
+                                    router.back();
+                                    router.setParams(item);
+                                }
+                            }}
+                        />
                     );
                 }}
-            // onEndReached={fetchMoreData}
-            // onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
             />
+
+            <StatusBar style="auto" />
         </View>
     );
 };

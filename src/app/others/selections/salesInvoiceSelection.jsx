@@ -1,6 +1,6 @@
-import { View, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+import { View, FlatList, TextInput, TouchableOpacity, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useRoute } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
 import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
@@ -26,23 +26,33 @@ const salesInvoiceSelection = () => {
         navigation.setOptions({
             headerShown: true,
             title: `Select Sales Invoice (${selections.length})`,
-            headerLeft: () => customHeaderBackButton(() => {
-                router.back();
-            }),
-            headerRight: () => (
-                <TouchableOpacity onPress={() => {
+            headerLeft: () =>
+                customHeaderBackButton(() => {
                     router.back();
-                    router.setParams({ key: moment().valueOf(), type: +params?.multipleSelect ? "salesInvoiceList" : "salesInvoice" });
-                }}>
+                }),
+            headerRight: () => (
+                <TouchableOpacity
+                    onPress={() => {
+                        router.back();
+                        router.setParams({
+                            key: moment().valueOf(),
+                            type: +params?.multipleSelect ? "salesInvoiceList" : "salesInvoice",
+                        });
+                    }}
+                >
                     <FontAwesome size={18} name="check" color="green" />
                 </TouchableOpacity>
             ),
         });
     }, [navigation, selections]);
 
-    const dataList = useQuery("salesInvoices", (col) => {
-        return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");
-    }, [searchKey]);
+    const dataList = useQuery(
+        "salesInvoices",
+        (col) => {
+            return col.filtered("invoiceNo BEGINSWITH[c] $0", searchKey).sorted("dateOfSI");
+        },
+        [searchKey]
+    );
 
     // useEffect(() => {
     //     resetCounter();
@@ -70,7 +80,7 @@ const salesInvoiceSelection = () => {
     // };
 
     return (
-        <View className="m-2 mb-3">
+        <View className="m-2 mb-5">
             <View className="relative">
                 <TextInput
                     className="text-sm pr-10 my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -79,9 +89,12 @@ const salesInvoiceSelection = () => {
                     onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
                 {!!+params?.allowAdd && (
-                    <TouchableOpacity className="absolute inset-y-0 right-0 flex items-center justify-center pr-4" onPress={() => {
-                        router.push({ pathname: ROUTES.SALES_FORM });
-                    }}>
+                    <TouchableOpacity
+                        className="absolute inset-y-0 right-0 flex items-center justify-center pr-4"
+                        onPress={() => {
+                            router.push({ pathname: ROUTES.SALES_FORM });
+                        }}
+                    >
                         <FontAwesome size={18} name="plus" color="gray" />
                     </TouchableOpacity>
                 )}
@@ -93,27 +106,34 @@ const salesInvoiceSelection = () => {
                 data={dataList}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
-                    const isExist = !!selections.find(sel => sel._id === item._id);
+                    const isExist = !!selections.find((sel) => sel._id === item._id);
                     return (
-                        <InvoiceCard data={item} isActive={isExist} onSelect={() => {
-                            const currentData = {
-                                key: moment().valueOf(),
-                                type: "salesInvoice",
-                                ...item,
-                            };
-                            if (+params?.multipleSelect)
-                                isExist ? removeToSelection({ key: "_id", value: item._id }, true) : addToSelection(currentData);
-                            else {
-                                resetSelection();
-                                addToSelection(currentData);
-                            }
-                        }} />
+                        <InvoiceCard
+                            data={item}
+                            isActive={isExist}
+                            onSelect={() => {
+                                const currentData = {
+                                    key: moment().valueOf(),
+                                    type: "salesInvoice",
+                                    ...item,
+                                };
+                                if (+params?.multipleSelect)
+                                    isExist
+                                        ? removeToSelection({ key: "_id", value: item._id }, true)
+                                        : addToSelection(currentData);
+                                else {
+                                    resetSelection();
+                                    addToSelection(currentData);
+                                }
+                            }}
+                        />
                     );
                 }}
-            // onEndReached={fetchMoreData}
-            // onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
             />
 
+            <StatusBar style="auto" />
         </View>
     );
 };

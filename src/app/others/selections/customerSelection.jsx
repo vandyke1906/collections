@@ -1,7 +1,7 @@
-import { View, FlatList, TextInput, TouchableOpacity, Text, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, FlatList, TextInput, TouchableOpacity, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
 import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
@@ -25,28 +25,35 @@ const customerSelection = () => {
         navigation.setOptions({
             headerShown: true,
             title: `Select Customer (${selections.length})`,
-            headerLeft: () => customHeaderBackButton(() => {
-                router.back();
-            }),
-            headerRight: () => !!(+params?.multipleSelect) && (
-                <TouchableOpacity onPress={() => {
+            headerLeft: () =>
+                customHeaderBackButton(() => {
                     router.back();
-                    router.setParams({ key: moment().valueOf(), type: "customerList" });
-                }}>
-                    <FontAwesome size={18} name="check" color="green" />
-                </TouchableOpacity>
-            ),
+                }),
+            headerRight: () =>
+                !!+params?.multipleSelect && (
+                    <TouchableOpacity
+                        onPress={() => {
+                            router.back();
+                            router.setParams({ key: moment().valueOf(), type: "customerList" });
+                        }}
+                    >
+                        <FontAwesome size={18} name="check" color="green" />
+                    </TouchableOpacity>
+                ),
         });
     }, [navigation, selections]);
 
-    useEffect(() => {
+    useEffect(() => {}, []);
 
-    }, []);
-
-    const dataList = useQuery("customers", (col) => {
-        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("name");
-    }, [searchKey]);
-
+    const dataList = useQuery(
+        "customers",
+        (col) => {
+            return col
+                .filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
+                .sorted("name");
+        },
+        [searchKey]
+    );
 
     // useEffect(() => {
     //     resetCounter();
@@ -82,7 +89,6 @@ const customerSelection = () => {
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />
-
             </View>
 
             <FlatList
@@ -91,25 +97,32 @@ const customerSelection = () => {
                 data={dataList}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
-                    const isExist = !!selections.find(sel => sel._id === item._id);
+                    const isExist = !!selections.find((sel) => sel._id === item._id);
                     return (
-                        <Customer data={item} enableButtons={false} isActive={isExist} onSelect={() => {
-                            const items = {
-                                key: moment().valueOf(),
-                                type: "customer",
-                                ...item,
-                            };
-                            if (+params?.multipleSelect)
-                                isExist ? removeToSelection({ key: "_id", value: item._id }, true) : addToSelection(item);
-                            else {
-                                router.back();
-                                router.setParams(items);
-                            }
-                        }} />
+                        <Customer
+                            data={item}
+                            enableButtons={false}
+                            isActive={isExist}
+                            onSelect={() => {
+                                const items = {
+                                    key: moment().valueOf(),
+                                    type: "customer",
+                                    ...item,
+                                };
+                                if (+params?.multipleSelect)
+                                    isExist
+                                        ? removeToSelection({ key: "_id", value: item._id }, true)
+                                        : addToSelection(item);
+                                else {
+                                    router.back();
+                                    router.setParams(items);
+                                }
+                            }}
+                        />
                     );
                 }}
-            // onEndReached={fetchMoreData}
-            // onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
             />
 
             {!!+params?.allowAdd && (
@@ -124,6 +137,7 @@ const customerSelection = () => {
                 </TouchableOpacity>
             )}
 
+            <StatusBar style="auto" />
         </View>
     );
 };
