@@ -78,6 +78,7 @@ const productForm = () => {
 
                     if (params._id) {
                         const product = realm.objectForPrimaryKey("products", params._id);
+                        const salesProduct = realm.objects("salesProducts").find((s) => s.productId === params._id);
                         if (product) {
                             product.code = data.code.trim();
                             product.name = data.name.trim();
@@ -85,6 +86,12 @@ const productForm = () => {
                             product.group = data.group.trim();
                             product.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                             isNew = false;
+                        }
+                        if (salesProduct) {
+                            salesProduct.code = data.code.trim();
+                            salesProduct.name = data.name.trim();
+                            salesProduct.unit = data.unit.trim();
+                            salesProduct.group = data.group.trim();
                         }
                     } else {
                         data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
