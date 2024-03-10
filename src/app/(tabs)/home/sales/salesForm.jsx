@@ -264,23 +264,28 @@ const salesForm = () => {
                                 <View>
                                     <Text className="text-slate-500">Customer</Text>
                                     <View className="relative">
-                                        <TextInput
-                                            className={`${inputClass} pr-10 border ${
-                                                errors.customerName ? "border-red-500" : ""
-                                            }`}
-                                            autoCapitalize="characters"
-                                            placeholder="Customer"
-                                            value={value}
-                                            editable={false}
-                                        />
                                         <TouchableOpacity
+                                            onPress={() => router.push({ pathname: ROUTES.CUSTOMER_SELECTION })}
+                                        >
+                                            <TextInput
+                                                className={`${inputClass} border ${
+                                                    errors.customerName ? "border-red-500" : ""
+                                                }`}
+                                                autoCapitalize="characters"
+                                                placeholder="Customer"
+                                                value={value}
+                                                editable={false}
+                                                pointerEvents="none"
+                                            />
+                                        </TouchableOpacity>
+                                        {/* <TouchableOpacity
                                             className="absolute inset-y-0 right-0 flex items-center justify-center pr-4"
                                             onPress={() => {
                                                 router.push({ pathname: ROUTES.CUSTOMER_SELECTION });
                                             }}
                                         >
                                             <FontAwesome size={18} name="search" color="gray" />
-                                        </TouchableOpacity>
+                                        </TouchableOpacity> */}
                                     </View>
                                 </View>
                             </TouchableWithoutFeedback>
