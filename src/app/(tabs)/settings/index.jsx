@@ -13,7 +13,7 @@ const Page = () => {
             const { directoryUri } = permissions;
             const filesInRoot = await StorageAccessFramework.readDirectoryAsync(directoryUri);
             const filesInNestedFolder = await StorageAccessFramework.readDirectoryAsync(filesInRoot[0]);
-            console.log({ filesInRoot, filesInNestedFolder });
+            console.info({ filesInRoot, filesInNestedFolder });
         });
     };
 
@@ -27,17 +27,29 @@ const Page = () => {
                 const selectedFile = result.assets[0];
                 const { uri, name, size, mimeType } = selectedFile;
 
+                console.info({ mimeType });
+
                 try {
                     const fileContent = await StorageAccessFramework.readAsStringAsync(uri, {
                         encoding: EncodingType.UTF8,
                     });
-                    console.log("File content:", fileContent);
-                    setText(fileContent);
+                    let formattedContent = "";
+                    switch (mimeType) {
+                        case "application/json": {
+                            formattedContent = JSON.stringify(JSON.parse(fileContent), null, 2);
+                            break;
+                        } default: {
+                            formattedContent = fileContent;
+                            break;
+                        }
+                    }
+                    console.info("File content:", formattedContent);
+                    setText(formattedContent);
                 } catch (error) {
                     console.error("Error reading file:", error);
                 }
             } else {
-                console.log("User cancelled the document picker");
+                console.info("User cancelled the document picker");
             }
         } catch (error) {
             console.error("Error picking document:", error);
@@ -45,8 +57,8 @@ const Page = () => {
     };
 
     return (
-        <ScrollView>
-            <View className="h-full flex items-center justify-center bg-white">
+        <ScrollView className="bg-white">
+            <View className="flex items-center justify-center mt-10">
                 <Button icon="upload" mode="outlined" onPress={() => readFile()}>
                     Browse File
                 </Button>
