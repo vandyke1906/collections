@@ -285,9 +285,8 @@ const collectionForm = () => {
                                     <View>
                                         <Text className="text-slate-500">Date of Cheque</Text>
                                         <TextInput
-                                            className={`${inputClass} border ${
-                                                errors.chequeDate ? "border-red-500" : ""
-                                            }`}
+                                            className={`${inputClass} border ${errors.chequeDate ? "border-red-500" : ""
+                                                }`}
                                             placeholder="Date of Cheque"
                                             value={value}
                                             editable={false}
@@ -342,7 +341,7 @@ const collectionForm = () => {
                         {!isNaN(data?.totalAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                    Sales:{" "}
+                                    Sales:
                                 </Text>
                                 <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">
                                     : {formatAmount(data?.totalAmount)}
@@ -352,7 +351,7 @@ const collectionForm = () => {
                         {!isNaN(data?.unpaidAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                    Unpaid:{" "}
+                                    Unpaid:
                                 </Text>
                                 <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">
                                     : {formatAmount(data?.unpaidAmount)}

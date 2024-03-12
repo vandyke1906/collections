@@ -238,9 +238,8 @@ const salesForm = () => {
                                 <View>
                                     <Text className="text-slate-500">Date Delivered</Text>
                                     <TextInput
-                                        className={`${inputClass} border ${
-                                            errors.dateDelivered ? "border-red-500" : ""
-                                        }`}
+                                        className={`${inputClass} border ${errors.dateDelivered ? "border-red-500" : ""
+                                            }`}
                                         placeholder="Date Delivered"
                                         value={value}
                                         editable={false}
@@ -268,9 +267,8 @@ const salesForm = () => {
                                             onPress={() => router.push({ pathname: ROUTES.CUSTOMER_SELECTION })}
                                         >
                                             <TextInput
-                                                className={`${inputClass} border ${
-                                                    errors.customerName ? "border-red-500" : ""
-                                                }`}
+                                                className={`${inputClass} border ${errors.customerName ? "border-red-500" : ""
+                                                    }`}
                                                 autoCapitalize="characters"
                                                 placeholder="Customer"
                                                 value={value}
@@ -329,7 +327,7 @@ const salesForm = () => {
                         rules={{ required: true }}
                         name="totalAmount"
                         defaultValue={0}
-                        render={({ field: {} }) => (
+                        render={({ field: { } }) => (
                             <View>
                                 <Text className="text-slate-500">Total Revenue</Text>
                                 <TextInput

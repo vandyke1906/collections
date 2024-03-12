@@ -45,10 +45,12 @@ const useReportStore = create((set) => {
         setDateFrom: (number) => set(() => {
             if (moment(number).isValid())
                 return { dateFrom: number };
+            else return { dateFrom: 0 };
         }),
         setDateTo: (number) => set(() => {
             if (moment(number).isValid())
                 return { dateTo: number };
+            else return { dateFrom: 0 };
         }),
         setGroups: (list) => set(() => {
             if (list)

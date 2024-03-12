@@ -22,7 +22,7 @@ import MiniCardData from "src/components/MiniCardData";
 
 const filterReport = () => {
     const inputClass =
-        "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+        "text-sm my-2 p-2 appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
     const miniCardClass =
         "mb-2 mr-2 p-2 flex text-xs font-sans text-center text-gray-900 bg-white border border-gray-300 rounded-full text-xs dark:bg-gray-800 dark:text-white";
 
@@ -120,56 +120,83 @@ const filterReport = () => {
 
                 <View className="bg-gray-100 rounded-lg p-2">
                     <Text className="text-slate-500 my-2">Date Range</Text>
-
-                    <TouchableWithoutFeedback
-                        onPress={() => {
-                            Keyboard.dismiss();
-                            showDatePicker({
-                                date: dateFrom,
-                                onChange: (event, date) => {
-                                    if (event.type === "set") {
-                                        const startDate = moment(date).startOf("day").valueOf();
-                                        setDateFrom(startDate);
-                                    }
-                                },
-                            });
-                        }}
-                    >
-                        <View>
+                    <View>
+                        <View className="flex">
                             <Text className="text-slate-500 mx-2">From: </Text>
-                            <TextInput
-                                className={inputClass}
-                                placeholder="Start Date"
-                                value={formatDate(dateFrom)}
-                                editable={false}
-                            />
-                        </View>
-                    </TouchableWithoutFeedback>
 
-                    <TouchableWithoutFeedback
-                        onPress={() => {
-                            Keyboard.dismiss();
-                            showDatePicker({
-                                date: dateTo,
-                                onChange: (event, date) => {
-                                    if (event.type === "set") {
-                                        const endDate = moment(date).endOf("day").valueOf();
-                                        setDateTo(endDate);
-                                    }
-                                },
-                            });
-                        }}
-                    >
-                        <View>
-                            <Text className="text-slate-500 mx-2">To: </Text>
-                            <TextInput
-                                className={inputClass}
-                                placeholder="End Date"
-                                value={formatDate(dateTo)}
-                                editable={false}
-                            />
+                            <View className="flex flex-row items-center">
+                                <TouchableOpacity className="flex-1"
+                                    onPress={() => {
+                                        Keyboard.dismiss();
+                                        showDatePicker({
+                                            date: dateFrom,
+                                            onChange: (event, date) => {
+                                                if (event.type === "set") {
+                                                    const startDate = moment(date).startOf("day").valueOf();
+                                                    setDateFrom(startDate);
+                                                }
+                                            },
+                                        });
+                                    }}
+                                >
+                                    <TextInput
+                                        className={inputClass}
+                                        placeholder="Start Date"
+                                        value={formatDate(dateFrom)}
+                                        editable={false}
+                                    />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    className="p-4"
+                                    onPress={() => {
+                                        setDateFrom(0);
+                                    }}
+                                >
+                                    <FontAwesome size={18} name="times" color="gray" />
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
-                    </TouchableWithoutFeedback>
+                    </View>
+
+                    <View>
+                        <Text className="text-slate-500 mx-2">To: </Text>
+                        <View className="flex flex-row items-center">
+                            <TouchableOpacity className="flex-1"
+                                onPress={() => {
+                                    Keyboard.dismiss();
+                                    showDatePicker({
+                                        date: dateTo,
+                                        onChange: (event, date) => {
+                                            if (event.type === "set") {
+                                                const endDate = moment(date).endOf("day").valueOf();
+                                                setDateTo(endDate);
+                                            }
+                                        },
+                                    });
+                                }}
+                            >
+                                <View>
+                                    <TextInput
+                                        className={inputClass}
+                                        placeholder="End Date"
+                                        value={formatDate(dateTo)}
+                                        editable={false}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                className="p-4"
+                                onPress={() => {
+                                    setDateTo(0);
+                                }}
+                            >
+                                <FontAwesome size={18} name="times" color="gray" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
 
                 {/* CUSTOMERS */}

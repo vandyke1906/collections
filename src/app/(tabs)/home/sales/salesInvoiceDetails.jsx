@@ -74,7 +74,7 @@ const salesInvoiceDetails = () => {
                 <View className="flex flex-row items-center justify-between">
                     <View className="flex flex-row items-start">
                         <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">
-                            TOTAL PAID:{" "}
+                            TOTAL PAID:
                         </Text>
                         <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-green-900 font-bold">
                             {formatAmount(collections.reduce((acc, item) => acc + item.amount, 0))}
@@ -164,7 +164,7 @@ const salesInvoiceDetails = () => {
                         {!isNaN(data?.totalAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                    Sales:{" "}
+                                    Sales:
                                 </Text>
                                 <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">
                                     : {formatAmount(data?.totalAmount)}
@@ -174,7 +174,7 @@ const salesInvoiceDetails = () => {
                         {!isNaN(data?.unpaidAmount) && (
                             <View className="flex flex-row">
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                    Unpaid:{" "}
+                                    Unpaid:
                                 </Text>
                                 <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">
                                     : {formatAmount(data?.unpaidAmount)}

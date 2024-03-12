@@ -94,38 +94,42 @@ const reportView = () => {
         navigation.setOptions({
             headerShown: true,
             title: `${isSales ? "Sales" : "Collection"} Report`,
-            headerRight: () => (
-                <TouchableOpacity
-                    className="py-3 pl-10 pr-3"
-                    onPress={() => {
-                        Alert.alert("Download", "Do you want to save report generated?", [
-                            { text: "Cancel" },
-                            {
-                                text: "Continue",
-                                onPress: () => {
-                                    saveAsFile(JSON.stringify(salesInvoices), {
-                                        type: "json",
-                                        filename: isSales ? "sales-report" : "collection-report",
-                                    })
-                                        .then(() => {
-                                            ToastAndroid.show("Report downloaded.", ToastAndroid.SHORT);
+            headerRight: () => {
+                if (!results.length)
+                    return null;
+                return (
+                    <TouchableOpacity
+                        className="py-3 pl-10 pr-3"
+                        onPress={() => {
+                            Alert.alert("Download", "Do you want to save report generated?", [
+                                { text: "Cancel" },
+                                {
+                                    text: "Continue",
+                                    onPress: () => {
+                                        saveAsFile(JSON.stringify(results), {
+                                            type: "json",
+                                            filename: isSales ? "sales-report" : "collection-report",
                                         })
-                                        .catch(() => {
-                                            ToastAndroid.show(
-                                                `Failed to download file. ${error.message || error}.`,
-                                                ToastAndroid.SHORT
-                                            );
-                                        });
+                                            .then(() => {
+                                                ToastAndroid.show("Report downloaded.", ToastAndroid.SHORT);
+                                            })
+                                            .catch(() => {
+                                                ToastAndroid.show(
+                                                    `Failed to download file. ${error.message || error}.`,
+                                                    ToastAndroid.SHORT
+                                                );
+                                            });
+                                    },
                                 },
-                            },
-                        ]);
-                    }}
-                >
-                    <FontAwesome size={18} name="download" />
-                </TouchableOpacity>
-            ),
+                            ]);
+                        }}
+                    >
+                        <FontAwesome size={18} name="download" />
+                    </TouchableOpacity>
+                );
+            },
         });
-    }, [navigation]);
+    }, [navigation, results]);
 
     const renderSummary = () => {
         return (
@@ -133,7 +137,7 @@ const reportView = () => {
                 {!!dateFrom && (
                     <View className="flex flex-row items-center justify-start">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            Date From:{" "}
+                            Date From:
                         </Text>
                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                             {formatDate(dateFrom)}
@@ -144,7 +148,7 @@ const reportView = () => {
                 {!!dateTo && (
                     <View className="flex flex-row items-center justify-start">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            Date To:{" "}
+                            Date To:
                         </Text>
                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                             {formatDate(dateTo)}
@@ -155,7 +159,7 @@ const reportView = () => {
                 {!!groups.length && (
                     <View className="flex flex-row items-center justify-start flex-wrap">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            Groups:{" "}
+                            Groups:
                         </Text>
                         {groups.map((g, index) => (
                             <View
@@ -173,7 +177,7 @@ const reportView = () => {
                 {!!products.length && (
                     <View className="flex flex-row items-center justify-start flex-wrap">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            Products:{" "}
+                            Products:
                         </Text>
                         {products.map((p, index) => (
                             <View
@@ -191,7 +195,7 @@ const reportView = () => {
                 {!!customers.length && (
                     <View className="flex flex-row items-center justify-start flex-wrap">
                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                            Customers:{" "}
+                            Customers:
                         </Text>
                         {customers.map((c, index) => (
                             <View
@@ -212,7 +216,7 @@ const reportView = () => {
                             {!!summary.totalQty && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                        Total Product Quantities:{" "}
+                                        Total Product Quantities:
                                     </Text>
                                     <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">
                                         {summary.totalQty || 0}
@@ -222,7 +226,7 @@ const reportView = () => {
                             {!!summary.totalRevenue && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                        Total Sales:{" "}
+                                        Total Sales:
                                     </Text>
                                     <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">
                                         {formatAmount(summary.totalRevenue || 0)}
@@ -232,7 +236,7 @@ const reportView = () => {
                             {!!summary.totalCollected && (
                                 <View className="flex flex-row items-center justify-start">
                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                        Total Collected:{" "}
+                                        Total Collected:
                                     </Text>
                                     <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-900 uppercase">
                                         {formatAmount(summary.totalCollected || 0)}
@@ -251,7 +255,7 @@ const reportView = () => {
             <View className="m-2 mb-2 flex border-t border-gray-300">
                 <View className="flex flex-row">
                     <Text className="mt-2 block font-sans text-xs antialiased leading-normal text-gray-500 uppercase">
-                        results found{" "}
+                        results found
                     </Text>
                     <Text className="mt-2 block font-sans text-xs antialiased leading-normal font-bold text-gray-900 uppercase">
                         ({results.length})
@@ -270,7 +274,7 @@ const reportView = () => {
                                     <View className="flex flex-row items-center justify-between">
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">
-                                                Code:{" "}
+                                                Code:
                                             </Text>
                                             <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 opacity-75">
                                                 {data.product.code}
@@ -279,7 +283,7 @@ const reportView = () => {
 
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">
-                                                Qty:{" "}
+                                                Qty:
                                             </Text>
                                             <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">
                                                 {data.product.qty}
@@ -288,7 +292,7 @@ const reportView = () => {
 
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">
-                                                Unit:{" "}
+                                                Unit:
                                             </Text>
                                             <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-700 uppercase">
                                                 {data.product.unit}
@@ -297,7 +301,7 @@ const reportView = () => {
 
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 opacity-75">
-                                                Code:{" "}
+                                                Code:
                                             </Text>
                                             <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 uppercase">
                                                 {formatAmount(data.product.amount)}
@@ -311,7 +315,7 @@ const reportView = () => {
                                 <View className="mt-2">
                                     <View className="flex flex-row items-center justify-start">
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
-                                            Invoice #:{" "}
+                                            Invoice #:
                                         </Text>
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                             {data.invoice.invoiceNo}
@@ -320,7 +324,7 @@ const reportView = () => {
 
                                     <View className="flex flex-row items-center justify-start">
                                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                            Customer:{" "}
+                                            Customer:
                                         </Text>
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                             {data.invoice.customerName}
@@ -329,7 +333,7 @@ const reportView = () => {
 
                                     <View className="flex flex-row items-center justify-start">
                                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                            Invoice Date:{" "}
+                                            Invoice Date:
                                         </Text>
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                             {formatDate(data.invoice.dateOfSI)}
@@ -338,7 +342,7 @@ const reportView = () => {
 
                                     <View className="flex flex-row items-center justify-start">
                                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                            Date Delivered:{" "}
+                                            Date Delivered:
                                         </Text>
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                             {formatDate(data.invoice.dateDelivered)}
@@ -348,7 +352,7 @@ const reportView = () => {
                                     <View className="flex flex-row items-center justify-between">
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                                PO #:{" "}
+                                                PO #:
                                             </Text>
                                             <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                                 {data.invoice.poNo}
@@ -357,7 +361,7 @@ const reportView = () => {
 
                                         <View className="flex flex-row items-center justify-start">
                                             <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                                SO #:{" "}
+                                                SO #:
                                             </Text>
                                             <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                                 {data.invoice.soNo}
@@ -371,7 +375,7 @@ const reportView = () => {
                                 <View className="flex">
                                     <View className="flex flex-row items-center justify-start">
                                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                            COR #:{" "}
+                                            COR #:
                                         </Text>
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                             {data.collection.corNo}
@@ -395,7 +399,7 @@ const reportView = () => {
                                         <View className="flex flex-row items-center justify-between">
                                             <View className="flex flex-row  items-center justify-start">
                                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                                    Mode of Payment:{" "}
+                                                    Mode of Payment:
                                                 </Text>
                                                 <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                                     {data.collection.modeOfPayment}
@@ -404,7 +408,7 @@ const reportView = () => {
 
                                             <View className="flex flex-row  items-center justify-start">
                                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                                    Amount Collected:{" "}
+                                                    Amount Collected:
                                                 </Text>
                                                 <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                                     {formatAmount(data.collection.amount || 0)}
@@ -416,7 +420,7 @@ const reportView = () => {
                                             <View className="flex flex-row items-center justify-between">
                                                 <View className="flex flex-row  items-center justify-start">
                                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                                        Cheque Number:{" "}
+                                                        Cheque Number:
                                                     </Text>
                                                     <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                                         {data.collection.chequeNo}
@@ -425,7 +429,7 @@ const reportView = () => {
 
                                                 <View className="flex flex-row  items-center justify-start">
                                                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                                                        Date of Cheque:{" "}
+                                                        Date of Cheque:
                                                     </Text>
                                                     <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
                                                         {formatDate(data.collection.chequeDate)}
