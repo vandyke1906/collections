@@ -34,12 +34,12 @@ const Page = () => {
             <View className="basis-2/12">
                 <View className="flex flex-row items-stretch w-full h-full rounded-lg">
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.SALES })}>
-                        <Text className="text-7xl font-sans text-blue-400">{salesInvoiceList.length}</Text>
+                        <Text className="text-7xl font-sans text-blue-500">{salesInvoiceList.length}</Text>
                         <Text className="text-slate-900 font-medium text-center">Sales Invoices</Text>
                     </Pressable>
 
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.COLLECTIONS })}>
-                        <Text className="text-7xl font-sans text-blue-400">{collectionList.length}</Text>
+                        <Text className="text-7xl font-sans text-blue-500">{collectionList.length}</Text>
                         <Text className="text-slate-900 font-medium text-center">Collections</Text>
                     </Pressable>
                 </View>
@@ -47,30 +47,35 @@ const Page = () => {
             <View className="basis-2/12">
                 <View className="flex flex-row items-stretch w-full h-full rounded-lg">
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.CUSTOMERS })}>
-                        <Text className="text-7xl font-sans text-blue-400">{activeCustomers.length}</Text>
+                        <Text className="text-7xl font-sans text-blue-500">{activeCustomers.length}</Text>
                         <Text className="text-slate-900 font-medium text-center">Customers</Text>
                     </Pressable>
 
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.PRODUCTS })}>
-                        <Text className="text-7xl font-sans text-blue-400">{activeProducts.length}</Text>
+                        <Text className="text-7xl font-sans text-blue-500">{activeProducts.length}</Text>
                         <Text className="text-slate-900 font-medium text-center">Products</Text>
                     </Pressable>
                 </View>
             </View>
             <View className="basis-2/12">
                 <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.FILTER_REPORT })}>
-                    <FontAwesome size={64} name="bar-chart" color="#189AB4" />
-                    <Text className="text-slate-900 font-medium text-center uppercase">View Reports</Text>
+                    <FontAwesome size={48} name="file" color="rgb(59 130 246)" />
+                    <Text className="mt-2 text-slate-900 font-medium text-center uppercase">Filter Reports</Text>
                 </Pressable>
             </View>
 
-            <View className="basis-2/12"></View>
+            <View className="basis-2/12">
+                {/* <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.FILTER_REPORT })}>
+                    <FontAwesome size={48} name="bar-chart" color="rgb(59 130 246)" />
+                    <Text className="mt-2 text-slate-900 font-medium text-center uppercase">View Graphs</Text>
+                </Pressable> */}
+            </View>
 
             <View className="basis-1/12">
                 <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => {
                     app.currentUser.logOut();
                 }}>
-                    <FontAwesome size={24} name="user" color="#189AB4" />
+                    <FontAwesome size={24} name="user" color="rgb(59 130 246)" />
                     <Text className="text-slate-900 font-medium text-center uppercase">Logout</Text>
                 </Pressable>
             </View>
