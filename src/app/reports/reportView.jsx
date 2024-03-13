@@ -4,7 +4,7 @@ import { useRealm } from "@realm/react";
 import { useNavigation } from "expo-router";
 import useReportStore from "src/store/reportStore";
 import { FontAwesome } from "@expo/vector-icons";
-import { REPORT_TYPE, formatAmount, formatDate, isMOPCheque, saveAsFile } from "src/common/common";
+import { REPORT_TYPE, convertJSONtoCSV, formatAmount, formatDate, isMOPCheque, saveAsFile } from "src/common/common";
 import CardData from "src/components/CardData";
 import moment from "moment";
 
@@ -23,10 +23,9 @@ const reportView = () => {
         if (isSales) {
             let filteredResult = realm.objects("salesInvoices");
             if (dateFrom && dateTo) {
-                filteredResult = filteredResult
-                    .filtered("dateOfSI BETWEEN { $0 , $1 }", dateFrom, dateTo)
-                    .sorted("dateOfSI");
-            } else filteredResult = filteredResult.filtered("dateOfSI >= $0", dateFrom).sorted("dateOfSI");
+                filteredResult = filteredResult.filtered("dateOfSI BETWEEN { $0 , $1 }", dateFrom, dateTo).sorted("dateOfSI");
+            } else
+                filteredResult = filteredResult.filtered("dateOfSI >= $0", dateFrom).sorted("dateOfSI");
 
             if (customers.length) {
                 const customerSet = new Set(customers.map((c) => c._id));
@@ -129,7 +128,8 @@ const reportView = () => {
                                                     });
                                                 }
                                             }
-                                            dataText = JSON.stringify(salesProductFormat);
+                                            // dataText = JSON.stringify(salesProductFormat);
+                                            dataText = convertJSONtoCSV(salesProductFormat);
                                         }
                                         else {
                                             const collectionFormat = [];
@@ -145,7 +145,8 @@ const reportView = () => {
                                                     DATE: moment(collection.paymentDate).format("DD-MMM-YY"),
                                                 });
                                             }
-                                            dataText = JSON.stringify(collectionFormat);
+                                            // dataText = JSON.stringify(collectionFormat);
+                                            dataText = convertJSONtoCSV(collectionFormat);
                                         }
                                         saveAsFile(dataText, { type: "json", filename: isSales ? "sales-report" : "collection-report", })
                                             .then(() => {
