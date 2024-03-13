@@ -6,6 +6,7 @@ import Loading from "src/components/Loading";
 import axios from "axios";
 import { GET_LOCATION_ROUTE } from "src/common/common";
 import { Picker } from "@react-native-picker/picker";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const login = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -121,7 +122,10 @@ const login = () => {
                     <Pressable className="bg-blue-500 hover:bg-blue-700 py-2 px-10 rounded focus:outline-none focus:shadow-outline" onPress={() => {
                         handleLogin();
                     }}>
-                        <Text className="text-white font-bold">Login</Text>
+                        <View className="flex flex-row items-center justify-between">
+                            <Text className="text-white font-bold mr-2">Login</Text>
+                            <FontAwesome size={24} name="sign-in" color="white" />
+                        </View>
                     </Pressable>
 
                     <Pressable className="inline-block align-baseline" onPress={() => {

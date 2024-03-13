@@ -79,10 +79,10 @@ const Page = () => {
             </View>
 
             <View className="basis-1/12">
-                <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => {
+                <Pressable className="m-2 flex-1 block rounded-lg bg-gray-50 items-center justify-center" onPress={() => {
                     app.currentUser.logOut();
                 }}>
-                    <FontAwesome size={24} name="user" color="rgb(59 130 246)" />
+                    <FontAwesome size={24} name="sign-out" color="rgb(59 130 246)" />
                     <Text className="text-slate-900 font-medium text-center uppercase">Logout</Text>
                 </Pressable>
             </View>
