@@ -13,7 +13,8 @@ export class SalesProduct extends Realm.Object {
             unit: "string",
             qty: "int",
             amount: "double",
-            group: "string"
+            group: "string",
+            userId: "string?"
         },
     };
 }

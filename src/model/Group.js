@@ -7,5 +7,6 @@ export class Group extends Realm.Object {
         properties: {
             _id: "string"
         },
+        userId: "string?"
     };
 }
