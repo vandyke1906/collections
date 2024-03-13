@@ -108,7 +108,30 @@ const reportView = () => {
                                     text: "Continue",
                                     onPress: () => {
                                         let dataText = JSON.stringify(results);
-                                        if (!isSales) {
+                                        if (isSales) {
+                                            const salesProductFormat = [];
+                                            for (const { invoice, products } of results) {
+                                                for (const product of products) {
+                                                    salesProductFormat.push({
+                                                        ACCOUNT_NAME: invoice.customerName,
+                                                        PO_NUMBER: invoice.poNo,
+                                                        SO_NUMBER: invoice.soNo,
+                                                        DATE_OF_SI: moment(invoice.dateOfSI).format("DD-MMM-YY"),
+                                                        INVOICE_NUMBER: invoice.invoiceNo,
+                                                        PRODUCT_CODE: product.code,
+                                                        PRODUCT: product.name,
+                                                        GROUP: product.group,
+                                                        UNIT: product.unit,
+                                                        QUANTITY: product.qty,
+                                                        REVENUE: formatAmount(invoiceNo.totalAmount),
+                                                        UNPAID_AMOUNT: formatAmount(invoiceNo.unpaidAmount),
+                                                        DATE_DELIVERED: moment(invoice.dateDelivered).format("DD-MMM-YY"),
+                                                    });
+                                                }
+                                            }
+                                            dataText = JSON.stringify(salesProductFormat);
+                                        }
+                                        else {
                                             const collectionFormat = [];
                                             for (const { collection } of results) {
                                                 collectionFormat.push({
