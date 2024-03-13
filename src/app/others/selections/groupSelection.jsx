@@ -2,7 +2,7 @@ import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid, Statu
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
-import { useQuery, useRealm, useUser } from "@realm/react";
+import { useQuery, useRealm } from "@realm/react";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSelection from "@store/selectionStore";
@@ -13,7 +13,6 @@ import { customHeaderBackButton } from "src/common/common";
 const groupSelection = () => {
     const navigation = useNavigation();
     const realm = useRealm();
-    const user = useUser();
     const route = useRoute();
     const params = route.params || {};
     const { selections, addToSelection } = useSelection();
