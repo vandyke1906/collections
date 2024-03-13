@@ -14,7 +14,7 @@ export class SalesProduct extends Realm.Object {
             qty: "int",
             amount: "double",
             group: "string",
-            userId: "string?"
+            location: { type: "string?", indexed: true }
         },
     };
 }

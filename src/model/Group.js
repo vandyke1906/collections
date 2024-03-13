@@ -5,8 +5,7 @@ export class Group extends Realm.Object {
         name: "groups",
         primaryKey: "_id",
         properties: {
-            _id: "string",
-            userId: "string?"
+            _id: "string"
         },
     };
 }

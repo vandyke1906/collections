@@ -19,7 +19,7 @@ export class Collection extends Realm.Object {
             details: 'collections_details',
             customerId: { type: "string", indexed: true },
             dateCreated: { type: "int", default: () => moment().valueOf() },
-            userId: "string?"
+            location: { type: "string?", indexed: true }
         },
     };
 }
