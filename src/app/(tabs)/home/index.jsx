@@ -1,17 +1,15 @@
 import { router } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { ROUTES } from "src/common/common";
-import { useApp, useQuery, useRealm, useUser } from "@realm/react";
+import { useApp, useQuery } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useEffect } from "react";
 import useUserData from "src/store/userDataStore";
 
 const Page = () => {
 
     const app = useApp();
-    const user = useUser();
-    const { location, setLocation } = useUserData();
+    const { location } = useUserData();
 
     const activeCustomers = useQuery("customers", (coll) => {
         return coll.filtered("deletedAt == 0");
@@ -28,11 +26,6 @@ const Page = () => {
     }, [location]);
 
 
-    useEffect(() => {
-        console.info({ first: user.customData });
-        const customData = user.customData || {};
-        setLocation(customData.location || "");
-    }, [user]);
 
     return (
         <View className="flex flex-col bg-white gap-y-2">
