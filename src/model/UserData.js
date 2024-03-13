@@ -1,6 +1,6 @@
 import Realm from "realm";
 
-export class User extends Realm.Object {
+export class UserData extends Realm.Object {
     static schema = {
         name: "userData",
         primaryKey: "_id",

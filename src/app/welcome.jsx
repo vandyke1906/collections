@@ -53,9 +53,11 @@ const login = () => {
         try {
             await loginWithCredentials(email, password);
         } catch (error) {
+            console.error({ error });
             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
+        } finally {
+            setIsProcessing(false);
         }
-        setIsProcessing(false);
     };
 
     const handleRegister = async () => {

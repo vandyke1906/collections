@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, router } from "expo-router";
+import { Stack } from "expo-router";
 import { AppProvider, RealmProvider, UserProvider } from "@realm/react";
 import { Product } from "src/model/Product";
 import { Group } from "src/model/Group";
@@ -8,10 +8,12 @@ import { SalesInvoice } from "src/model/SalesInvoice";
 import { SalesProduct } from "src/model/SalesProduct";
 import { Collection } from "src/model/Collection";
 import { CollectionDetails } from "src/model/CollectionDetails";
+import { UserData } from "src/model/UserData";
+import { Location } from "src/model/Location";
 import { OpenRealmBehaviorType, OpenRealmTimeOutBehavior } from "realm";
+import Loading from "src/components/Loading";
 import { APP_ID } from "src/common/common";
 import login from "./welcome";
-import Loading from "src/components/Loading";
 
 const AppLayout = () => {
     const realmAccessBehavior = {
@@ -23,7 +25,7 @@ const AppLayout = () => {
         <AppProvider id={APP_ID}>
             <UserProvider fallback={login}>
                 <RealmProvider
-                    schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails]}
+                    schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails, Location, UserData]}
                     sync={{
                         flexible: true,
                         newRealmFileBehavior: realmAccessBehavior,
