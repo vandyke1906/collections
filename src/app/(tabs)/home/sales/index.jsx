@@ -7,7 +7,6 @@ import { useQuery, useRealm } from "@realm/react";
 import { ROUTES } from "src/common/common";
 import SalesInvoiceCard from "src/components/SalesInvoiceCard";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
-// import useInvoice from "src/store/invoiceStore";
 
 const salesPage = () => {
     const navigation = useNavigation();
@@ -15,20 +14,10 @@ const salesPage = () => {
 
     const [searchKey, setSearchKey] = useState("");
     const setSelectedInvoice = useSalesInvoiceStore((state) => state.setSelected);
-    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useInvoice();
 
-    const dataList = useQuery(
-        "salesInvoices",
-        (col) => {
-            return col
-                .filtered(
-                    "invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0",
-                    searchKey
-                )
-                .sorted("dateOfSI");
-        },
-        [searchKey]
-    );
+    const dataList = useQuery("salesInvoices", (col) => {
+        return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
+    }, [searchKey]);
 
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: "Sales Invoices" });

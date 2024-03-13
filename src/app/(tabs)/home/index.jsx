@@ -29,9 +29,9 @@ const Page = () => {
 
     return (
         <View className="flex flex-col bg-white gap-y-2">
-            <View className="basis-1/6">
+            <View className="basis-2/10">
             </View>
-            <View className="basis-1/5">
+            <View className="basis-2/10">
                 <View className="flex flex-row items-stretch w-full h-full rounded-lg">
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.SALES })}>
                         <Text className="text-7xl font-sans text-blue-400">{salesInvoiceList.length}</Text>
@@ -44,7 +44,7 @@ const Page = () => {
                     </Pressable>
                 </View>
             </View>
-            <View className="basis-1/5">
+            <View className="basis-2/10">
                 <View className="flex flex-row items-stretch w-full h-full rounded-lg">
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.CUSTOMERS })}>
                         <Text className="text-7xl font-sans text-blue-400">{activeCustomers.length}</Text>
@@ -57,14 +57,14 @@ const Page = () => {
                     </Pressable>
                 </View>
             </View>
-            <View className="basis-1/5">
+            <View className="basis-2/10">
                 <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.FILTER_REPORT })}>
                     <FontAwesome size={64} name="bar-chart" color="#189AB4" />
                     <Text className="text-slate-900 font-medium text-center uppercase">View Reports</Text>
                 </Pressable>
             </View>
 
-            <View className="basis-1/5">
+            <View className="basis-1/10">
                 <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => {
                     app.currentUser.logOut();
                 }}>
@@ -72,6 +72,8 @@ const Page = () => {
                     <Text className="text-slate-900 font-medium text-center uppercase">Logout</Text>
                 </Pressable>
             </View>
+
+            <View className="basis-1/10"> </View>
 
             <StatusBar style="auto" />
         </View>
