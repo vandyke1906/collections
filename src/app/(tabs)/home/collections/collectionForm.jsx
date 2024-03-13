@@ -34,7 +34,7 @@ const collectionForm = () => {
     const navigation = useNavigation();
     const realm = useRealm();
     const { location } = useUserData();
-    const { selected: selectedInvoice, setSelected: setSelectedInvoice } = useSalesInvoiceStore((state) => state.selected);
+    const { selected: selectedInvoice, setSelected: setSelectedInvoice } = useSalesInvoiceStore();
 
     const [isCheque, setIsCheque] = useState(false);
     const { control, handleSubmit, setValue, formState: { errors }, } = useForm();
