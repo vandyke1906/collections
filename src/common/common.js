@@ -10,6 +10,7 @@ import { Feather } from "@expo/vector-icons";
 import moment from "moment";
 
 export const APP_ID = "app-collection-vgocb";
+export const GET_LOCATION_ROUTE = "https://ap-southeast-1.aws.data.mongodb-api.com/app/app-collection-vgocb/endpoint/locations";
 
 export const QUERY_LIMIT = 5;
 
@@ -131,8 +132,6 @@ export const readFile = async () => {
         if ((result?.assets || []).length) {
             const selectedFile = result.assets[0];
             const { uri, name, size, mimeType } = selectedFile;
-
-            console.info({ mimeType });
 
             try {
                 const fileContent = await StorageAccessFramework.readAsStringAsync(uri, {

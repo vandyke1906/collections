@@ -1,12 +1,11 @@
 import Realm from "realm";
 
-export class Group extends Realm.Object {
+export class Location extends Realm.Object {
     static schema = {
-        name: "groups",
+        name: "locations",
         primaryKey: "_id",
         properties: {
             _id: "string",
-            userId: "string?"
         },
     };
 }
