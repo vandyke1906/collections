@@ -111,6 +111,7 @@ const reportView = () => {
                                             const salesProductFormat = [];
                                             for (const { invoice, product } of results) {
                                                 salesProductFormat.push({
+                                                    CAN: invoice.customerCode,
                                                     ACCOUNT_NAME: invoice.customerName,
                                                     PO_NUMBER: invoice.poNo,
                                                     SO_NUMBER: invoice.soNo,

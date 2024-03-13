@@ -135,7 +135,7 @@ const salesForm = () => {
         switch (params.type) {
             case "customer": {
                 setValue("customerName", params.name);
-                updateDetails({ customerId: params._id });
+                updateDetails({ customerId: params._id, customerCode: params.code });
                 break;
             }
             case "product": {

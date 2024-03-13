@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const DEFAULT_DETAILS = Object.freeze({ invoiceNo: "", dateOfSI: null, customerId: null, customerName: "", poNo: "", soNo: "", dateDelivered: null, totalAmount: 0, unpaidAmount: 0 });
+const DEFAULT_DETAILS = Object.freeze({ invoiceNo: "", dateOfSI: null, customerId: null, customerCode: "", customerName: "", poNo: "", soNo: "", dateDelivered: null, totalAmount: 0, unpaidAmount: 0 });
 
 const useSalesInvoiceStore = create((set) => {
     const calculateTotalAmount = (_list) => {

@@ -5,6 +5,7 @@ export class CollectionDetails extends Realm.Object {
         name: 'collections_details',
         embedded: true,
         properties: {
+            customerCode: 'string?',
             customerName: 'string?',
             invoiceNo: 'string?',
         }

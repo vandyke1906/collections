@@ -10,6 +10,7 @@ const SalesInvoiceCard = ({ data, onEdit, enableButtons, onSelect }) => {
             <TouchableOpacity disabled={typeof onSelect !== "function"} onPress={() => typeof onSelect === "function" ? onSelect() : () => { }}>
                 <View className="p-2">
                     {data?.invoiceNo && <Text className="block font-sans text-xs antialiased leading-normal text-gray-900 font-bold">{data?.invoiceNo}</Text>}
+                    {data?.customerCode && <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900">{data?.customerCode}</Text>}
                     {data?.customerName && <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900">{data?.customerName}</Text>}
 
                     <View className="flex flex-row items-center justify-between">
