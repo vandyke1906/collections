@@ -48,17 +48,17 @@ const customerPage = () => {
             <View className="block rounded-lg bg-white p-2 m-2">
                 {customer?.name && (
                     <Text className="block font-sans text-xs antialiased font-bold leading-relaxed text-blue-gray-900">
-                        {customer.name}
+                        {customer.name || ""}
                     </Text>
                 )}
                 {customer?.code && (
                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                        Account #: {customer.code}
+                        Account #: {customer.code || ""}
                     </Text>
                 )}
                 {customer?.address && (
                     <Text className="block font-sans  text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
-                        Address: {customer.address}
+                        Address: {customer.address || ""}
                     </Text>
                 )}
             </View>

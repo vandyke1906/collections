@@ -17,7 +17,7 @@ const Page = () => {
         if (customData.location)
             setTimeout(() => {
                 router.replace({ pathname: ROUTES.HOME });
-            }, 500);
+            }, 100);
         else
             app.currentUser.logOut();
     }, []);
