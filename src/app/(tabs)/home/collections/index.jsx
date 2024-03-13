@@ -35,31 +35,6 @@ const collections = () => {
         [searchKey]
     );
 
-    // useEffect(() => {
-    //     resetCounter();
-    //     const result = getRecords(searchKey);
-    //     setDataList(result);
-    // }, [realm, searchKey]);
-
-    // const getRecords = (searchKey) => {
-    //     try {
-    //         let result = realm.objects("collections").filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey)
-    //             .sorted("corDate").slice((counter - 1) * limit, counter * limit);
-    //         if (!result.length) setIsEnd(true);
-    //         nextCounter();
-    //         return Array.from(result) || [];
-    //     } catch (error) {
-    //         console.error(error);
-    //         return [];
-    //     }
-    // };
-
-    // const fetchMoreData = () => {
-    //     if (isEnd) return console.info("End of record");
-    //     const nextResult = getRecords(searchKey);
-    //     addToDataList(nextResult);
-    // };
-
     const getSalesInvoiceDetails = ({ _id, invoiceNo = "" }) => {
         let salesInvoice;
         if (_id) salesInvoice = realm.objectForPrimaryKey("salesInvoices", _id);
@@ -146,8 +121,8 @@ const collections = () => {
                             }}
                         />
                     )}
-                    // onEndReached={fetchMoreData}
-                    // onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

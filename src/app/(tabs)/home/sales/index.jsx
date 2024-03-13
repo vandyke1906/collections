@@ -34,31 +34,6 @@ const salesPage = () => {
         navigation.setOptions({ headerShown: true, title: "Sales Invoices" });
     }, [navigation]);
 
-    // useEffect(() => {
-    //     resetCounter();
-    //     const result = getRecords(searchKey);
-    //     setDataList(result);
-    // }, [realm, searchKey]);
-
-    // const getRecords = (searchKey) => {
-    //     try {
-    //         let result = realm.objects("salesInvoices").filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey)
-    //             .sorted("dateOfSI").slice((counter - 1) * limit, counter * limit);
-    //         if (!result.length) setIsEnd(true);
-    //         nextCounter();
-    //         return Array.from(result) || [];
-    //     } catch (error) {
-    //         console.error(error);
-    //         return [];
-    //     }
-    // };
-
-    // const fetchMoreData = () => {
-    //     if (isEnd) return console.info("End of record");
-    //     const nextResult = getRecords(searchKey);
-    //     addToDataList(nextResult);
-    // };
-
     const getSalesInvoiceDetails = (item) => {
         const salesInvoice = realm.objectForPrimaryKey("salesInvoices", item._id);
         if (salesInvoice) {
@@ -94,8 +69,8 @@ const salesPage = () => {
                             }}
                         />
                     )}
-                    // onEndReached={fetchMoreData}
-                    // onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

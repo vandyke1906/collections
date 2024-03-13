@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, ToastAndroid, StatusBar } from
 import { useCallback, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import { useRealm, useUser } from "@realm/react";
+import { useRealm } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useUserData from "src/store/userDataStore";
 
@@ -59,10 +59,10 @@ const customerForm = () => {
                             customer.address = data.address.trim();
                             customer.indexedName = data.name.toLowerCase().replace(/\s/g, "");
                             isNew = false;
-                        } else {
-                            data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
-                            data.location = location;
                         }
+                    } else {
+                        data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
+                        data.location = location;
                     }
 
                     if (isNew) realm.create("customers", data);

@@ -43,7 +43,7 @@ const customerSelection = () => {
         });
     }, [navigation, selections]);
 
-    useEffect(() => {}, []);
+    useEffect(() => { }, []);
 
     const dataList = useQuery(
         "customers",
@@ -54,31 +54,6 @@ const customerSelection = () => {
         },
         [searchKey]
     );
-
-    // useEffect(() => {
-    //     resetCounter();
-    //     const result = getRecords(searchKey);
-    //     setDataList(result);
-    // }, [realm, searchKey]);
-
-    // const getRecords = (searchKey) => {
-    //     try {
-    //         let result = realm.objects("customers").filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
-    //             .sorted("name").slice((counter - 1) * limit, counter * limit);
-    //         if (!result.length) setIsEnd(true);
-    //         nextCounter();
-    //         return Array.from(result) || [];
-    //     } catch (error) {
-    //         console.error(error);
-    //         return [];
-    //     }
-    // };
-
-    // const fetchMoreData = () => {
-    //     if (isEnd) return console.info("End of record");
-    //     const nextResult = getRecords(searchKey);
-    //     addToDataList(nextResult);
-    // };
 
     return (
         <View className="m-2 h-full mb-5">
@@ -121,8 +96,8 @@ const customerSelection = () => {
                         />
                     );
                 }}
-                // onEndReached={fetchMoreData}
-                // onEndReachedThreshold={0.1}
+            // onEndReached={fetchMoreData}
+            // onEndReachedThreshold={0.1}
             />
 
             {!!+params?.allowAdd && (

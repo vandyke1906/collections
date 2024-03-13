@@ -70,16 +70,14 @@ const login = () => {
 
             if (currentUser) {
                 const userData = currentUser.mongoClient("mongodb-atlas").db("collectionDB").collection("userData");
-                const filter = { userId: currentUser.id };
-                const updateDoc = { $set: { userId: currentUser.id, location: areaCode } };
-                const options = { upsert: true };
-                await userData.updateOne(filter, updateDoc, options);
-                const customUserData = await currentUser.refreshCustomData();
-                console.log(customUserData);
+                if (userData) {
+                    const filter = { userId: currentUser.id };
+                    const updateDoc = { $set: { userId: currentUser.id, location: areaCode } };
+                    const options = { upsert: true };
+                    await userData.updateOne(filter, updateDoc, options);
+                    await currentUser.refreshCustomData();
+                }
             }
-
-
-
         } catch (error) {
             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
         } finally {
