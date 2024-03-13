@@ -6,7 +6,6 @@ import { useQuery, useRealm } from "@realm/react";
 import { ROUTES } from "src/common/common";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 import CollectionCard from "src/components/CollectionCard";
-// import useCollection from "src/store/collectionStore";
 
 const collections = () => {
     const navigation = useNavigation();
@@ -16,24 +15,14 @@ const collections = () => {
     const [invoiceNumber, setInvoiceNumber] = useState("");
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
     const setSelectedInvoice = useSalesInvoiceStore((state) => state.setSelected);
-    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useCollection();
 
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: "Collections" });
     }, [navigation]);
 
-    const dataList = useQuery(
-        "collections",
-        (col) => {
-            return col
-                .filtered(
-                    "corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0",
-                    searchKey
-                )
-                .sorted("corDate");
-        },
-        [searchKey]
-    );
+    const dataList = useQuery("collections", (col) => {
+        return col.filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey).sorted("corDate");
+    }, [searchKey]);
 
     const getSalesInvoiceDetails = ({ _id, invoiceNo = "" }) => {
         let salesInvoice;

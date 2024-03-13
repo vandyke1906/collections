@@ -176,8 +176,8 @@ const salesInvoiceDetails = () => {
                                 <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
                                     Unpaid:
                                 </Text>
-                                <Text className="block font-sans text-xs antialiased font-bold leading-normal text-green-700 opacity-75">
-                                    : {formatAmount(data?.unpaidAmount)}
+                                <Text className={`block font-sans text-xs antialiased font-bold leading-normal opacity-75 ${data?.unpaidAmount ? "text-red-700" : "text-green-700"}`}>
+                                    {formatAmount(data?.unpaidAmount)}
                                 </Text>
                             </View>
                         )}
