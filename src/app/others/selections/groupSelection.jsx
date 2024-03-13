@@ -16,6 +16,7 @@ const groupSelection = () => {
     const user = useUser();
     const route = useRoute();
     const params = route.params || {};
+    const { selections, addToSelection } = useSelection();
 
 
     const [searchKey, setSearchKey] = useState("");
