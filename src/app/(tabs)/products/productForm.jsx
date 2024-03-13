@@ -58,10 +58,7 @@ const productForm = () => {
                     const groupName = data.group && data.group.toUpperCase();
                     if (groupName) {
                         const group = realm.objectForPrimaryKey("groups", groupName);
-                        if (!group) realm.create("groups", {
-                            _id: groupName,
-                            userId: user?.id
-                        });
+                        if (!group) realm.create("groups", { _id: groupName });
                         data.group = groupName;
                     }
 
@@ -74,7 +71,6 @@ const productForm = () => {
                             product.unit = data.unit.trim();
                             product.group = data.group.trim();
                             product.indexedName = data.name.toLowerCase().replace(/\s/g, "");
-                            product.userId = user?.id;
                             isNew = false;
                         }
                         if (salesProduct) {
@@ -85,7 +81,6 @@ const productForm = () => {
                         }
                     } else {
                         data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
-                        data.userId = user?.id;
                     }
 
                     if (isNew) {

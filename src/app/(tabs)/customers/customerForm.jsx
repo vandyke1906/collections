@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useRealm, useUser } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import useUserData from "src/store/userDataStore";
 
 const customerForm = () => {
     const inputClass =
@@ -11,13 +12,10 @@ const customerForm = () => {
 
     const navigation = useNavigation();
     const realm = useRealm();
-    const user = useUser();
     const params = useLocalSearchParams();
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
+    const { control, handleSubmit, formState: { errors }, } = useForm();
+
+    const { location } = useUserData();
 
     useEffect(() => {
         navigation.setOptions({
@@ -60,11 +58,10 @@ const customerForm = () => {
                             customer.name = data.name.trim();
                             customer.address = data.address.trim();
                             customer.indexedName = data.name.toLowerCase().replace(/\s/g, "");
-                            customer.userId = user?.id;
                             isNew = false;
                         } else {
                             data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
-                            data.userId = user?.id;
+                            data.location = location;
                         }
                     }
 

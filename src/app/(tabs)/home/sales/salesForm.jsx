@@ -24,19 +24,19 @@ import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 import SIProduct from "src/components/SIProduct";
 import useSelection from "src/store/selectionStore";
 import { DATE_FORMAT, ROUTES, formatDate, getDateValueOf, showDatePicker } from "src/common/common";
+import useUserData from "src/store/userDataStore";
 
 const salesForm = () => {
-    const inputClass =
-        "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const { control, handleSubmit, setValue, formState: { errors }, } = useForm();
     const realm = useRealm();
-    const user = useUser();
     const navigation = useNavigation();
     const params = useLocalSearchParams();
 
     const { list: productList, details, setProducts, updateDetails, updateProductDetail, clearList, } = useSalesInvoiceStore();
     const { selections, resetSelection, setSelections } = useSelection();
+    const { location } = useUserData();
 
     const [list, setList] = useState(productList);
 
@@ -95,7 +95,7 @@ const salesForm = () => {
                             qty: product.qty || 0,
                             amount: product.amount || 0,
                             group: product.group,
-                            userId: user?.id
+                            location: location
                         };
 
                         if (!productData.qty || !productData.amount) productHasError = true;
@@ -114,7 +114,7 @@ const salesForm = () => {
                         totalAmount: totalAmount,
                         unpaidAmount: totalAmount,
                         products: products,
-                        userId: user?.id
+                        location: location
                     };
                     realm.create("salesInvoices", salesInvoiceData);
                     router.push({ pathname: ROUTES.SALES });

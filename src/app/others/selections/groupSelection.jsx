@@ -60,7 +60,7 @@ const groupSelection = () => {
                     realm.write(() => {
                         try {
                             const newGroup = searchKey.trim().toUpperCase();
-                            const group = realm.create("groups", { _id: newGroup, userId: user?.id });
+                            const group = realm.create("groups", { _id: newGroup });
                             addToDataList(group, { isFirst: true, checkBeforeAdd: true });
                             ToastAndroid.show(`Group ${newGroup} added.`, ToastAndroid.SHORT);
                         } catch (error) {

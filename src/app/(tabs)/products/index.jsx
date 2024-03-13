@@ -4,13 +4,11 @@ import { useCallback, useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "src/common/common";
 import Product from "src/components/Product";
-import { useRealm, useQuery, useUser } from "@realm/react";
+import { useRealm, useQuery } from "@realm/react";
 import moment from "moment";
-// import useProduct from "src/store/productStore";
 
 const ProductPage = () => {
     const realm = useRealm();
-    const user = useUser();
     const [searchKey, setSearchKey] = useState("");
 
     const dataList = useQuery("products", (col) => {
@@ -24,7 +22,6 @@ const ProductPage = () => {
                 realm.write(() => {
                     try {
                         prodObj.deletedAt = moment().valueOf();
-                        prodObj.userId = user?.id;
                     } catch (error) {
                         ToastAndroid.show(
                             error.message || error,

@@ -6,21 +6,17 @@ import { useQuery, useRealm, useUser } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Customer from "src/components/Customer";
 import { ROUTES } from "src/common/common";
+import useUserData from "src/store/userDataStore";
 
 const CustomerPage = () => {
     const realm = useRealm();
     const user = useUser();
     const [searchKey, setSearchKey] = useState("");
+    const { location } = useUserData();
 
-    const dataList = useQuery(
-        "customers",
-        (coll) => {
-            return coll
-                .filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
-                .sorted("indexedName");
-        },
-        [searchKey]
-    );
+    const dataList = useQuery("customers", (coll) => {
+        return coll.filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey).sorted("indexedName");
+    }, [searchKey]);
 
     const handleDeleteCustomer = useCallback((item) => {
         if (realm) {
@@ -29,7 +25,6 @@ const CustomerPage = () => {
                 realm.write(() => {
                     try {
                         custObj.deletedAt = moment().valueOf();
-                        custObj.userId = user?.id;
                     } catch (error) {
                         ToastAndroid.show(
                             error.message || error,
