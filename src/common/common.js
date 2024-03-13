@@ -102,12 +102,13 @@ export const saveAsFile = async (value, options = { type: "text", filename: mome
     try {
         const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
         if (!permissions.granted) throw new Error("Permission denied.");
-        let extn = ".txt";
         let mimeType = "plain/text";
         switch (options.type) {
             case "json":
-                extn = ".json";
                 mimeType = "application/json";
+                break;
+            case "csv":
+                mimeType = "text/comma-separated-values";
                 break;
         }
         // options.filename = `${options.filename}${extn}`;

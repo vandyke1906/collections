@@ -109,29 +109,27 @@ const reportView = () => {
                                         let dataText = JSON.stringify(results);
                                         if (isSales) {
                                             const salesProductFormat = [];
-                                            for (const { invoice, products } of results) {
-                                                for (const product of products) {
-                                                    salesProductFormat.push({
-                                                        ACCOUNT_NAME: invoice.customerName,
-                                                        PO_NUMBER: invoice.poNo,
-                                                        SO_NUMBER: invoice.soNo,
-                                                        DATE_OF_SI: moment(invoice.dateOfSI).format("DD-MMM-YY"),
-                                                        INVOICE_NUMBER: invoice.invoiceNo,
-                                                        PRODUCT_CODE: product.code,
-                                                        PRODUCT: product.name,
-                                                        GROUP: product.group,
-                                                        UNIT: product.unit,
-                                                        QUANTITY: product.qty,
-                                                        REVENUE: formatAmount(invoiceNo.totalAmount),
-                                                        UNPAID_AMOUNT: formatAmount(invoiceNo.unpaidAmount),
-                                                        DATE_DELIVERED: moment(invoice.dateDelivered).format("DD-MMM-YY"),
-                                                    });
-                                                }
+                                            for (const { invoice, product } of results) {
+                                                salesProductFormat.push({
+                                                    ACCOUNT_NAME: invoice.customerName,
+                                                    PO_NUMBER: invoice.poNo,
+                                                    SO_NUMBER: invoice.soNo,
+                                                    DATE_OF_SI: moment(invoice.dateOfSI).format("DD-MMM-YY"),
+                                                    INVOICE_NUMBER: invoice.invoiceNo,
+                                                    PRODUCT_CODE: product.code,
+                                                    PRODUCT: product.name,
+                                                    GROUP: product.group,
+                                                    UNIT: product.unit,
+                                                    QUANTITY: product.qty,
+                                                    AMOUNT: formatAmount(product.amount),
+                                                    INVOICE_AMOUNT: formatAmount(invoice.totalAmount),
+                                                    UNPAID_AMOUNT: formatAmount(invoice.unpaidAmount),
+                                                    DATE_DELIVERED: moment(invoice.dateDelivered).format("DD-MMM-YY"),
+                                                });
                                             }
                                             // dataText = JSON.stringify(salesProductFormat);
                                             dataText = convertJSONtoCSV(salesProductFormat);
-                                        }
-                                        else {
+                                        } else {
                                             const collectionFormat = [];
                                             for (const { collection } of results) {
                                                 collectionFormat.push({
@@ -148,7 +146,7 @@ const reportView = () => {
                                             // dataText = JSON.stringify(collectionFormat);
                                             dataText = convertJSONtoCSV(collectionFormat);
                                         }
-                                        saveAsFile(dataText, { type: "json", filename: isSales ? "sales-report" : "collection-report", })
+                                        saveAsFile(dataText, { type: "csv", filename: isSales ? "sales-report" : "collection-report", })
                                             .then(() => {
                                                 ToastAndroid.show("Report downloaded.", ToastAndroid.SHORT);
                                             }).catch(() => {
