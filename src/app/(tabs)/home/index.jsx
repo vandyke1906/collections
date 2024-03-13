@@ -30,7 +30,14 @@ const Page = () => {
 
     return (
         <View className="flex flex-col bg-white gap-y-2">
-            <View className="basis-2/12"></View>
+            <View className="basis-1/12">
+            </View>
+            <View className="basis-1/12">
+                <View className="flex flex-row items-star  w-full p-4">
+                    <Text className="text-slate-400 text-2xl mr-2">Area Code:</Text>
+                    <Text className="text-blue-500 text-5xl font-semibold font-serif">{location}</Text>
+                </View>
+            </View>
             <View className="basis-2/12">
                 <View className="flex flex-row items-stretch w-full h-full rounded-lg">
                     <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.SALES })}>
