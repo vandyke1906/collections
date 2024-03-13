@@ -6,6 +6,7 @@ import useReportStore from "src/store/reportStore";
 import { FontAwesome } from "@expo/vector-icons";
 import { REPORT_TYPE, formatAmount, formatDate, isMOPCheque, saveAsFile } from "src/common/common";
 import CardData from "src/components/CardData";
+import moment from "moment";
 
 const reportView = () => {
     const navigation = useNavigation();
@@ -106,18 +107,28 @@ const reportView = () => {
                                 {
                                     text: "Continue",
                                     onPress: () => {
-                                        saveAsFile(JSON.stringify(results), {
-                                            type: "json",
-                                            filename: isSales ? "sales-report" : "collection-report",
-                                        })
+                                        let dataText = JSON.stringify(results);
+                                        if (!isSales) {
+                                            const collectionFormat = [];
+                                            for (const { collection } of results) {
+                                                collectionFormat.push({
+                                                    COR_DATE: moment(collection.corDate).format("DD-MMM-YY"),
+                                                    COR_NUMBER: collection.corNo,
+                                                    SI_DATE: moment(collection.salesInvoice.dateOfSI).format("DD-MMM-YY"),
+                                                    SI_NUMBER: collection.salesInvoice.invoiceNo,
+                                                    CUSTOMER: collection.details.customerName,
+                                                    PAYMENT_TYPE: collection.modeOfPayment,
+                                                    AMOUNT: formatAmount(collection.amount),
+                                                    DATE: moment(collection.paymentDate).format("DD-MMM-YY"),
+                                                });
+                                            }
+                                            dataText = JSON.stringify(collectionFormat);
+                                        }
+                                        saveAsFile(dataText, { type: "json", filename: isSales ? "sales-report" : "collection-report", })
                                             .then(() => {
                                                 ToastAndroid.show("Report downloaded.", ToastAndroid.SHORT);
-                                            })
-                                            .catch(() => {
-                                                ToastAndroid.show(
-                                                    `Failed to download file. ${error.message || error}.`,
-                                                    ToastAndroid.SHORT
-                                                );
+                                            }).catch(() => {
+                                                ToastAndroid.show(`Failed to download file. ${error.message || error}.`, ToastAndroid.SHORT);
                                             });
                                     },
                                 },

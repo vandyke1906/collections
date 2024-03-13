@@ -1,14 +1,4 @@
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    TextInput,
-    Keyboard,
-    ScrollView,
-    ToastAndroid,
-    StatusBar,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Keyboard, ScrollView, ToastAndroid, StatusBar, } from "react-native";
 import React, { useEffect } from "react";
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -30,26 +20,9 @@ const filterReport = () => {
     const route = useRoute();
     const params = route.params || {};
     const {
-        reportType,
-        setReportType,
-        clearSummary,
-        dateFrom,
-        setDateFrom,
-        dateTo,
-        setDateTo,
-        setGroups,
-        groups,
-        removeGroup,
-        setProducts,
-        products,
-        removeProduct,
-        setCustomers,
-        customers,
-        removeCustomer,
-        setSalesInvoices,
-        salesInvoices,
-        removeSalesInvoice,
-        resetReportData,
+        reportType, setReportType, clearSummary, dateFrom, setDateFrom, dateTo, setDateTo,
+        setGroups, groups, removeGroup, setProducts, products, removeProduct, setCustomers, customers, removeCustomer,
+        setSalesInvoices, salesInvoices, removeSalesInvoice, resetReportData
     } = useReportStore();
     const { selections, resetSelection, setSelections } = useSelection();
 
