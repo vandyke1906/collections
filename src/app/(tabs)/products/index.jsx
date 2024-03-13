@@ -11,8 +11,8 @@ const ProductPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
 
-    const dataList = useQuery("products", (col) => {
-        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("indexedName");
+    const dataList = useQuery("products", (coll) => {
+        return coll.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("indexedName");
     }, [searchKey]);
 
     const handleDeleteProduct = useCallback(() => {

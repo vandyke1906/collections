@@ -13,26 +13,24 @@ const Page = () => {
 
     useEffect(() => {
         const customData = user.customData || {};
-        setLocation(customData.location || "");
-        if (customData.location)
+        const currentLocation = customData.location;
+        if (currentLocation) {
+            setLocation(currentLocation);
+
+            realm.subscriptions.update((subs) => {
+                subs.add(realm.objects("groups"));
+                subs.add(realm.objects("products"));
+                subs.add(realm.objects("customers").filtered("location == $0", currentLocation));
+                subs.add(realm.objects("salesInvoices").filtered("location == $0", currentLocation));
+                subs.add(realm.objects("salesProducts").filtered("location == $0", currentLocation));
+                subs.add(realm.objects("collections").filtered("location == $0", currentLocation));
+            });
             setTimeout(() => {
                 router.replace({ pathname: ROUTES.HOME });
             }, 0);
-        else
-            app.currentUser.logOut();
-    }, []);
-
-    useEffect(() => {
-        realm.subscriptions.update((subs) => {
-            subs.add(realm.objects("groups"));
-            subs.add(realm.objects("products"));
-            subs.add(realm.objects("customers").filtered("location == $0", location));
-            subs.add(realm.objects("salesInvoices").filtered("location == $0", location));
-            subs.add(realm.objects("salesProducts").filtered("location == $0", location));
-            subs.add(realm.objects("collections").filtered("location == $0", location));
-        });
-    }, [realm, location]);
-
+        }
+        else app.currentUser.logOut();
+    }, [realm]);
     return <Loading />;
 };
 

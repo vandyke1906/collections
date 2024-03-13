@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useRealm } from "@realm/react";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
 import ProductSummary from "src/components/reports/salesProducts/ProductSummary";
+// import { FontAwesome } from "@expo/vector-icons";
 
 const productPage = () => {
     const navigation = useNavigation();
@@ -12,39 +12,16 @@ const productPage = () => {
     const route = useRoute();
     const product = route.params || {};
     const [dateRange, setDateRange] = useState({ from: 0, to: 0 });
-    const data = useQuery(
-        "salesInvoices",
-        (coll) => {
-            const salesProducts = realm.objects("salesProducts").filtered("productId == $0", product._id);
-            if (!salesProducts || !salesProducts.length) return [];
-            if (dateRange.from && dateRange.to)
-                return coll
-                    .filtered(
-                        `ANY products == {${salesProducts
-                            .map((s) => `obj('salesProducts', '${s._id}')`)
-                            .join(",")}} && dateOfSI BETWEEN { $0, $1 }`,
-                        dateRange.from,
-                        dateRange.to
-                    )
-                    .sorted("dateOfSI");
-            else if (dateRange.from)
-                return coll
-                    .filtered(
-                        `ANY products == {${salesProducts
-                            .map((s) => `obj('salesProducts', '${s._id}')`)
-                            .join(",")}} && dateOfSI >= $0`,
-                        dateRange.from
-                    )
-                    .sorted("dateOfSI");
-            else
-                return coll
-                    .filtered(
-                        `ANY products == {${salesProducts.map((s) => `obj('salesProducts', '${s._id}')`).join(",")}}`
-                    )
-                    .sorted("dateOfSI");
-        },
-        [dateRange]
-    );
+    const data = useQuery("salesInvoices", (coll) => {
+        const salesProducts = realm.objects("salesProducts").filtered("productId == $0", product._id);
+        if (!salesProducts || !salesProducts.length) return salesProducts;
+        if (dateRange.from && dateRange.to)
+            return coll.filtered(`ANY products == {${salesProducts.map((s) => `obj('salesProducts', '${s._id}')`).join(",")}} && dateOfSI BETWEEN { $0, $1 }`, dateRange.from, dateRange.to).sorted("dateOfSI");
+        else if (dateRange.from)
+            return coll.filtered(`ANY products == {${salesProducts.map((s) => `obj('salesProducts', '${s._id}')`).join(",")}} && dateOfSI >= $0`, dateRange.from).sorted("dateOfSI");
+        else
+            return coll.filtered(`ANY products == {${salesProducts.map((s) => `obj('salesProducts', '${s._id}')`).join(",")}}`).sorted("dateOfSI");
+    }, [dateRange]);
 
     useEffect(() => {
         navigation.setOptions({
