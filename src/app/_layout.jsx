@@ -11,6 +11,7 @@ import { CollectionDetails } from "src/model/CollectionDetails";
 import { OpenRealmBehaviorType, OpenRealmTimeOutBehavior } from "realm";
 import { APP_ID } from "src/common/common";
 import login from "./welcome";
+import Loading from "src/components/Loading";
 
 const AppLayout = () => {
     const realmAccessBehavior = {
@@ -31,6 +32,7 @@ const AppLayout = () => {
                             console.error({ error });
                         }
                     }}
+                    fallback={Loading}
                 >
                     <Stack screenOptions={{ headerShown: false }} />
                 </RealmProvider>

@@ -2,6 +2,7 @@ import { View, Text, TextInput, Pressable, ScrollView, ToastAndroid, ActivityInd
 import React, { useRef, useState } from 'react';
 import { useApp } from "@realm/react";
 import { Credentials } from "realm";
+import Loading from "src/components/Loading";
 
 const login = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
@@ -154,11 +155,7 @@ const login = () => {
 
     const renderLoading = () => {
         if (isProcessing) {
-            return (
-                <ActivityIndicator size="large" color="black" style={{
-                    position: 'absolute', left: 0, right: 0, bottom: 0, top: 0
-                }} />
-            );
+            return <Loading />;
         } else {
             return null;
         }
