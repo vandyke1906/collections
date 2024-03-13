@@ -1,17 +1,16 @@
 import { router } from "expo-router";
 import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert, StatusBar } from "react-native";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import moment from "moment";
-import { useQuery, useRealm } from "@realm/react";
+import { useQuery, useRealm, useUser } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Customer from "src/components/Customer";
 import { ROUTES } from "src/common/common";
-// import useCustomer from "src/store/customerStore";
 
 const CustomerPage = () => {
     const realm = useRealm();
+    const user = useUser();
     const [searchKey, setSearchKey] = useState("");
-    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useCustomer();
 
     const dataList = useQuery(
         "customers",
@@ -23,30 +22,24 @@ const CustomerPage = () => {
         [searchKey]
     );
 
-    // useEffect(() => {
-    //     resetCounter();
-    //     const result = getRecords(searchKey);
-    //     setDataList(result);
-    // }, [realm, searchKey]);
-
-    // const getRecords = (searchKey) => {
-    //     try {
-    //         let result = realm.objects("customers").filtered("deletedAt == 0 && code BEGINSWITH[c] $0 || name CONTAINS[c] $0", searchKey)
-    //             .sorted("indexedName").slice((counter - 1) * limit, counter * limit);
-    //         if (!result.length) setIsEnd(true);
-    //         nextCounter();
-    //         return Array.from(result) || [];
-    //     } catch (error) {
-    //         console.error(error);
-    //         return [];
-    //     }
-    // };
-
-    // const fetchMoreData = () => {
-    //     if (isEnd) return console.info("End of record");
-    //     const nextResult = getRecords(searchKey);
-    //     addToDataList(nextResult);
-    // };
+    const handleDeleteCustomer = useCallback((item) => {
+        if (realm) {
+            const custObj = realm.objectForPrimaryKey("customers", item._id);
+            if (custObj) {
+                realm.write(() => {
+                    try {
+                        custObj.deletedAt = moment().valueOf();
+                        custObj.userId = user?.id;
+                    } catch (error) {
+                        ToastAndroid.show(
+                            error.message || error,
+                            ToastAndroid.SHORT
+                        );
+                    }
+                });
+            }
+        }
+    }, [realm]);
 
     return (
         <View className="flex-1 mb-5">
@@ -72,33 +65,13 @@ const CustomerPage = () => {
                             onDelete={() => {
                                 Alert.alert("Delete Customer", `Do you want to delete ${item.name}?`, [
                                     { text: "Cancel" },
-                                    {
-                                        text: "Continue",
-                                        onPress: () => {
-                                            if (realm) {
-                                                const custObj = realm.objectForPrimaryKey("customers", item._id);
-                                                if (custObj) {
-                                                    realm.write(() => {
-                                                        try {
-                                                            custObj.deletedAt = moment().valueOf();
-                                                            // realm.delete(custObj);
-                                                        } catch (error) {
-                                                            ToastAndroid.show(
-                                                                error.message || error,
-                                                                ToastAndroid.SHORT
-                                                            );
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        },
-                                    },
+                                    { text: "Continue", onPress: () => handleDeleteCustomer(item) },
                                 ]);
                             }}
                         />
                     )}
-                    // onEndReached={fetchMoreData}
-                    // onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

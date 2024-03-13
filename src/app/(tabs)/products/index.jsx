@@ -1,79 +1,40 @@
 import { router } from "expo-router";
 import { FlatList, View, TouchableOpacity, TextInput, ToastAndroid, Alert, StatusBar } from "react-native";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ROUTES } from "src/common/common";
 import Product from "src/components/Product";
-import { useRealm, useQuery } from "@realm/react";
+import { useRealm, useQuery, useUser } from "@realm/react";
 import moment from "moment";
 // import useProduct from "src/store/productStore";
 
 const ProductPage = () => {
     const realm = useRealm();
+    const user = useUser();
     const [searchKey, setSearchKey] = useState("");
-    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useProduct();
 
-    const dataList = useQuery(
-        "products",
-        (col) => {
-            return col
-                .filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
-                .sorted("indexedName");
-        },
-        [searchKey]
-    );
+    const dataList = useQuery("products", (col) => {
+        return col.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("indexedName");
+    }, [searchKey]);
 
-    // useEffect(() => {
-    //     resetCounter();
-    //     const result = getRecords(searchKey);
-    //     setDataList(result);
-    // }, [realm, searchKey]);
-
-    // const getRecords = (searchKey) => {
-    //     try {
-    //         const products = realm.objects("products");
-    //         products.removeAllListeners();
-    //         products.addListener((coll, changes) => {
-    //             console.info({ coll, changes });
-    //             // Handle deleted Dog objects
-    //             changes.deletions.forEach((index) => {
-    //                 console.log(`Looks like Dog #${index} has left the realm.`);
-    //             });
-    //             // Handle newly added Dog objects
-    //             changes.insertions.forEach((index) => {
-    //                 const insertedDog = coll[index];
-    //                 console.log(`Welcome our new friend, ${insertedDog.name}!`);
-    //             });
-    //             // Handle Dog objects that were modified
-    //             changes.newModifications.forEach((index) => {
-    //                 const modifiedDog = coll[index];
-    //                 console.log(`Hey ${modifiedDog.name}, you look different!`);
-    //             });
-    //             // Handle Dog objects that were modified
-    //             changes.oldModifications.forEach((index) => {
-    //                 const modifiedDog = coll[index];
-    //                 console.log(`Old Modif ${modifiedDog.name}, you look different!`);
-    //             });
-    //         });
-
-    //         let result = products.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey)
-    //             .sorted("indexedName").slice((counter - 1) * limit, counter * limit);
-
-    //         if (!result.length) setIsEnd(true);
-    //         nextCounter();
-    //         return result || [];
-    //     } catch (error) {
-    //         console.error(error);
-    //         return [];
-    //     }
-    // };
-
-    // const fetchMoreData = () => {
-    //     console.info("fetch data");
-    //     if (isEnd) return console.info("End of record");
-    //     const nextResult = getRecords(searchKey);
-    //     addToDataList(nextResult, { isArray: true, checkBeforeAdd: true });
-    // };
+    const handleDeleteProduct = useCallback(() => {
+        if (realm) {
+            const prodObj = realm.objectForPrimaryKey("products", item._id);
+            if (prodObj) {
+                realm.write(() => {
+                    try {
+                        prodObj.deletedAt = moment().valueOf();
+                        prodObj.userId = user?.id;
+                    } catch (error) {
+                        ToastAndroid.show(
+                            error.message || error,
+                            ToastAndroid.SHORT
+                        );
+                    }
+                });
+            }
+        }
+    }, [realm]);
 
     return (
         <View className="flex-1 mb-5">
@@ -96,35 +57,18 @@ const ProductPage = () => {
                             onSelect={() => router.push({ pathname: ROUTES.PRODUCT_PAGE, params: item })}
                             onEdit={() => router.push({ pathname: ROUTES.PRODUCT_FORM, params: item })}
                             onDelete={() => {
-                                Alert.alert("Delete Customer", `Do you want to delete ${item.name}?`, [
+                                Alert.alert("Delete Product", `Do you want to delete ${item.name}?`, [
                                     { text: "Cancel" },
                                     {
                                         text: "Continue",
-                                        onPress: () => {
-                                            if (realm) {
-                                                const prodObj = realm.objectForPrimaryKey("products", item._id);
-                                                if (prodObj) {
-                                                    realm.write(() => {
-                                                        try {
-                                                            prodObj.deletedAt = moment().valueOf();
-                                                            // realm.delete(custObj);
-                                                        } catch (error) {
-                                                            ToastAndroid.show(
-                                                                error.message || error,
-                                                                ToastAndroid.SHORT
-                                                            );
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        },
+                                        onPress: () => handleDeleteProduct(item),
                                     },
                                 ]);
                             }}
                         />
                     )}
-                    // onEndReached={fetchMoreData}
-                    // onEndReachedThreshold={0.1}
+                // onEndReached={fetchMoreData}
+                // onEndReachedThreshold={0.1}
                 />
             </View>
 

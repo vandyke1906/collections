@@ -25,7 +25,7 @@ import {
 } from "src/common/common";
 import { Controller, useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
-import { useRealm } from "@realm/react";
+import { useRealm, useUser } from "@realm/react";
 import moment from "moment";
 
 const collectionForm = () => {
@@ -33,16 +33,12 @@ const collectionForm = () => {
         "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
     const navigation = useNavigation();
     const realm = useRealm();
+    const user = useUser();
     const selectedInvoice = useSalesInvoiceStore((state) => state.selected);
     const setSelectedInvoice = useSalesInvoiceStore((state) => state.setSelected);
 
     const [isCheque, setIsCheque] = useState(false);
-    const {
-        control,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm();
+    const { control, handleSubmit, setValue, formState: { errors }, } = useForm();
 
     useEffect(() => {
         navigation.setOptions({
@@ -101,6 +97,7 @@ const collectionForm = () => {
                                 customerName: selectedInvoice.customerName,
                             },
                             customerId: currentSalesInvoice.customerId,
+                            userId: user?.id
                         };
 
                         if (isMOPCheque(data.modeOfPayment)) {

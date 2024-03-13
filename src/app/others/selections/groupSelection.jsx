@@ -2,7 +2,7 @@ import { View, FlatList, TextInput, TouchableOpacity, Alert, ToastAndroid, Statu
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { router, useNavigation } from "expo-router";
-import { useQuery, useRealm } from "@realm/react";
+import { useQuery, useRealm, useUser } from "@realm/react";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useSelection from "@store/selectionStore";
@@ -13,11 +13,10 @@ import { customHeaderBackButton } from "src/common/common";
 const groupSelection = () => {
     const navigation = useNavigation();
     const realm = useRealm();
+    const user = useUser();
     const route = useRoute();
     const params = route.params || {};
 
-    const { selections, addToSelection, removeToSelection } = useSelection();
-    // const { dataList, counter, limit, nextCounter, resetCounter, setDataList, addToDataList, isEnd, setIsEnd } = useGroup();
 
     const [searchKey, setSearchKey] = useState("");
 
@@ -51,34 +50,9 @@ const groupSelection = () => {
         [searchKey]
     );
 
-    // useEffect(() => {
-    //     resetCounter();
-    //     const result = getRecords(searchKey);
-    //     setDataList(result);
-    // }, [realm, searchKey]);
-
-    // const getRecords = (searchKey) => {
-    //     try {
-    //         let result = realm.objects("groups").filtered("_id CONTAINS[c] $0", searchKey)
-    //             .sorted("_id").slice((counter - 1) * limit, counter * limit);
-    //         if (!result.length) setIsEnd(true);
-    //         nextCounter();
-    //         return Array.from(result) || [];
-    //     } catch (error) {
-    //         console.error(error);
-    //         return [];
-    //     }
-    // };
-
-    // const fetchMoreData = () => {
-    //     if (isEnd) return console.info("End of record");
-    //     const nextResult = getRecords(searchKey);
-    //     addToDataList(nextResult, { isArray: true, checkBeforeAdd: true });
-    // };
-
     const showAddConfirmation = () => {
         Alert.alert("Add Group", `Do you want to add ${searchKey.toUpperCase()}?`, [
-            { text: "Cancel", onPress: () => {} },
+            { text: "Cancel", onPress: () => { } },
             {
                 text: "Continue",
                 onPress: () => {
@@ -86,7 +60,7 @@ const groupSelection = () => {
                     realm.write(() => {
                         try {
                             const newGroup = searchKey.trim().toUpperCase();
-                            const group = realm.create("groups", { _id: newGroup });
+                            const group = realm.create("groups", { _id: newGroup, userId: user?.id });
                             addToDataList(group, { isFirst: true, checkBeforeAdd: true });
                             ToastAndroid.show(`Group ${newGroup} added.`, ToastAndroid.SHORT);
                         } catch (error) {
@@ -149,8 +123,8 @@ const groupSelection = () => {
                         />
                     );
                 }}
-                // onEndReached={fetchMoreData}
-                // onEndReachedThreshold={0.1}
+            // onEndReached={fetchMoreData}
+            // onEndReachedThreshold={0.1}
             />
 
             <StatusBar style="auto" />

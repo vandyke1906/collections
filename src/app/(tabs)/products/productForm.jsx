@@ -1,15 +1,6 @@
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    ToastAndroid,
-    TouchableWithoutFeedback,
-    Keyboard,
-    StatusBar,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, TouchableWithoutFeedback, Keyboard, StatusBar, } from "react-native";
 import { useCallback, useEffect } from "react";
-import { useRealm } from "@realm/react";
+import { useRealm, useUser } from "@realm/react";
 import { useForm, Controller } from "react-hook-form";
 import { router, useNavigation } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -18,16 +9,11 @@ import { ROUTES } from "src/common/common";
 import useProduct from "src/store/productStore";
 
 const productForm = () => {
-    const inputClass =
-        "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
+    const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
-    const {
-        control,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm();
+    const { control, handleSubmit, setValue, formState: { errors }, } = useForm();
     const realm = useRealm();
+    const user = useUser();
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
@@ -72,7 +58,10 @@ const productForm = () => {
                     const groupName = data.group && data.group.toUpperCase();
                     if (groupName) {
                         const group = realm.objectForPrimaryKey("groups", groupName);
-                        if (!group) realm.create("groups", { _id: groupName });
+                        if (!group) realm.create("groups", {
+                            _id: groupName,
+                            userId: user?.id
+                        });
                         data.group = groupName;
                     }
 
@@ -85,6 +74,7 @@ const productForm = () => {
                             product.unit = data.unit.trim();
                             product.group = data.group.trim();
                             product.indexedName = data.name.toLowerCase().replace(/\s/g, "");
+                            product.userId = user?.id;
                             isNew = false;
                         }
                         if (salesProduct) {
@@ -95,6 +85,7 @@ const productForm = () => {
                         }
                     } else {
                         data.indexedName = data.name.toLowerCase().replace(/\s/g, "");
+                        data.userId = user?.id;
                     }
 
                     if (isNew) {
