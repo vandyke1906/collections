@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { Stack } from "expo-router";
-import { AppProvider, RealmProvider, UserProvider, useAuth } from "@realm/react";
+import React from 'react';
+import { Stack, router } from "expo-router";
+import { AppProvider, RealmProvider, UserProvider } from "@realm/react";
 import { Product } from "src/model/Product";
 import { Group } from "src/model/Group";
 import { Customer } from "src/model/Customer";
@@ -9,7 +9,8 @@ import { SalesProduct } from "src/model/SalesProduct";
 import { Collection } from "src/model/Collection";
 import { CollectionDetails } from "src/model/CollectionDetails";
 import { OpenRealmBehaviorType, OpenRealmTimeOutBehavior } from "realm";
-import { ActivityIndicator, Text, View } from "react-native";
+import { APP_ID } from "src/common/common";
+import login from "./welcome";
 
 const AppLayout = () => {
     const realmAccessBehavior = {
@@ -18,15 +19,17 @@ const AppLayout = () => {
         timeOut: 3000,
     };
     return (
-        <AppProvider id="app-collection-vgocb">
-            <UserProvider fallback={LoginComponent}>
+        <AppProvider id={APP_ID}>
+            <UserProvider fallback={login}>
                 <RealmProvider
                     schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails]}
                     sync={{
                         flexible: true,
                         newRealmFileBehavior: realmAccessBehavior,
                         existingRealmFileBehavior: realmAccessBehavior,
-                        onError: console.error
+                        onError: (_, error) => {
+                            console.error({ error });
+                        }
                     }}
                 >
                     <Stack screenOptions={{ headerShown: false }} />
@@ -35,21 +38,4 @@ const AppLayout = () => {
         </AppProvider>
     );
 };
-
-const LoginComponent = () => {
-    const { logInWithAnonymous, result } = useAuth();
-    useEffect(() => {
-        logInWithAnonymous();
-    }, []);
-    return (
-        <View className="flex h-full w-full items-center justify-center">
-            {!result.error && <Text>Please Continue</Text>}
-            <View>
-                {result.pending && <ActivityIndicator />}
-                {result.error && JSON.stringify(result.error)}
-            </View>
-        </View>
-    );
-};
-
 export default AppLayout;

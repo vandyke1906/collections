@@ -1,18 +1,17 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import {
-    documentDirectory,
     writeAsStringAsync,
-    readDirectoryAsync,
-    readAsStringAsync,
     StorageAccessFramework,
     EncodingType,
 } from "expo-file-system";
+import { getDocumentAsync } from "expo-document-picker";
 import { Pressable } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import moment from "moment";
 
+export const APP_ID = "app-collection-vgocb";
+
 export const QUERY_LIMIT = 5;
-export const REALM_QUERY_LIMIT = "LIMIT(1)";
 
 export const ROUTES = {
     HOME: "/(tabs)/home",
@@ -34,6 +33,7 @@ export const ROUTES = {
     SALES_INVOICE_SELECTION: "/others/selections/salesInvoiceSelection",
     FILTER_REPORT: "/reports/filterReport",
     VIEW_REPORT: "/reports/reportView",
+    WELCOME: "/welcome",
 };
 
 export const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
@@ -74,16 +74,16 @@ export const getDateValueOf = (date, options = { format: "" }) => {
     return moment(date).valueOf();
 };
 
-export const showDatePicker = (options = { date: 0, onChange: () => {} }) => {
+export const showDatePicker = (options = { date: 0, onChange: () => { } }) => {
     DateTimePickerAndroid.open({
         value: options.date ? new Date(options.date) : new Date(),
         mode: "date",
         display: "calendar",
-        onChange: typeof options.onChange === "function" ? options.onChange : () => {},
+        onChange: typeof options.onChange === "function" ? options.onChange : () => { },
     });
 };
 
-export const customHeaderBackButton = (onPress = () => {}) => {
+export const customHeaderBackButton = (onPress = () => { }) => {
     return (
         <Pressable className="pr-8" onPress={onPress}>
             <Feather size={24} name="arrow-left" />
@@ -120,4 +120,53 @@ export const saveAsFile = async (value, options = { type: "text", filename: mome
     } catch (error) {
         throw error;
     }
+};
+
+export const readFile = async () => {
+    try {
+        // const result = await getDocumentAsync({ type: "*/*" }); //allow all */*
+        const result = await getDocumentAsync({
+            type: ["application/json", "text/csv", "text/comma-separated-values"],
+        }); //allow all */*
+        if ((result?.assets || []).length) {
+            const selectedFile = result.assets[0];
+            const { uri, name, size, mimeType } = selectedFile;
+
+            console.info({ mimeType });
+
+            try {
+                const fileContent = await StorageAccessFramework.readAsStringAsync(uri, {
+                    encoding: EncodingType.UTF8,
+                });
+                let formattedContent = "";
+                switch (mimeType) {
+                    case "application/json": {
+                        formattedContent = JSON.stringify(JSON.parse(fileContent), null, 2);
+                        break;
+                    } default: {
+                        formattedContent = fileContent;
+                        break;
+                    }
+                }
+                console.info("File content:", formattedContent);
+                return formattedContent;
+            } catch (error) {
+                console.error("Error reading file:", error);
+            }
+        } else {
+            console.info("User cancelled the document picker");
+        }
+    } catch (error) {
+        console.error("Error picking document:", error);
+    }
+};
+
+export const readDirectory = () => {
+    StorageAccessFramework.requestDirectoryPermissionsAsync().then(async (permissions) => {
+        if (!permissions.granted) return;
+        const { directoryUri } = permissions;
+        const filesInRoot = await StorageAccessFramework.readDirectoryAsync(directoryUri);
+        const filesInNestedFolder = await StorageAccessFramework.readDirectoryAsync(filesInRoot[0]);
+        console.info({ filesInRoot, filesInNestedFolder });
+    });
 };

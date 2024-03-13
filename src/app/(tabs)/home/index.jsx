@@ -1,11 +1,13 @@
 import { router } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { ROUTES } from "src/common/common";
-import { useQuery } from "@realm/react";
+import { useApp, useQuery } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const Page = () => {
+
+    const app = useApp();
 
     const salesInvoiceList = useQuery("salesInvoices");
     const collectionList = useQuery("collections");
@@ -17,6 +19,7 @@ const Page = () => {
     });
 
     return (
+        // <ScrollView>
         <View className="flex flex-col bg-white gap-y-2">
             <View className="basis-1/6">
             </View>
@@ -53,12 +56,18 @@ const Page = () => {
                 </Pressable>
             </View>
 
-            <View className="h-full">
-
+            <View className="basis-1/5">
+                <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => {
+                    app.currentUser.logOut();
+                }}>
+                    <FontAwesome size={24} name="user" color="#189AB4" />
+                    <Text className="text-slate-900 font-medium text-center uppercase">Logout</Text>
+                </Pressable>
             </View>
 
             <StatusBar style="auto" />
         </View>
+        // </ScrollView>
     );
 };
 
