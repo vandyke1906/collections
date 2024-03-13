@@ -39,9 +39,9 @@ const Page = () => {
             <View className="basis-1/12">
             </View>
             <View className="basis-1/12">
-                <View className="flex flex-row items-star  w-full p-4">
-                    <Text className="text-slate-300 text-2xl mr-2">Area Code:</Text>
-                    <Text className="text-blue-500 text-3xl font-semibold font-serif">{location}</Text>
+                <View className="flex flex-row items-center w-full p-4">
+                    <Text className="text-slate-300 text-1xl mr-2">Area Code:</Text>
+                    <Text className="text-blue-500 text-2xl font-semibold font-serif">{location}</Text>
                 </View>
             </View>
             <View className="basis-2/12">
