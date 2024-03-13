@@ -3,34 +3,21 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useRealm } from "@realm/react";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
 import InvoiceSummary from "src/components/reports/salesInvoices/InvoiceSummary";
+// import { FontAwesome } from "@expo/vector-icons";
 
 const customerPage = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const customer = route.params || {};
     const [dateRange, setDateRange] = useState({ from: 0, to: 0 });
-    const data = useQuery(
-        "salesInvoices",
-        (coll) => {
-            if (dateRange.from && dateRange.to)
-                return coll
-                    .filtered(
-                        "customerId == $0 && dateOfSI BETWEEN { $1, $2 }",
-                        customer._id,
-                        dateRange.from,
-                        dateRange.to
-                    )
-                    .sorted("dateOfSI");
-            else if (dateRange.from)
-                return coll
-                    .filtered("customerId == $0 && dateOfSI >= $1", customer._id, dateRange.from)
-                    .sorted("dateOfSI");
-            else return coll.filtered("customerId == $0", customer._id).sorted("dateOfSI");
-        },
-        [dateRange]
-    );
+    const data = useQuery("salesInvoices", (coll) => {
+        if (dateRange.from && dateRange.to)
+            return coll.filtered("customerId == $0 && dateOfSI BETWEEN { $1, $2 }", customer._id, dateRange.from, dateRange.to).sorted("dateOfSI");
+        else if (dateRange.from)
+            return coll.filtered("customerId == $0 && dateOfSI >= $1", customer._id, dateRange.from).sorted("dateOfSI");
+        else return coll.filtered("customerId == $0", customer._id).sorted("dateOfSI");
+    }, [dateRange]);
 
     useEffect(() => {
         navigation.setOptions({

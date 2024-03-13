@@ -13,15 +13,37 @@ const salesPage = () => {
     const realm = useRealm();
 
     const [searchKey, setSearchKey] = useState("");
-    const setSelectedInvoice = useSalesInvoiceStore((state) => state.setSelected);
+    const { setSelected: setSelectedInvoice } = useSalesInvoiceStore();
 
     const dataList = useQuery("salesInvoices", (col) => {
+        const statusRegex = /^#STATUS:(PAID|UNPAID|PARTIAL)$/i;
+        if (statusRegex.test(searchKey)) {
+            const status = searchKey.toUpperCase().match(/(PAID|UNPAID|PARTIAL)/)[0];
+            switch (status) {
+                case "PAID":
+                    return col.filtered("unpaidAmount == 0").sorted("dateOfSI");
+                case "UNPAID":
+                    return col.filtered("totalAmount == unpaidAmount").sorted("dateOfSI");
+                case "PARTIAL":
+                    return col.filtered("unpaidAmount < totalAmount ").sorted("dateOfSI");
+                default:
+                    break;
+            }
+        }
         return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
     }, [searchKey]);
 
     useEffect(() => {
-        navigation.setOptions({ headerShown: true, title: "Sales Invoices" });
-    }, [navigation]);
+        navigation.setOptions({
+            headerShown: true,
+            title: `Sales Invoices (${dataList.length})`,
+            // headerRight: () => (
+            //     <TouchableOpacity className="py-3 pl-10 pr-2" onPress={() => { }}>
+            //         <FontAwesome size={18} name="filter" />
+            //     </TouchableOpacity>
+            // ),
+        });
+    }, [navigation, dataList]);
 
     const getSalesInvoiceDetails = (item) => {
         const salesInvoice = realm.objectForPrimaryKey("salesInvoices", item._id);
@@ -39,7 +61,7 @@ const salesPage = () => {
             <View className="items-center justify-center m-2">
                 <TextInput
                     className="text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    placeholder="Search by invoice#, customer, PO#, SO#..."
+                    placeholder="Search by invoice #, customer, PO #, SO #, #STATUS:PAID|UNPAID|PARTIAL..."
                     value={searchKey}
                     onChangeText={(text) => setSearchKey(text.toUpperCase())}
                 />

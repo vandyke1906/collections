@@ -1,11 +1,15 @@
 import { View, Text, TextInput } from 'react-native';
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 
 const SIProduct = ({ data, onQtyChange, onAmountChange }) => {
     const inputClass = "text-sm p-1 appearance-none block bg-gray-50 text-gray-700 border border-gray-100 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
 
     const defaultQty = data.hasOwnProperty("qty") ? data.qty.toString() : "";
     const defaultAmount = data.hasOwnProperty("amount") ? data.amount.toString() : "";
+
+    const refQty = useRef();
+    const refAmount = useRef();
+
     const [qty, setQty] = React.useState(defaultQty);
     const [amount, setAmount] = React.useState(defaultAmount);
     return (
@@ -30,7 +34,7 @@ const SIProduct = ({ data, onQtyChange, onAmountChange }) => {
             <View className="flex flex-row items-center justify-between mt-2">
                 <View className="flex flex-row items-center justify-center flex-1 mx-2">
                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Qty: </Text>
-                    <TextInput className={`${inputClass} grow`} placeholder="Quantity" keyboardType="numeric" value={qty} onChangeText={(text) => {
+                    <TextInput ref={refQty} returnKeyType="next" onSubmitEditing={() => refAmount.current && refAmount.current.focus()} className={`${inputClass} grow`} placeholder="Quantity" keyboardType="numeric" value={qty} onChangeText={(text) => {
                         setQty(text);
                         if (text && typeof onQtyChange === "function")
                             onQtyChange(text);
@@ -39,7 +43,7 @@ const SIProduct = ({ data, onQtyChange, onAmountChange }) => {
 
                 <View className="flex flex-row items-center justify-center flex-1 mx-2">
                     <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">Amount: </Text>
-                    <TextInput className={`${inputClass} text-right grow`} placeholder="Amount" keyboardType="numeric" value={amount} onChangeText={(text) => {
+                    <TextInput ref={refAmount} className={`${inputClass} text-right grow`} placeholder="Amount" keyboardType="numeric" value={amount} onChangeText={(text) => {
                         setAmount(text);
                         if (text && typeof onAmountChange === "function")
                             onAmountChange(text);
