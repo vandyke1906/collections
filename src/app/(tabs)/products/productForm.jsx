@@ -13,7 +13,6 @@ const productForm = () => {
 
     const { control, handleSubmit, setValue, formState: { errors }, } = useForm();
     const realm = useRealm();
-    const user = useUser();
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};

@@ -150,7 +150,7 @@ export const readFile = async () => {
                         break;
                     }
                 }
-                console.info("File content:", formattedContent);
+                // console.info("File content:", formattedContent);
                 return formattedContent;
             } catch (error) {
                 console.error("Error reading file:", error);
@@ -181,6 +181,28 @@ export const convertJSONtoCSV = (jsonData) => {
         csv += values.join(",") + "\n";
     }
     return csv;
+};
+
+export const convertCSVtoJSON = (csvString) => {
+    if (typeof csvString !== "string") throw new Error("Data provided must be a string.");
+
+    const lines = csvString.split("\n");
+    const headers = lines[0].split(",").map(header => header.trim());
+
+    const result = lines.slice(1)
+        .filter(line => line.trim() !== "")
+        .map(line => {
+            const currentLine = line.split(",").map(cell => cell.trim());
+            const obj = {};
+
+            headers.forEach((header, index) => {
+                obj[header] = currentLine[index];
+            });
+
+            return obj;
+        });
+    console.info(JSON.stringify(result, null, 2));
+    return result;
 };
 
 export const ADMIN_EMAILS = ["asordanisajane10@gmail.com", "root@root.com"];
