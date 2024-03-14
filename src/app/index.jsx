@@ -1,7 +1,7 @@
 import { useApp, useRealm, useUser } from "@realm/react";
-import { Redirect, router } from "expo-router";
+import { router } from "expo-router";
 import { useEffect } from "react";
-import { ROUTES } from "src/common/common";
+import { ADMIN_EMAILS, ROUTES } from "src/common/common";
 import Loading from "src/components/Loading";
 import useUserData from "src/store/userDataStore";
 
@@ -9,14 +9,15 @@ const Page = () => {
     const realm = useRealm();
     const user = useUser();
     const app = useApp();
-    const { location, setLocation } = useUserData();
+    const { setLocation, setEmail, setUserId } = useUserData();
 
     useEffect(() => {
-        const customData = user.customData || {};
+        const { customData, profile, id } = user;
         const currentLocation = customData.location;
+        setUserId(id);
+        setEmail(profile?.email || "");
         if (currentLocation) {
             setLocation(currentLocation);
-
             realm.subscriptions.update((subs) => {
                 subs.add(realm.objects("groups"));
                 subs.add(realm.objects("products"));
@@ -26,7 +27,10 @@ const Page = () => {
                 subs.add(realm.objects("collections").filtered("location == $0", currentLocation));
             });
             setTimeout(() => {
-                router.replace({ pathname: ROUTES.HOME });
+                if (customData.isActive)
+                    router.replace({ pathname: ROUTES.HOME });
+                else
+                    router.replace({ pathname: ROUTES.REQUIRED_ACTIVATION });
             }, 0);
         }
         else app.currentUser.logOut();

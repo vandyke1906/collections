@@ -27,6 +27,7 @@ export const ROUTES = {
     PRODUCTS: "/(tabs)/products",
     PRODUCT_FORM: "/(tabs)/products/productForm",
     PRODUCT_PAGE: "/(tabs)/products/productPage",
+    USERS: "/(tabs)/users",
     SETTINGS: "/(tabs)/settings",
     CUSTOMER_SELECTION: "/others/selections/customerSelection",
     PRODUCT_SELECTION: "/others/selections/productSelection",
@@ -35,6 +36,7 @@ export const ROUTES = {
     FILTER_REPORT: "/reports/filterReport",
     VIEW_REPORT: "/reports/reportView",
     WELCOME: "/welcome",
+    REQUIRED_ACTIVATION: "/activate",
 };
 
 export const DATE_FORMAT = "(dddd), MMMM DD, YYYY";
@@ -180,3 +182,5 @@ export const convertJSONtoCSV = (jsonData) => {
     }
     return csv;
 };
+
+export const ADMIN_EMAILS = ["asordanisajane10@gmail.com", "root@root.com"];

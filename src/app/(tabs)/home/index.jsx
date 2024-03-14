@@ -2,14 +2,17 @@ import { router } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, Text, View } from 'react-native';
 import { ROUTES } from "src/common/common";
-import { useApp, useQuery } from "@realm/react";
+import { useApp, useQuery, useUser } from "@realm/react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useUserData from "src/store/userDataStore";
+import NetInfo from '@react-native-community/netinfo';
+import { useEffect, useState } from "react";
 
 const Page = () => {
 
     const app = useApp();
-    const { location } = useUserData();
+    const user = useUser();
+    const { email, location, isAdmin, totalUsers, setTotalUsers, setIsConnected, isConnected } = useUserData();
 
     const activeCustomers = useQuery("customers", (coll) => {
         return coll.filtered("deletedAt == 0");
@@ -26,22 +29,33 @@ const Page = () => {
         return coll.filtered("location == $0", location);
     }, [location]);
 
-
-    // return (
-    //     <View className="bg-black flex-1">
-
-    //     </View>
-    // );
-
+    useEffect(() => {
+        NetInfo.fetch().then(state => {
+            const hasInternet = state.isConnected && state.isInternetReachable;
+            setIsConnected(hasInternet);
+            if (hasInternet) {
+                const userData = user.mongoClient("mongodb-atlas").db("collectionDB").collection("userData");
+                userData.find({}).then((userList) => {
+                    setTotalUsers(userList.length);
+                });
+            }
+        });
+    }, []);
 
     return (
         <View className="flex flex-col bg-white gap-y-2">
             <View className="basis-1/12">
             </View>
             <View className="basis-1/12">
-                <View className="flex flex-row items-center w-full p-4">
-                    <Text className="text-slate-300 text-1xl mr-2">Area Code:</Text>
-                    <Text className="text-blue-500 text-2xl font-semibold font-serif">{location}</Text>
+                <View className="flex flex-row items-center justify-between w-full p-4">
+                    <View>
+                        <Text className="text-slate-400 text-1xl mr-2">Email</Text>
+                        <Text className="text-blue-500 text-lg font-semibold font-serif">{email}</Text>
+                    </View>
+                    <View>
+                        <Text className="text-slate-400 text-1xl mr-2">Area Code</Text>
+                        <Text className="text-blue-500 text-2xl font-semibold font-serif">{location}</Text>
+                    </View>
                 </View>
             </View>
             <View className="basis-2/12">
@@ -77,7 +91,14 @@ const Page = () => {
                 </Pressable>
             </View>
 
+
             <View className="basis-2/12">
+                {isAdmin && isConnected && (
+                    <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => { router.push({ pathname: ROUTES.USERS }); }}>
+                        <Text className="text-7xl font-sans text-blue-500">{totalUsers}</Text>
+                        <Text className="text-slate-900 font-medium text-center">Users</Text>
+                    </Pressable>
+                )}
                 {/* <Pressable className="m-2 flex-1 block rounded-lg bg-gray-200 items-center justify-center" onPress={() => router.push({ pathname: ROUTES.FILTER_REPORT })}>
                     <FontAwesome size={48} name="bar-chart" color="rgb(59 130 246)" />
                     <Text className="mt-2 text-slate-900 font-medium text-center uppercase">View Graphs</Text>

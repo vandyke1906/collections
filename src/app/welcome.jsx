@@ -4,7 +4,7 @@ import { useApp } from "@realm/react";
 import { Credentials } from "realm";
 import Loading from "src/components/Loading";
 import axios from "axios";
-import { GET_LOCATION_ROUTE } from "src/common/common";
+import { ADMIN_EMAILS, GET_LOCATION_ROUTE } from "src/common/common";
 import { Picker } from "@react-native-picker/picker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -54,7 +54,6 @@ const login = () => {
         try {
             await loginWithCredentials(email, password);
         } catch (error) {
-            console.error({ error });
             ToastAndroid.show(error.message || error, ToastAndroid.SHORT);
         } finally {
             setIsProcessing(false);
@@ -72,8 +71,10 @@ const login = () => {
             if (currentUser) {
                 const userData = currentUser.mongoClient("mongodb-atlas").db("collectionDB").collection("userData");
                 if (userData) {
+                    const email = currentUser?.profile?.email;
+                    const isAdmin = ADMIN_EMAILS.includes(email);
                     const filter = { userId: currentUser.id };
-                    const updateDoc = { $set: { userId: currentUser.id, location: areaCode } };
+                    const updateDoc = { $set: { userId: currentUser.id, email, location: areaCode, isAdmin, isActive: isAdmin } };
                     const options = { upsert: true };
                     await userData.updateOne(filter, updateDoc, options);
                     await currentUser.refreshCustomData();
