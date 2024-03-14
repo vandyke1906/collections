@@ -6,10 +6,12 @@ import { ROUTES } from "src/common/common";
 import Product from "src/components/Product";
 import { useRealm, useQuery } from "@realm/react";
 import moment from "moment";
+import useUserData from "src/store/userDataStore";
 
 const ProductPage = () => {
     const realm = useRealm();
     const [searchKey, setSearchKey] = useState("");
+    const { isAdmin } = useUserData();
 
     const dataList = useQuery("products", (coll) => {
         return coll.filtered("deletedAt == 0 && (code BEGINSWITH[c] $0 || name CONTAINS[c] $0)", searchKey).sorted("indexedName");
@@ -54,13 +56,15 @@ const ProductPage = () => {
                             onSelect={() => router.push({ pathname: ROUTES.PRODUCT_PAGE, params: item })}
                             onEdit={() => router.push({ pathname: ROUTES.PRODUCT_FORM, params: item })}
                             onDelete={() => {
-                                Alert.alert("Delete Product", `Do you want to delete ${item.name}?`, [
-                                    { text: "Cancel" },
-                                    {
-                                        text: "Continue",
-                                        onPress: () => handleDeleteProduct(item),
-                                    },
-                                ]);
+                                if (!isAdmin) ToastAndroid.show("Permission denied. Only admin can delete a product.");
+                                else
+                                    Alert.alert("Delete Product", `Do you want to delete ${item.name}?`, [
+                                        { text: "Cancel" },
+                                        {
+                                            text: "Continue",
+                                            onPress: () => handleDeleteProduct(item),
+                                        },
+                                    ]);
                             }}
                         />
                     )}
