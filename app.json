@@ -1,8 +1,8 @@
 {
     "expo": {
-        "name": "collections",
-        "slug": "collections",
-        "scheme": "collections",
+        "name": "Sales & Invoice",
+        "slug": "sales-invoices",
+        "scheme": "sales-invoices",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
