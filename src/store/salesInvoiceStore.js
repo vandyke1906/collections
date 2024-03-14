@@ -20,12 +20,13 @@ const useSalesInvoiceStore = create((set) => {
             return { selected: null };
         }),
         updateDetails: (data = {}) => set((state) => {
-            const { dateOfSI, customerId, customerName, poNo, soNo, dateDelivered, totalAmount, invoiceNo } = data;
+            const { dateOfSI, customerId, customerCode, customerName, poNo, soNo, dateDelivered, totalAmount, invoiceNo } = data;
             const newDetails = { ...state.details };
             if (invoiceNo != null) newDetails.invoiceNo = invoiceNo;
             if (dateOfSI != null) newDetails.dateOfSI = dateOfSI;
             if (dateDelivered != null) newDetails.dateDelivered = dateDelivered;
             if (customerId != null) newDetails.customerId = customerId;
+            if (customerCode != null) newDetails.customerCode = customerCode;
             if (customerName != null) newDetails.customerName = customerName;
             if (poNo != null) newDetails.poNo = poNo;
             if (soNo != null) newDetails.soNo = soNo;

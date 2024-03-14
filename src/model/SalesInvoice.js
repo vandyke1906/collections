@@ -16,6 +16,7 @@ export class SalesInvoice extends Realm.Object {
             totalAmount: "double",
             unpaidAmount: "double",
             customerId: "string",
+            customerCode: "string",
             customerName: "string",
             products: "salesProducts[]",
             createdAt: { type: "int", default: () => moment().valueOf() },

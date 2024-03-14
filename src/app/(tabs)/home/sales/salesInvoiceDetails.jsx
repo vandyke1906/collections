@@ -133,14 +133,15 @@ const salesInvoiceDetails = () => {
                             {data?.invoiceNo}
                         </Text>
                     )}
-                    {!!data?.customerCode && (
-                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900">
-                            {data?.customerCode}
-                        </Text>
-                    )}
                     {!!data?.customerName && (
                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900">
                             {data?.customerName}
+                        </Text>
+                    )}
+
+                    {!!data?.customerCode && (
+                        <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
+                            Customer Account #:{data?.customerCode}
                         </Text>
                     )}
                     {!!data?.poNo && (

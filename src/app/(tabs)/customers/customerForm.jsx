@@ -47,12 +47,20 @@ const customerForm = () => {
                         if (customer) {
                             //update related fields in other collections
                             if (customer.name !== data.name || customer.code !== data.code) {
-                                const collections = realm.objects("salesInvoices");
-                                const filtered = collections.filter((c) => c.customerId === customer._id);
-                                filtered.forEach((coll) => {
+                                const collections = realm.objects("collections");
+                                const filteredCollections = collections.filter((c) => c.customerId === customer._id);
+                                filteredCollections.forEach((coll) => {
                                     if (coll.details) {
                                         coll.details.customerName = data.name.trim();
                                         coll.details.customerCode = data.code.trim();
+                                    }
+                                });
+                                const salesInvoices = realm.objects("salesInvoices");
+                                const filteredSI = salesInvoices.filter((si) => si.customerId === customer._id);
+                                filteredSI.forEach((coll) => {
+                                    if (coll) {
+                                        coll.customerName = data.name.trim();
+                                        coll.customerCode = data.code.trim();
                                     }
                                 });
                             }

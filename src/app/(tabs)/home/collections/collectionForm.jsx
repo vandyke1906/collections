@@ -75,6 +75,7 @@ const collectionForm = () => {
                             details: {
                                 invoiceNo: currentSalesInvoice.invoiceNo,
                                 customerName: selectedInvoice.customerName,
+                                customerCode: selectedInvoice.customerCode
                             },
                             customerId: currentSalesInvoice.customerId,
                             location: location

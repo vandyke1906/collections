@@ -358,6 +358,15 @@ const reportView = () => {
 
                                     <View className="flex flex-row items-center justify-start">
                                         <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
+                                            Customer Account Number:
+                                        </Text>
+                                        <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">
+                                            {data.invoice.customerCode}
+                                        </Text>
+                                    </View>
+
+                                    <View className="flex flex-row items-center justify-start">
+                                        <Text className="block font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
                                             Customer:
                                         </Text>
                                         <Text className="block font-sans text-xs antialiased font-bold leading-normal text-gray-900 uppercase">

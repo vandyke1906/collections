@@ -105,6 +105,7 @@ const salesForm = () => {
 
                     const salesInvoiceData = {
                         customerId: latestDetails.customerId,
+                        customerCode: latestDetails.customerCode,
                         customerName: latestDetails.customerName,
                         invoiceNo: latestDetails.invoiceNo,
                         dateOfSI: moment(latestDetails.dateOfSI, DATE_FORMAT).valueOf(),
