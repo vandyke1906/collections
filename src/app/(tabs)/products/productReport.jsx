@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import { BarChart, LineChart, ProgressChart } from "react-native-chart-kit";
 import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
-import { FontAwesome } from "@expo/vector-icons";
 
 const productReport = () => {
     const navigation = useNavigation();
-    const realm = useRealm();
     const route = useRoute();
     const product = route.params || {};
     const [parentWidth, setParentWidth] = useState(0);

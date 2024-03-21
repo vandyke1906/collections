@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { BarChart, LineChart, ProgressChart } from "react-native-chart-kit";
 import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
-import { FontAwesome } from "@expo/vector-icons";
 
 const customerReport = () => {
 
