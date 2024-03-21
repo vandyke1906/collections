@@ -137,6 +137,8 @@ const InvoiceSummary = ({ data, onSearch }) => {
         );
     };
 
+    const renderStatusFilter = () => { };
+
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             {renderDateRange()}

@@ -33,7 +33,6 @@ const Page = () => {
             realm.subscriptions.update((subs) => {
                 subs.add(realm.objects("groups"));
                 subs.add(realm.objects("products"));
-                subs.add(realm.objects("configurations").filtered("userId == $0", id));
                 subs.add(realm.objects("customers").filtered("location == $0", currentLocation));
                 subs.add(realm.objects("salesInvoices").filtered("location == $0", currentLocation));
                 subs.add(realm.objects("salesProducts").filtered("location == $0 ", currentLocation));

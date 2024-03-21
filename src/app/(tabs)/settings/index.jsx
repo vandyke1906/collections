@@ -94,6 +94,7 @@ const Page = () => {
                     }}>
                         Import Products
                     </Button>
+                    {/*
                     <Button icon="upload" mode="outlined" onPress={() => {
                         ToastAndroid.show("Import customers is not yet available.", ToastAndroid.SHORT);
                     }}>
@@ -103,9 +104,9 @@ const Page = () => {
                         readFile().then((data) => setText(data));
                     }}>
                         Read File
-                    </Button>
+                    </Button> */}
                 </View>
-                <View className="bg-gray-200 flex-1 mt-5 w-full">
+                <View className="bg-gray-50 flex-1 mt-5 w-full">
                     <Text>{text}</Text>
                 </View>
             </View>
