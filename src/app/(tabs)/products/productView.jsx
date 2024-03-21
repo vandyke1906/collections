@@ -1,10 +1,11 @@
-import { View, Text, StatusBar } from "react-native";
+import { View, Text, StatusBar, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useQuery, useRealm } from "@realm/react";
 import { useRoute } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import ProductSummary from "src/components/reports/salesProducts/ProductSummary";
-// import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { ROUTES } from "src/common/common";
 
 const productView = () => {
     const navigation = useNavigation();
@@ -26,16 +27,16 @@ const productView = () => {
     useEffect(() => {
         navigation.setOptions({
             title: `Code: ${product.code || "Customer"}`,
-            // headerRight: () => (
-            //     <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { }}>
-            //         <FontAwesome size={18} name="check" color="green" />
-            //     </TouchableOpacity>
-            // ),
+            headerRight: () => (
+                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { router.push({ pathname: ROUTES.PRODUCT_REPORT, params: route.params }); }}>
+                    <FontAwesome size={18} name="line-chart" />
+                </TouchableOpacity>
+            ),
         });
     }, [navigation]);
 
     return (
-        <View className="w-full">
+        <ScrollView>
             <View className="block rounded-lg bg-white p-2 m-2">
                 <Text className="mb-2 block font-sans text-xs antialiased font-bold leading-normal text-gray-900">
                     {product?.name || ""}
@@ -59,6 +60,7 @@ const productView = () => {
                 </View>
             </View>
 
+
             <ProductSummary
                 product={product}
                 data={data}
@@ -70,7 +72,7 @@ const productView = () => {
             />
 
             <StatusBar style="auto" />
-        </View>
+        </ScrollView>
     );
 };
 

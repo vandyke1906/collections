@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useQuery, useRealm } from "@realm/react";
 import { useRoute } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import InvoiceSummary from "src/components/reports/salesInvoices/InvoiceSummary";
-// import { FontAwesome } from "@expo/vector-icons";
+import { ROUTES } from "src/common/common";
+import { FontAwesome } from "@expo/vector-icons";
 
 const customerView = () => {
     const navigation = useNavigation();
@@ -22,16 +23,16 @@ const customerView = () => {
     useEffect(() => {
         navigation.setOptions({
             title: `CAN: ${customer.code || "Customer"}`,
-            // headerRight: () => (
-            //     <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { }}>
-            //         <FontAwesome size={18} name="check" color="green" />
-            //     </TouchableOpacity>
-            // ),
+            headerRight: () => (
+                <TouchableOpacity className="py-3 pl-10 pr-3" onPress={() => { router.push({ pathname: ROUTES.CUSTOMER_REPORT, params: route.params }); }}>
+                    <FontAwesome size={18} name="line-chart" />
+                </TouchableOpacity>
+            ),
         });
     }, [navigation]);
 
     return (
-        <View className="w-full">
+        <ScrollView>
             <View className="block rounded-lg bg-white p-2 m-2">
                 {customer?.name && (
                     <Text className="block font-sans text-xs antialiased font-bold leading-relaxed text-blue-gray-900">
@@ -60,7 +61,7 @@ const customerView = () => {
             />
 
             <StatusBar style="auto" />
-        </View>
+        </ScrollView>
     );
 };
 
