@@ -36,7 +36,7 @@ const salesForm = () => {
 
     const { list: productList, details, setProducts, updateDetails, updateProductDetail, clearList, } = useSalesInvoiceStore();
     const { selections, resetSelection, setSelections } = useSelection();
-    const { location } = useUserData();
+    const { location, userId } = useUserData();
 
     const [list, setList] = useState(productList);
 
@@ -115,7 +115,8 @@ const salesForm = () => {
                         totalAmount: totalAmount,
                         unpaidAmount: totalAmount,
                         products: products,
-                        location: location
+                        location: location,
+                        userId: userId
                     };
                     realm.create("salesInvoices", salesInvoiceData);
                     router.push({ pathname: ROUTES.SALES });

@@ -14,7 +14,7 @@ const collectionForm = () => {
     const inputClass = "text-sm my-2 p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500";
     const navigation = useNavigation();
     const realm = useRealm();
-    const { location } = useUserData();
+    const { location, userId } = useUserData();
     const { selected: selectedInvoice, setSelected: setSelectedInvoice } = useSalesInvoiceStore();
 
     const [isCheque, setIsCheque] = useState(false);
@@ -78,7 +78,8 @@ const collectionForm = () => {
                                 customerCode: selectedInvoice.customerCode
                             },
                             customerId: currentSalesInvoice.customerId,
-                            location: location
+                            location: location,
+                            userId: userId
                         };
 
                         if (isMOPCheque(data.modeOfPayment)) {

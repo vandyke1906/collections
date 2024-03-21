@@ -20,7 +20,8 @@ export class SalesInvoice extends Realm.Object {
             customerName: "string",
             products: "salesProducts[]",
             createdAt: { type: "int", default: () => moment().valueOf() },
-            location: { type: "string", indexed: true }
+            location: { type: "string", indexed: true },
+            userId: { type: "string", indexed: true, optional: true },
         },
     };
 }
