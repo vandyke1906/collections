@@ -101,7 +101,7 @@ const ProductSummary = ({ product, data, onSearch }) => {
                     <Pressable className="flex-1" onPress={() => {
                         Keyboard.dismiss();
                         showDatePicker({
-                            date: getDateValueOf(value, { format: DATE_FORMAT }),
+                            date: getDateValueOf(dateFrom, { format: DATE_FORMAT }),
                             onChange: (event, date) => {
                                 if (event.type === "set") {
                                     const startDate = moment(date).startOf("day").valueOf();
@@ -118,7 +118,7 @@ const ProductSummary = ({ product, data, onSearch }) => {
                     <Pressable className="flex-1" onPress={() => {
                         Keyboard.dismiss();
                         showDatePicker({
-                            date: getDateValueOf(value, { format: DATE_FORMAT }),
+                            date: getDateValueOf(dateTo, { format: DATE_FORMAT }),
                             onChange: (event, date) => {
                                 if (event.type === "set") {
                                     const endDate = moment(date).endOf("day").valueOf();
