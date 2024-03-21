@@ -89,7 +89,7 @@ const UserPage = () => {
                                     <Text className="mb-2 block font-sans text-xs antialiased font-bold leading-normal text-gray-900">{item?.email || ""}</Text>
                                     {!!item?.location && <Text className="block font-sans text-xs antialiased font-xs leading-normal text-gray-700 opacity-75">Area/Location: {item.location}</Text>}
                                 </View>
-                                {!item.isAdmin && (
+                                {!item.isAdmin && !item.isActive && (
                                     <View className="pt-3 flex flex-row items-center justify-between border-t-2 border-neutral-100 font-sans text-xs antialiased font-normal leading-normal text-gray-700 opacity-75">
                                         {item.isActive ? <View cclassName="flex items-center justify-center"></View> : (
                                             <TouchableOpacity className="flex items-center justify-center" onPress={() => {
@@ -98,11 +98,11 @@ const UserPage = () => {
                                                 <Text className="pointer-events-auto px-5 inline-block cursor-pointer rounded text-sm font-normal leading-normal text-green-700">Confirm</Text>
                                             </TouchableOpacity>
                                         )}
-                                        <TouchableOpacity className="flex items-center justify-center" onPress={() => {
+                                        {/* <TouchableOpacity className="flex items-center justify-center" onPress={() => {
                                             handleDeleteUser(item);
                                         }}>
                                             <Text className="pointer-events-auto px-5 inline-block cursor-pointer rounded text-sm font-normal leading-normal text-red-700">Delete</Text>
-                                        </TouchableOpacity>
+                                        </TouchableOpacity> */}
                                     </View>
                                 )}
                             </CardData>
