@@ -6,7 +6,7 @@ import { useNavigation } from "expo-router";
 import ProductSummary from "src/components/reports/salesProducts/ProductSummary";
 // import { FontAwesome } from "@expo/vector-icons";
 
-const productPage = () => {
+const productView = () => {
     const navigation = useNavigation();
     const realm = useRealm();
     const route = useRoute();
@@ -74,4 +74,4 @@ const productPage = () => {
     );
 };
 
-export default productPage;
+export default productView;

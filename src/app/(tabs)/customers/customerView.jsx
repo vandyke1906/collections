@@ -6,7 +6,7 @@ import { useNavigation } from "expo-router";
 import InvoiceSummary from "src/components/reports/salesInvoices/InvoiceSummary";
 // import { FontAwesome } from "@expo/vector-icons";
 
-const customerPage = () => {
+const customerView = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const customer = route.params || {};
@@ -64,4 +64,4 @@ const customerPage = () => {
     );
 };
 
-export default customerPage;
+export default customerView;

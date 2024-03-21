@@ -53,7 +53,7 @@ const ProductPage = () => {
                         <Product
                             data={item}
                             enableButtons={true}
-                            onSelect={() => router.push({ pathname: ROUTES.PRODUCT_PAGE, params: item })}
+                            onSelect={() => router.push({ pathname: ROUTES.PRODUCT_VIEW, params: item })}
                             onEdit={() => router.push({ pathname: ROUTES.PRODUCT_FORM, params: item })}
                             onDelete={() => {
                                 if (!isAdmin) ToastAndroid.show("Permission denied. Only admin can delete a product.");

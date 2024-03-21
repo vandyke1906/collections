@@ -55,7 +55,7 @@ const CustomerPage = () => {
                         <Customer
                             data={item}
                             enableButtons={true}
-                            onSelect={() => router.push({ pathname: ROUTES.CUSTOMER_PAGE, params: item })}
+                            onSelect={() => router.push({ pathname: ROUTES.CUSTOMER_VIEW, params: item })}
                             onEdit={() => router.push({ pathname: ROUTES.CUSTOMER_FORM, params: item })}
                             onDelete={() => {
                                 Alert.alert("Delete Customer", `Do you want to delete ${item.name}?`, [
