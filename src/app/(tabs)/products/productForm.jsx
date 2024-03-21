@@ -48,7 +48,8 @@ const productForm = () => {
                     const isCodeExist = (_code, _id) => {
                         const regexPattern = new RegExp(data.code, "i");
                         const product = realm.objects("products").find((c) => regexPattern.test(c.code));
-                        if (product && _id) if (product._id === _id) return false;
+                        if (product && _id)
+                            if (product._id === _id) return false;
                         return !!product;
                     };
 

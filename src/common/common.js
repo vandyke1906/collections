@@ -126,12 +126,11 @@ export const saveAsFile = async (value, options = { type: "text", filename: mome
     }
 };
 
-export const readFile = async () => {
+export const readFile = async (options = { type: ["application/json", "text/csv", "text/comma-separated-values"] }) => {
     try {
         // const result = await getDocumentAsync({ type: "*/*" }); //allow all */*
-        const result = await getDocumentAsync({
-            type: ["application/json", "text/csv", "text/comma-separated-values"],
-        }); //allow all */*
+        // type: ["application/json", "text/csv", "text/comma-separated-values"]
+        const result = await getDocumentAsync({ type: options.type }); //allow all */*
         if ((result?.assets || []).length) {
             const selectedFile = result.assets[0];
             const { uri, name, size, mimeType } = selectedFile;
@@ -201,7 +200,6 @@ export const convertCSVtoJSON = (csvString) => {
 
             return obj;
         });
-    console.info(JSON.stringify(result, null, 2));
     return result;
 };
 
