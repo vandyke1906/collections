@@ -8,6 +8,7 @@ import { SalesInvoice } from "src/model/SalesInvoice";
 import { SalesProduct } from "src/model/SalesProduct";
 import { Collection } from "src/model/Collection";
 import { CollectionDetails } from "src/model/CollectionDetails";
+import { Configuration } from "src/model/Configuration";
 import { OpenRealmBehaviorType, OpenRealmTimeOutBehavior } from "realm";
 import Loading from "src/components/Loading";
 import { APP_ID } from "src/common/common";
@@ -23,7 +24,7 @@ const AppLayout = () => {
         <AppProvider id={APP_ID}>
             <UserProvider fallback={login}>
                 <RealmProvider
-                    schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails]}
+                    schema={[Product, Group, Customer, SalesInvoice, SalesProduct, Collection, CollectionDetails, Configuration]}
                     sync={{
                         flexible: true,
                         newRealmFileBehavior: realmAccessBehavior,

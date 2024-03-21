@@ -1,7 +1,8 @@
 import { useApp, useRealm, useUser } from "@realm/react";
 import { router } from "expo-router";
+import moment from "moment";
 import { useEffect } from "react";
-import { ADMIN_EMAILS, ROUTES } from "src/common/common";
+import { ROUTES } from "src/common/common";
 import Loading from "src/components/Loading";
 import useUserData from "src/store/userDataStore";
 
@@ -9,7 +10,18 @@ const Page = () => {
     const realm = useRealm();
     const user = useUser();
     const app = useApp();
-    const { setLocation, setEmail, setUserId } = useUserData();
+    const { setLocation, setEmail, setUserId, setAvailableYears } = useUserData();
+
+    useEffect(() => {
+        const currentYear = moment().year();
+        const years = [];
+        years.push(currentYear);
+        for (let i = 1; i <= 10; i++) {
+            const prevYear = currentYear - i;
+            years.push(prevYear);
+        }
+        setAvailableYears(years);
+    }, []);
 
     useEffect(() => {
         const { customData, profile, id } = user;
@@ -21,9 +33,10 @@ const Page = () => {
             realm.subscriptions.update((subs) => {
                 subs.add(realm.objects("groups"));
                 subs.add(realm.objects("products"));
+                subs.add(realm.objects("configurations").filtered("userId == $0", id));
                 subs.add(realm.objects("customers").filtered("location == $0", currentLocation));
                 subs.add(realm.objects("salesInvoices").filtered("location == $0", currentLocation));
-                subs.add(realm.objects("salesProducts").filtered("location == $0", currentLocation));
+                subs.add(realm.objects("salesProducts").filtered("location == $0 ", currentLocation));
                 subs.add(realm.objects("collections").filtered("location == $0", currentLocation));
             });
             setTimeout(() => {
@@ -35,6 +48,7 @@ const Page = () => {
         }
         else app.currentUser.logOut();
     }, [realm]);
+
     return <Loading />;
 };
 

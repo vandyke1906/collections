@@ -7,6 +7,7 @@ import { useQuery, useRealm } from "@realm/react";
 import { ROUTES } from "src/common/common";
 import SalesInvoiceCard from "src/components/SalesInvoiceCard";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
+import useUserData from "src/store/userDataStore";
 
 const salesPage = () => {
     const navigation = useNavigation();
@@ -14,8 +15,11 @@ const salesPage = () => {
 
     const [searchKey, setSearchKey] = useState("");
     const { setSelected: setSelectedInvoice } = useSalesInvoiceStore();
+    const { currentYear } = useUserData();
 
     const dataList = useQuery("salesInvoices", (col) => {
+        const currentStartDate = moment(currentYear, "YYYY").startOf("year").valueOf();
+        const currentEndDate = moment(currentYear, "YYYY").endOf("year").valueOf();
         const statusRegex = /^#STATUS:(PAID|UNPAID|PARTIAL)$/i;
         if (statusRegex.test(searchKey)) {
             const status = searchKey.toUpperCase().match(/(PAID|UNPAID|PARTIAL)/)[0];
@@ -30,13 +34,13 @@ const salesPage = () => {
                     break;
             }
         }
-        return col.filtered("invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0", searchKey).sorted("dateOfSI");
+        return col.filtered("(invoiceNo BEGINSWITH[c] $0 || poNo BEGINSWITH[c] $0 || soNo BEGINSWITH[c] $0 || customerName CONTAINS[c] $0) &&dateOfSI BETWEEN { $1 , $2 }", searchKey, currentStartDate, currentEndDate).sorted("dateOfSI");
     }, [searchKey]);
 
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: `Sales Invoices (${dataList.length})`,
+            title: `${currentYear} Sales Invoices (${dataList.length})`,
             // headerRight: () => (
             //     <TouchableOpacity className="py-3 pl-10 pr-2" onPress={() => { }}>
             //         <FontAwesome size={18} name="filter" />

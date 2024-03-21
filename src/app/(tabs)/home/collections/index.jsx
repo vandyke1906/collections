@@ -6,6 +6,8 @@ import { useQuery, useRealm } from "@realm/react";
 import { ROUTES } from "src/common/common";
 import useSalesInvoiceStore from "src/store/salesInvoiceStore";
 import CollectionCard from "src/components/CollectionCard";
+import useUserData from "src/store/userDataStore";
+import moment from "moment";
 
 const collections = () => {
     const navigation = useNavigation();
@@ -15,13 +17,16 @@ const collections = () => {
     const [invoiceNumber, setInvoiceNumber] = useState("");
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
     const setSelectedInvoice = useSalesInvoiceStore((state) => state.setSelected);
+    const { currentYear } = useUserData();
 
     useEffect(() => {
-        navigation.setOptions({ headerShown: true, title: "Collections" });
+        navigation.setOptions({ headerShown: true, title: `${currentYear} Collections` });
     }, [navigation]);
 
     const dataList = useQuery("collections", (col) => {
-        return col.filtered("corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0", searchKey).sorted("corDate");
+        const currentStartDate = moment(currentYear, "YYYY").startOf("year").valueOf();
+        const currentEndDate = moment(currentYear, "YYYY").endOf("year").valueOf();
+        return col.filtered("(corNo BEGINSWITH[c] $0 || details.invoiceNo BEGINSWITH[c] $0 || details.customerName CONTAINS[c] $0) && corDate BETWEEN { $1 , $2 }", searchKey, currentStartDate, currentEndDate).sorted("corDate");
     }, [searchKey]);
 
     const getSalesInvoiceDetails = ({ _id, invoiceNo = "" }) => {
